@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpogarfjr8ys4"]
+
+[ext_resource type="Script" path="res://addons/WebSDKPlugin/Demo/Demo.gd" id="1_so7c8"]
+
+[node name="Demo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_so7c8")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="Show_ad" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Show_ad	"
+
+[node name="Show_reward_ad" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Show_reward_ad"
+
+[node name="get_yandex_language" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "get_yandex_language"
+
+[node name="get_type_device" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "get_type_device"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "set_yandex_leaderboard"
+
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "leaderboard name:String"
+
+[node name="score" type="TextEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "score:int"
+
+[connection signal="pressed" from="VBoxContainer/GridContainer/Show_ad" to="." method="_on_show_ad_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/get_yandex_language" to="." method="_on_get_yandex_language_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/get_type_device" to="." method="_on_get_type_device_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]
