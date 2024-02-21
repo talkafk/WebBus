@@ -13,7 +13,7 @@ func _on_show_ad_pressed():
 
 
 func _on_show_reward_ad_pressed():
-	WebSDK.show_reward_ad()
+	WebSDK.show_rewarded_ad()
 
 
 func _on_get_yandex_language_pressed():

@@ -67,7 +67,7 @@ func show_ad():
 		elif OS.has_feature("yandexgames"):
 			yandex_show_ad()
 
-func show_reward_ad():
+func show_rewarded_ad():
 	if OS.get_name() == "Web":
 		if OS.has_feature("crazygames"):
 			crazy_show_rewarded_ad()
