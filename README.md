@@ -1,6 +1,10 @@
 # WebSDKPlugin
 It's a plugin fo Godot engine. Use one plugin for several web platform SDKs.
 
+## Supported platforms:
+- crazy games
+- yandex games
+
 ## Installation
 
 1. Download the plugin as a ZIP archive.
@@ -38,6 +42,17 @@ WebSDK.get_type_device()
 
 func type_device_recieved(type):
 	print("device_type: ", type)
+```
+
+Getting language:
+
+```
+WebSDK.language_recieved.connect(language_recieved)
+
+WebSDK.get_language()
+
+func language_recieved(lang):
+	print("language: ", lang)
 ```
 
 ### Yandex

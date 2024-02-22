@@ -56,6 +56,11 @@ func _ready():
 				while not CrazySDK:
 					CrazySDK = JavaScriptBridge.get_interface("Window").CrazyGames.SDK
 					await get_tree().create_timer(0.1).timeout
+					
+				var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info)
+				CrazySDK.user.getSystemInfo(callback)
+				await _system_info_recieved
+				
 				emit_signal("_SDK_inited")
 				print('gd init crazy')
 
@@ -105,48 +110,51 @@ func _adError(args):
 func _adStarted(args):
 	ad_started.emit()
 
-
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
 		window.SaveLeaderboardScore(leaderboard, score, extra_data)
 
-signal language_from_sdk_recieved
+signal language_recieved
 
-func get_yandex_language():
-	# TODO rewrite with crazy games
+func get_language():
+	var lang:String
 	if OS.has_feature("yandexgames"):
 		while not YandexSDK:
 			await _SDK_inited
-		var lang = YandexSDK.environment.i18n.lang
-		print("language from sdk: ", lang)
-		language_from_sdk_recieved.emit(lang)
-		return lang
+		lang = YandexSDK.environment.i18n.lang
+	elif OS.has_feature("crazygames"):
+		while not system_info:
+			await _SDK_inited
+		lang = system_info.countryCode
+	lang = lang.to_lower()
+	if lang == 'us':
+		lang = 'en'
+	print("language from sdk: ", lang)
+	language_recieved.emit(lang)
 
 
 signal type_device_recieved
-var type_device:String
 
 func get_type_device():
 	var type:String
 	if OS.get_name() == "Web":
 		if OS.has_feature("crazygames"):
-			while not CrazySDK:
-				await _SDK_inited
-			var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info) 
-			CrazySDK.user.getSystemInfo(callback)
-			await _system_info_recieved
+			while not system_info:
+				await _SDK_inited 
+			type = system_info.device.type
 		elif OS.has_feature("yandexgames"):
 			while not YandexSDK:
 				await _SDK_inited
-			type_device = YandexSDK.deviceInfo.type
-		print("type device is ", type_device)
-		emit_signal("type_device_recieved", type_device)
+			type = YandexSDK.deviceInfo.type
+		print("type device is ", type)
+		emit_signal("type_device_recieved", type)
 
 
 signal _system_info_recieved
+var system_info:JavaScriptObject
 
 func _callback_crazy_system_info(args:Array):
-	type_device = args[1].device.type
-	emit_signal("_system_info_recieved", type_device)
+	system_info = args[1]
+	emit_signal("_system_info_recieved", system_info)
 
 

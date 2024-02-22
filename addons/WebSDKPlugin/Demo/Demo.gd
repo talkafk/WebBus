@@ -6,6 +6,7 @@ func _ready():
 	WebSDK.ad_started.connect(ad_started)
 	WebSDK.reward_added.connect(reward_added)
 	WebSDK.type_device_recieved.connect(type_device_recieved)
+	WebSDK.language_recieved.connect(language_recieved)
 
 
 func _on_show_ad_pressed():
@@ -17,7 +18,7 @@ func _on_show_reward_ad_pressed():
 
 
 func _on_get_yandex_language_pressed():
-	WebSDK.get_yandex_language()
+	WebSDK.get_language()
 
 
 func _on_get_type_device_pressed():
@@ -44,3 +45,6 @@ func reward_added():
 	
 func type_device_recieved(type):
 	print("device_type: ", type)
+	
+func language_recieved(lang):
+	print("language: ", lang)
