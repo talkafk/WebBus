@@ -6,6 +6,9 @@ const JS_YANDEX_FILE = "yandex_sdk.js"
 const JS_YANDEX_SDK_REF = "https://yandex.ru/games/sdk/v2"
 const JS_CRAZY_SDK_REF = "https://sdk.crazygames.com/crazygames-sdk-v2.js"
 
+# You can change archive name
+const YANDEX_ARCHIVE_NAME = "yandex_export.zip"
+
 var plugin_path: String = get_script().resource_path.get_base_dir()
 var is_yandex := false
 var is_crazy := false
@@ -41,7 +44,7 @@ func _export_end() -> void:
 		file = FileAccess.open(export_path, FileAccess.WRITE)
 		file.store_string(html)
 		file.close()
-		zip_export("yandex_export.zip")
+		zip_export(YANDEX_ARCHIVE_NAME)
 	elif is_crazy:
 		var file := FileAccess.open(export_path, FileAccess.READ)
 		var html := file.get_as_text()
