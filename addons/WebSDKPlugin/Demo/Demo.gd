@@ -17,6 +17,14 @@ func _on_show_reward_ad_pressed():
 	WebSDK.show_rewarded_ad()
 
 
+func _on_show_banner_pressed():
+	WebSDK.show_banner()
+
+
+func _on_hide_banner_pressed():
+	WebSDK.hide_banner()
+
+
 func _on_get_yandex_language_pressed():
 	WebSDK.get_language()
 

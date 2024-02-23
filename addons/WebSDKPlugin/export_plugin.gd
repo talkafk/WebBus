@@ -52,7 +52,10 @@ func _export_end() -> void:
 		var pos = html.find('</head>')
 		
 		html = html.insert(pos, 
-				'<script src="' + JS_CRAZY_SDK_REF + '"></script>\n')
+				'<script src="' + JS_CRAZY_SDK_REF + '"></script>\n' +
+				'<div id="responsive-banner-container" style="width: 300px; height: 250px;
+				position: fixed; top:0; left:0; z-index:9999"></div>'
+				)
 		file = FileAccess.open(export_path, FileAccess.WRITE)
 		file.store_string(html)
 		file.close()

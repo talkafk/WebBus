@@ -7,10 +7,6 @@ This version is for Godot 4.
 - Crazy games
 - Yandex games
 
-## Supported platforms:
-- crazy games
-- yandex games
-
 ## Installation
 
 1. Download the plugin as a ZIP archive.
@@ -31,6 +27,8 @@ You can explore the demo scene for a better understanding of how to use the plug
 
 ### General
 
+#### Advertisement
+
 Calling full-screen advertisement:
 ```
 WebSDK.show_ad()
@@ -40,7 +38,7 @@ Calling rewarded advertisement:
 WebSDK.show_rewarded_ad()
 ```
 
-For advertisements, there are 4 callback signals:
+For full-screen and rewarded advertisements, there are 4 callback signals:
 ```
 signal reward_added
 signal ad_closed
@@ -48,6 +46,17 @@ signal ad_error
 signal ad_started
 ```
 
+Calling banner advertisement:
+```
+WebSDK.show_banner()
+```
+
+Close banner advertisement:
+```
+WebSDK.hide_banner()
+```
+
+#### Other
 
 Getting type of device:
 ```

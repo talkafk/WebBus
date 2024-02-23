@@ -110,6 +110,21 @@ func _adError(args):
 func _adStarted(args):
 	ad_started.emit()
 
+func show_banner():
+	if OS.has_feature("yandexgames"):
+		YandexSDK.adv.showBannerAdv()
+	elif OS.has_feature("crazygames"):
+		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
+		CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
+		
+func hide_banner():
+	if OS.has_feature("yandexgames"):
+		YandexSDK.adv.hideBannerAdv()
+	elif OS.has_feature("crazygames"):
+		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
+		CrazySDK.banner.clearBanner("responsive-banner-container")
+
+
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
 		window.SaveLeaderboardScore(leaderboard, score, extra_data)
@@ -118,19 +133,20 @@ signal language_recieved
 
 func get_language():
 	var lang:String
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		lang = YandexSDK.environment.i18n.lang
-	elif OS.has_feature("crazygames"):
-		while not system_info:
-			await _SDK_inited
-		lang = system_info.countryCode
-	lang = lang.to_lower()
-	if lang == 'us':
-		lang = 'en'
-	print("language from sdk: ", lang)
-	language_recieved.emit(lang)
+	if OS.get_name() == "Web":
+		if OS.has_feature("yandexgames"):
+			while not YandexSDK:
+				await _SDK_inited
+			lang = YandexSDK.environment.i18n.lang
+		elif OS.has_feature("crazygames"):
+			while not system_info:
+				await _SDK_inited
+			lang = system_info.countryCode
+		lang = lang.to_lower()
+		if lang == 'us':
+			lang = 'en'
+		print("language from sdk: ", lang)
+		language_recieved.emit(lang)
 
 
 signal type_device_recieved
