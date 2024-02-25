@@ -36,18 +36,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Show_reward_ad"
 
-[node name="get_yandex_language" type="Button" parent="VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "get_yandex_language"
-
-[node name="get_type_device" type="Button" parent="VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "get_type_device"
-
 [node name="show_banner" type="Button" parent="VBoxContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -60,30 +48,59 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "hide_banner"
 
+[node name="get_yandex_language" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "get_yandex_language"
+
+[node name="get_type_device" type="Button" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "get_type_device"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="get_yandex_leaderboard_info" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "set_yandex_leaderboard"
+text = "get_yandex_leaderboard_info"
 
 [node name="leaderboard" type="TextEdit" parent="VBoxContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "leaderboard name:String"
 
-[node name="score" type="TextEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "set_yandex_leaderboard_score"
+
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "leaderboard name:String"
+
+[node name="score" type="TextEdit" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "score:int"
 
 [connection signal="pressed" from="VBoxContainer/GridContainer/Show_ad" to="." method="_on_show_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/get_yandex_language" to="." method="_on_get_yandex_language_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/get_type_device" to="." method="_on_get_type_device_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/show_banner" to="." method="_on_show_banner_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/hide_banner" to="." method="_on_hide_banner_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/get_yandex_language" to="." method="_on_get_yandex_language_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/get_type_device" to="." method="_on_get_type_device_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]

@@ -34,8 +34,8 @@ func _on_get_type_device_pressed():
 
 
 func _on_set_yandex_leaderboard_pressed():
-	var name_leaderboard :String = $VBoxContainer/HBoxContainer/leaderboard.text
-	var score: int = int($VBoxContainer/HBoxContainer/score.text)
+	var name_leaderboard :String = $VBoxContainer/HBoxContainer2/leaderboard.text
+	var score: int = int($VBoxContainer/HBoxContainer2/score.text)
 	WebSDK.set_yandex_leaderboard(name_leaderboard, score)
 	
 
@@ -56,3 +56,16 @@ func type_device_recieved(type):
 	
 func language_recieved(lang):
 	print("language: ", lang)
+
+
+var leaderboard_info
+
+func _on_get_yandex_leaderboard_info_pressed():
+	WebSDK.leaderboard_info_recieved.connect(getting_leaderboard_info)
+	var name_leaderboard :String = $VBoxContainer/HBoxContainer/leaderboard.text
+	WebSDK.get_leaderboard_info(name_leaderboard)
+	
+	
+func getting_leaderboard_info(info):
+	leaderboard_info = info
+	print(info)

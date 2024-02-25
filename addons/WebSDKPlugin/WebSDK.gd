@@ -17,7 +17,7 @@ var window = null
 var YandexSDK = null
 var CrazySDK = null
 
-
+#region _ready
 func _ready():
 	match OS.get_name():
 		"Web":
@@ -63,8 +63,8 @@ func _ready():
 				
 				emit_signal("_SDK_inited")
 				print('gd init crazy')
-
-	
+#endregion
+#region Ads
 func show_ad():
 	if OS.get_name() == "Web":
 		if OS.has_feature("crazygames"):
@@ -110,6 +110,7 @@ func _adError(args):
 func _adStarted(args):
 	ad_started.emit()
 
+#TODO need test banner
 func show_banner():
 	if OS.has_feature("yandexgames"):
 		YandexSDK.adv.showBannerAdv()
@@ -123,12 +124,22 @@ func hide_banner():
 	elif OS.has_feature("crazygames"):
 		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
 		CrazySDK.banner.clearBanner("responsive-banner-container")
+#endregion
+#region Yandex
+
+signal leaderboard_info_recieved
+
+#TODO need test
+func get_leaderboard_info(leaderboard:String):
+	var info:JavaScriptObject = await window.GetLeaderboardInfo(leaderboard)
+	leaderboard_info_recieved.emit(info)
 
 
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
 		window.SaveLeaderboardScore(leaderboard, score, extra_data)
-
+#endregion
+#region getting data
 signal language_recieved
 
 func get_language():
@@ -172,5 +183,4 @@ var system_info:JavaScriptObject
 func _callback_crazy_system_info(args:Array):
 	system_info = args[1]
 	emit_signal("_system_info_recieved", system_info)
-
-
+#endregion
