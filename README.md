@@ -11,6 +11,7 @@ This version is for Godot 4.
     - [Advertisement](#advertisement)
     - [Other](#other)
   - [Yandex](#yandex)
+    - [Ready](#ready)
     - [Leaderboards](#leaderboards)
 
 
@@ -92,6 +93,13 @@ func language_recieved(lang):
 
 ### Yandex
 
+#### Ready
+
+```gdscript
+WebSDK.yandex_ready()
+```
+
+
 #### Leaderboards
 
 Features exclusive to Yandex games.
@@ -106,7 +114,7 @@ func getting_leaderboard_info(info):
 	print(info)
 
 ```
-`leaderboard` : **String** type
+`name_leaderboard` : **String** type
 
 
 Save score in leaderboard:
@@ -114,7 +122,7 @@ Save score in leaderboard:
 WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 ```
 
-`leaderboard` : **String** type
+`name_leaderboard` : **String** type
 
 `score` : **int** type
 

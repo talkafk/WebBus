@@ -83,17 +83,25 @@ func show_rewarded_ad():
 # Yandex Games Block
 
 func yandex_show_ad():
+	while not YandexSDK:
+		await _SDK_inited
 	YandexSDK.adv.showFullscreenAdv(adCallbacks)
 
 func yandex_show_rewarded_ad():
+	while not YandexSDK:
+		await _SDK_inited
 	YandexSDK.adv.showRewardedVideo(adRewardCallbacks)
 
 # Crazy Games
 
 func crazy_show_ad():
+	while not CrazySDK:
+		await _SDK_inited
 	CrazySDK.ad.requestAd("midgame", adCallbacks)
 	
 func crazy_show_rewarded_ad():
+	while not CrazySDK:
+		await _SDK_inited
 	CrazySDK.ad.requestAd("rewarded", adRewardCallbacks)
 
 
@@ -113,8 +121,12 @@ func _adStarted(args):
 #TODO need test banner
 func show_banner():
 	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
 		YandexSDK.adv.showBannerAdv()
 	elif OS.has_feature("crazygames"):
+		while not CrazySDK:
+			await _SDK_inited
 		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
 		CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
 		
@@ -127,12 +139,19 @@ func hide_banner():
 #endregion
 #region Yandex
 
+func yandex_ready():
+	if OS.has_feature("yandexgames"):
+		JavaScriptBridge.eval("ysdk.features.LoadingAPI?.ready()")
+
 signal leaderboard_info_recieved
 
 #TODO need test
 func get_leaderboard_info(leaderboard:String):
-	var info:JavaScriptObject = await window.GetLeaderboardInfo(leaderboard)
-	leaderboard_info_recieved.emit(info)
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		var info:JavaScriptObject = await window.GetLeaderboardInfo(leaderboard)
+		leaderboard_info_recieved.emit(info)
 
 
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):

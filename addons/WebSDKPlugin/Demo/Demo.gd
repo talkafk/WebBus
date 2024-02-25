@@ -38,6 +38,8 @@ func _on_set_yandex_leaderboard_pressed():
 	var score: int = int($VBoxContainer/HBoxContainer2/score.text)
 	WebSDK.set_yandex_leaderboard(name_leaderboard, score)
 	
+func _on_yandex_ready_pressed():
+	WebSDK.yandex_ready()
 
 func ad_closed():
 	print("ad_closed")
@@ -69,3 +71,4 @@ func _on_get_yandex_leaderboard_info_pressed():
 func getting_leaderboard_info(info):
 	leaderboard_info = info
 	print(info)
+
