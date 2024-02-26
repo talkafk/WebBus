@@ -13,6 +13,8 @@ This version is for Godot 4.
   - [Yandex](#yandex)
     - [Ready](#ready)
     - [Leaderboards](#leaderboards)
+- [Features](#features)
+  - [Archive](#archive)
 
 
 ## Supported platforms
@@ -127,3 +129,14 @@ WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 `score` : **int** type
 
 `extra_data` : optional parameter, **String** type
+
+## Features
+
+### Archive
+
+For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in file `res://addons/WebSDKPlugin/export_plugin.gd`.
+Exapmle:
+```gdscript
+# You can change the archive name
+const YANDEX_ARCHIVE_NAME = "you_archive_name.zip"
+```
