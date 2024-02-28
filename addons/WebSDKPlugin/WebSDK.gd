@@ -89,7 +89,8 @@ func show_rewarded_ad():
 			crazy_show_rewarded_ad()
 		elif OS.has_feature("yandexgames"):
 			yandex_show_rewarded_ad()
-	
+		elif OS.has_feature("gamedistribution"):
+			game_dist_show_rewarded_ad()
 	
 # Yandex Games Block
 
@@ -115,10 +116,16 @@ func crazy_show_rewarded_ad():
 		await _SDK_inited
 	CrazySDK.ad.requestAd("rewarded", adRewardCallbacks)
 
+# Game Distribution
 func game_dist_show_ad():
 	while not GameDistSDK:
 		await _SDK_inited
 	GameDistSDK.show_ad()
+	
+func game_dist_show_rewarded_ad():
+	while not GameDistSDK:
+		await _SDK_inited
+	GameDistSDK.show_ad('rewarded')
 
 #Callbacks
 func _rewarded_ad(args):
