@@ -16,6 +16,7 @@ var window = null
 
 var YandexSDK = null
 var CrazySDK = null
+var GameDistSDK = null
 
 #region _ready
 func _ready():
@@ -63,6 +64,14 @@ func _ready():
 				
 				emit_signal("_SDK_inited")
 				print('gd init crazy')
+			elif OS.has_feature("gamedistribution"):
+				adCallbacks["ad_stop"] = adFinishedCallback
+				adCallbacks["ad_start"] = adStartedCallback
+				adCallbacks["ad_rewarded"] = adFinishedRewardCallback
+				window.setcallbacks(adCallbacks)
+				GameDistSDK = window.gdsdk
+				emit_signal("_SDK_inited")
+				print('gd init gamedistribution')
 #endregion
 #region Ads
 func show_ad():
@@ -71,6 +80,8 @@ func show_ad():
 			crazy_show_ad()
 		elif OS.has_feature("yandexgames"):
 			yandex_show_ad()
+		elif OS.has_feature("gamedistribution"):
+			game_dist_show_ad()
 
 func show_rewarded_ad():
 	if OS.get_name() == "Web":
@@ -104,6 +115,10 @@ func crazy_show_rewarded_ad():
 		await _SDK_inited
 	CrazySDK.ad.requestAd("rewarded", adRewardCallbacks)
 
+func game_dist_show_ad():
+	while not GameDistSDK:
+		await _SDK_inited
+	GameDistSDK.show_ad()
 
 #Callbacks
 func _rewarded_ad(args):
