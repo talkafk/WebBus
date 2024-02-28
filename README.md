@@ -135,7 +135,8 @@ WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 ### Archive
 
 For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in file `res://addons/WebSDKPlugin/export_plugin.gd`.
-Exapmle:
+
+Example:
 ```gdscript
 # You can change the archive name
 const YANDEX_ARCHIVE_NAME = "you_archive_name.zip"
