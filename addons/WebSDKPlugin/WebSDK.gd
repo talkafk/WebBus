@@ -158,6 +158,40 @@ func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = 
 	if OS.has_feature("yandexgames"):
 		window.SaveLeaderboardScore(leaderboard, score, extra_data)
 #endregion
+
+#region Crazy Games
+func crazy_happytime():
+	if CrazySDK:
+		CrazySDK.game.happytime()
+	else:
+		push_warning("SDK not initialized")
+	
+func crazy_start_gameplay():
+	if CrazySDK:
+		CrazySDK.game.gameplayStart()
+	else:
+		push_warning("SDK not initialized")
+	
+func crazy_stop_gameplay():
+	if CrazySDK:
+		CrazySDK.game.gameplayStop()
+	else:
+		push_warning("SDK not initialized")
+	
+func crazy_start_loading():
+	if CrazySDK:
+		CrazySDK.game.sdkGameLoadingStart()
+	else:
+		push_warning("SDK not initialized")
+	
+func crazy_stop_loading():
+	if CrazySDK:
+		CrazySDK.game.sdkGameLoadingStop()
+	else:
+		push_warning("SDK not initialized")
+	
+#endregion
+
 #region getting data
 signal language_recieved
 

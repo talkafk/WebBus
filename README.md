@@ -13,6 +13,8 @@ This version is for Godot 4.
   - [Yandex](#yandex)
     - [Ready](#ready)
     - [Leaderboards](#leaderboards)
+  - [Crazy Games](#crazy-games)
+    - [Game](#game)
 - [Features](#features)
   - [Archive](#archive)
 
@@ -97,6 +99,8 @@ func language_recieved(lang):
 
 #### Ready
 
+Call `yandex_ready()` function when the game ready for game.
+
 ```gdscript
 WebSDK.yandex_ready()
 ```
@@ -129,6 +133,37 @@ WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 `score` : **int** type
 
 `extra_data` : optional parameter, **String** type
+
+### Crazy Games
+#### Game
+
+The `crazy_happytime()` method can be called on various player achievements.
+
+```gdscript
+WebSDK.crazy_happytime()
+```
+The `crazy_start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
+
+```gdscript
+WebSDK.crazy_start_gameplay()
+```
+
+The `crazy_stop_gameplay()` function has to be called on every game break don't forget to call `gameplayStart()` when the gameplay resumes.
+
+```gdscript
+WebSDK.crazy_stop_gameplay()
+```
+The `crazy_start_loading()` function has to be called whenever you start loading your game.
+
+```gdscript
+WebSDK.crazy_start_loading()
+```
+The `crazy_stop_loading()` function has to be called when the loading is complete and eventually the gameplay starts.
+
+```gdscript
+WebSDK.crazy_stop_loading()
+```
+
 
 ## Features
 
