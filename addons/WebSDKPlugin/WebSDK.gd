@@ -53,8 +53,9 @@ func _ready():
 				adRewardCallbacks["adFinished"] = adFinishedRewardCallback
 				adRewardCallbacks["adError"] = adErrorCallback
 				adRewardCallbacks["adStarted"] = adStartedCallback
+				print("waiting sdk..")
 				while not CrazySDK:
-					CrazySDK = JavaScriptBridge.get_interface("Window").CrazyGames.SDK
+					CrazySDK = window.CrazyGames.SDK
 					await get_tree().create_timer(0.1).timeout
 					
 				var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info)
