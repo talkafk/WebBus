@@ -18,95 +18,146 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 14
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+[node name="General" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 columns = 3
 
-[node name="Show_ad" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="Show_ad" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Show_ad	"
 
-[node name="Show_reward_ad" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="Show_reward_ad" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Show_reward_ad"
 
-[node name="show_banner" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="show_banner" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "show_banner"
 
-[node name="hide_banner" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="hide_banner" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "hide_banner"
 
-[node name="get_yandex_language" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="get_language" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "get_yandex_language"
+text = "get_language"
 
-[node name="get_type_device" type="Button" parent="VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "get_type_device"
-
-[node name="yandex_ready" type="Button" parent="VBoxContainer/GridContainer"]
+[node name="get_type_device" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "get_type_device"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Crazy" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 3
+
+[node name="happytime" type="Button" parent="VBoxContainer/Crazy"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "happytime"
+
+[node name="start_gameplay" type="Button" parent="VBoxContainer/Crazy"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "start_gameplay"
+
+[node name="stop_gameplay" type="Button" parent="VBoxContainer/Crazy"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "stop_gameplay"
+
+[node name="start_loading" type="Button" parent="VBoxContainer/Crazy"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "start_loading"
+
+[node name="stop_loading" type="Button" parent="VBoxContainer/Crazy"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "stop_loading"
+
+[node name="Yandex" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="yandex_ready" type="Button" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+text = "yandex_loading_ready"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="get_yandex_leaderboard_info" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="get_yandex_leaderboard_info" type="Button" parent="VBoxContainer/Yandex/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "get_yandex_leaderboard_info"
 
-[node name="leaderboard" type="TextEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "leaderboard name:String"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/HBoxContainer2"]
+[node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/Yandex/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "set_yandex_leaderboard_score"
 
-[node name="leaderboard" type="TextEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "leaderboard name:String"
 
-[node name="score" type="TextEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="score" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "score:int"
 
-[connection signal="pressed" from="VBoxContainer/GridContainer/Show_ad" to="." method="_on_show_ad_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/show_banner" to="." method="_on_show_banner_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/hide_banner" to="." method="_on_hide_banner_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/get_yandex_language" to="." method="_on_get_yandex_language_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/get_type_device" to="." method="_on_get_type_device_pressed"]
-[connection signal="pressed" from="VBoxContainer/GridContainer/yandex_ready" to="." method="_on_yandex_ready_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/Show_ad" to="." method="_on_show_ad_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/show_banner" to="." method="_on_show_banner_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/hide_banner" to="." method="_on_hide_banner_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/get_language" to="." method="_on_get_language_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/get_type_device" to="." method="_on_get_type_device_pressed"]
+[connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
+[connection signal="pressed" from="VBoxContainer/Crazy/start_gameplay" to="." method="_on_start_gameplay_pressed"]
+[connection signal="pressed" from="VBoxContainer/Crazy/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
+[connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]
+[connection signal="pressed" from="VBoxContainer/Crazy/stop_loading" to="." method="_on_stop_loading_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/yandex_ready" to="." method="_on_yandex_ready_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]

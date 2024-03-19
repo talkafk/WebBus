@@ -25,7 +25,7 @@ func _on_hide_banner_pressed():
 	WebSDK.hide_banner()
 
 
-func _on_get_yandex_language_pressed():
+func _on_get_language_pressed():
 	WebSDK.get_language()
 
 
@@ -72,3 +72,23 @@ func getting_leaderboard_info(info):
 	leaderboard_info = info
 	print(info)
 
+
+
+func _on_happytime_pressed():
+	WebSDK.crazy_happytime()
+
+
+func _on_start_gameplay_pressed():
+	WebSDK.crazy_start_gameplay()
+
+
+func _on_stop_gameplay_pressed():
+	WebSDK.crazy_stop_gameplay()
+
+
+func _on_start_loading_pressed():
+	WebSDK.crazy_start_loading()
+
+
+func _on_stop_loading_pressed():
+	WebSDK.crazy_stop_loading()
