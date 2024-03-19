@@ -19,3 +19,4 @@ mono_crash.*.json
 
 /addons/*
 !/addons/WebSDKPlugin/
+/export/*
