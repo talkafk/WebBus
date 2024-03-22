@@ -75,24 +75,19 @@ WebSDK.hide_banner()
 #### Other
 
 Getting type of device:
+
+The function return `String`, possible values: "desktop", "tablet", "mobile".
+
 ```gdscript
-WebSDK.type_device_recieved.connect(type_device_recieved)
-
-WebSDK.get_type_device()
-
-func type_device_recieved(type):
-	print("device_type: ", type)
+var device_type = WebSDK.get_type_device()
 ```
 
 Getting language:
 
+The function return 2 letter is language code.
+
 ```gdscript
-WebSDK.language_recieved.connect(language_recieved)
-
-WebSDK.get_language()
-
-func language_recieved(lang):
-	print("language: ", lang)
+var language = WebSDK.get_language()
 ```
 
 ### Yandex

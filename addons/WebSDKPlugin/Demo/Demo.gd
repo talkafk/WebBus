@@ -5,8 +5,6 @@ func _ready():
 	WebSDK.ad_error.connect(ad_error)
 	WebSDK.ad_started.connect(ad_started)
 	WebSDK.reward_added.connect(reward_added)
-	WebSDK.type_device_recieved.connect(type_device_recieved)
-	WebSDK.language_recieved.connect(language_recieved)
 
 
 func _on_show_ad_pressed():
@@ -26,11 +24,14 @@ func _on_hide_banner_pressed():
 
 
 func _on_get_language_pressed():
-	WebSDK.get_language()
+	var lang = WebSDK.get_language()
+	print("language:", lang)
+	
 
 
 func _on_get_type_device_pressed():
-	WebSDK.get_type_device()
+	var type = WebSDK.get_type_device()
+	print("device type:", type)
 
 
 func _on_set_yandex_leaderboard_pressed():
@@ -52,12 +53,6 @@ func ad_started():
 	
 func reward_added():
 	print("reward_added")
-	
-func type_device_recieved(type):
-	print("device_type: ", type)
-	
-func language_recieved(lang):
-	print("language: ", lang)
 
 
 var leaderboard_info
