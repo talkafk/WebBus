@@ -8,10 +8,12 @@ const JS_CRAZY_SDK_REF = "https://sdk.crazygames.com/crazygames-sdk-v2.js"
 
 # You can change archive name
 const YANDEX_ARCHIVE_NAME = "yandex_export.zip"
+const CRAZY_BANNER_STYLE = "width: 100%; height: 100px; position: fixed; top:0; left:0; z-index:9999"
 
 var plugin_path: String = get_script().resource_path.get_base_dir()
 var is_yandex := false
 var is_crazy := false
+var is_gamedistribution := false
 var export_path := ""
 
 func _get_name() -> String:
@@ -21,10 +23,11 @@ func _get_name() -> String:
 func _export_begin(features: PackedStringArray , is_debug: bool, path: String, flags: int) -> void:
 	if features.has("yandexgames"):
 		is_yandex = true
-		export_path = path
 	elif features.has("crazygames"):
 		is_crazy = true
-		export_path = path
+	elif features.has("gamedistribution"):
+		is_gamedistribution = true
+	export_path = path
 
 
 func _export_end() -> void:
@@ -52,12 +55,18 @@ func _export_end() -> void:
 		var pos = html.find('</head>')
 		
 		html = html.insert(pos, 
-				'<script src="' + JS_CRAZY_SDK_REF + '"></script>\n')
+				'<script src="' + JS_CRAZY_SDK_REF + '"></script>\n' +
+				'<div id="responsive-banner-container" hidden="hidden" style="'
+				 + CRAZY_BANNER_STYLE +'"></div>'
+				)
 		file = FileAccess.open(export_path, FileAccess.WRITE)
 		file.store_string(html)
 		file.close()
+	elif is_gamedistribution:
+		pass #TODO
 	is_yandex = false
 	is_crazy = false
+	is_gamedistribution = false
 	
 	
 func zip_export(name_file:String):

@@ -16,6 +16,12 @@ function SaveLeaderboardScore(leaderboardName, score, extraData) {
     });
 }
 
+async function GetLeaderboardInfo(leaderboardName){
+    console.log('Getting leaderboard', leaderboardName, "info")
+    var info = await lb.getLeaderboardDescription(leaderboardName)
+    return info
+}
+
 function GetLang(callback) {
  	console.log('Get language');
 	callback(ysdk.environment.i18n.lang);
