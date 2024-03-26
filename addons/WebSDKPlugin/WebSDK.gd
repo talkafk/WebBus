@@ -89,7 +89,7 @@ func _ready():
 				rewardcallbacks["onOpen"] = adStartedCallback
 				adRewardCallbacks["callbacks"] = rewardcallbacks
 				while not YandexSDK:
-					YandexSDK = JavaScriptBridge.get_interface("Window").ysdk
+					YandexSDK = window.ysdk
 					await get_tree().create_timer(0.1).timeout # ждём яндекс sdk
 				emit_signal("_SDK_inited")
 				print('gd init yandex')
