@@ -1,4 +1,4 @@
-# WebSDKPlugin
+# WebBus
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
 This version is for Godot 4.
@@ -47,11 +47,11 @@ You can explore the demo scene for a better understanding of how to use the plug
 
 Calling full-screen advertisement:
 ```gdscript
-WebSDK.show_ad()
+WebBus.show_ad()
 ```
 Calling rewarded advertisement:
 ```gdscript
-WebSDK.show_rewarded_ad()
+WebBus.show_rewarded_ad()
 ```
 
 For full-screen and rewarded advertisements, there are 4 callback signals:
@@ -64,12 +64,12 @@ signal ad_started
 
 Calling banner advertisement:
 ```gdscript
-WebSDK.show_banner()
+WebBus.show_banner()
 ```
 
 Close banner advertisement:
 ```gdscript
-WebSDK.hide_banner()
+WebBus.hide_banner()
 ```
 
 #### Other
@@ -79,7 +79,7 @@ Getting type of device:
 The function return `String`, possible values: "desktop", "tablet", "mobile".
 
 ```gdscript
-var device_type = WebSDK.get_type_device()
+var device_type = WebBus.get_type_device()
 ```
 
 Getting language:
@@ -87,7 +87,7 @@ Getting language:
 The function return 2 letter is language code.
 
 ```gdscript
-var language = WebSDK.get_language()
+var language = WebBus.get_language()
 ```
 
 ### Yandex
@@ -97,7 +97,7 @@ var language = WebSDK.get_language()
 Call `yandex_ready()` function when the game ready for game.
 
 ```gdscript
-WebSDK.yandex_ready()
+WebBus.yandex_ready()
 ```
 
 
@@ -107,9 +107,9 @@ Features exclusive to Yandex games.
 
 Get info about leaderboard:
 ```gdscrript
-WebSDK.leaderboard_info_recieved.connect(getting_leaderboard_info)
+WebBus.leaderboard_info_recieved.connect(getting_leaderboard_info)
 
-WebSDK.get_leaderboard_info(name_leaderboard)
+WebBus.get_leaderboard_info(name_leaderboard)
 
 func getting_leaderboard_info(info):
 	print(info)
@@ -120,7 +120,7 @@ func getting_leaderboard_info(info):
 
 Save score in leaderboard:
 ```gdscript
-WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
+WebBus.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 ```
 
 `name_leaderboard` : **String** type
@@ -135,28 +135,28 @@ WebSDK.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 The `crazy_happytime()` method can be called on various player achievements.
 
 ```gdscript
-WebSDK.crazy_happytime()
+WebBus.crazy_happytime()
 ```
 The `crazy_start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
 
 ```gdscript
-WebSDK.crazy_start_gameplay()
+WebBus.crazy_start_gameplay()
 ```
 
 The `crazy_stop_gameplay()` function has to be called on every game break don't forget to call `gameplayStart()` when the gameplay resumes.
 
 ```gdscript
-WebSDK.crazy_stop_gameplay()
+WebBus.crazy_stop_gameplay()
 ```
 The `crazy_start_loading()` function has to be called whenever you start loading your game.
 
 ```gdscript
-WebSDK.crazy_start_loading()
+WebBus.crazy_start_loading()
 ```
 The `crazy_stop_loading()` function has to be called when the loading is complete and eventually the gameplay starts.
 
 ```gdscript
-WebSDK.crazy_stop_loading()
+WebBus.crazy_stop_loading()
 ```
 
 

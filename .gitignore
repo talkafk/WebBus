@@ -18,5 +18,5 @@ mono_crash.*.json
 *.import
 
 /addons/*
-!/addons/WebSDKPlugin/
+!/addons/WebBusPlugin/
 /export/*

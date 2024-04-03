@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bpogarfjr8ys4"]
 
-[ext_resource type="Script" path="res://addons/WebSDKPlugin/Demo/Demo.gd" id="1_so7c8"]
+[ext_resource type="Script" path="res://addons/WebBusPlugin/Demo/Demo.gd" id="1_so7c8"]
 
 [node name="Demo" type="Control"]
 layout_mode = 3
