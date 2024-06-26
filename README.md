@@ -15,6 +15,7 @@ This version is for Godot 4.
 	- [Leaderboards](#leaderboards)
   - [Crazy Games](#crazy-games)
 	- [Game](#game)
+  - [Main Screen Menu](#main-screen-menu)
 - [Features](#features)
   - [Archive](#archive)
 
@@ -71,6 +72,7 @@ Close banner advertisement:
 ```gdscript
 WebBus.hide_banner()
 ```
+>For Crazy Games banner you can set the size and position in the [Main Screen Menu](#main-screen-menu)
 
 #### Other
 
@@ -159,6 +161,11 @@ The `crazy_stop_loading()` function has to be called when the loading is complet
 WebBus.crazy_stop_loading()
 ```
 
+### Main Screen Menu
+
+In the main screen menu you can set your settings.
+
+![alt text](image.png)
 
 ## Features
 
