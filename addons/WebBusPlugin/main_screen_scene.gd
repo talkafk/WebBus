@@ -4,20 +4,14 @@ extends Control
 var crazy_banner_w := 728
 var crazy_banner_h := 90
 
-func _on_option_button_item_selected(index):
-	match index:
-		0:
-			crazy_banner_w = 728
-			crazy_banner_h = 90
-		1:
-			crazy_banner_w = 300
-			crazy_banner_h = 250
-		2:
-			crazy_banner_w = 320
-			crazy_banner_h = 50
-		3:
-			crazy_banner_w = 468
-			crazy_banner_h = 60
-		4:
-			crazy_banner_w = 320
-			crazy_banner_h = 100
+signal main_scene_data_change
+
+
+func _on_spin_box_value_changed(value):
+	crazy_banner_w = value
+	main_scene_data_change.emit()
+
+
+func _on_spin_box_2_value_changed(value):
+	crazy_banner_h = value
+	main_scene_data_change.emit()

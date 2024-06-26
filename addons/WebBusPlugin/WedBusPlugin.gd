@@ -13,13 +13,13 @@ func _enter_tree():
 	add_autoload_singleton(AUTOLOAD_NAME_AD, "res://addons/WebBusPlugin/WebBus.gd")
 	export_plugin = load("res://addons/WebBusPlugin/export_plugin.gd").new()
 	add_export_plugin(export_plugin)
-	main_screen_changed.connect(_update_data_from_main_screen)
 	
 	# Init main screen scene
 	main_screen_scene_instance = MainScreenScene.instantiate()
 	EditorInterface.get_editor_main_screen().add_child(main_screen_scene_instance)
 	_make_visible(false)
-
+	main_screen_scene_instance.main_scene_data_change.connect(_update_data_from_main_screen)
+	
 
 func _exit_tree():
 	# Clean-up of the plugin goes here.
@@ -44,7 +44,6 @@ func _get_plugin_icon():
 	return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
 	
 
-func _update_data_from_main_screen(_screen_name):
-	if _screen_name == _get_plugin_name():
-		export_plugin.crazy_banner_w = main_screen_scene_instance.crazy_banner_w
-		export_plugin.crazy_banner_h = main_screen_scene_instance.crazy_banner_h
+func _update_data_from_main_screen():
+	export_plugin.crazy_banner_w = main_screen_scene_instance.crazy_banner_w
+	export_plugin.crazy_banner_h = main_screen_scene_instance.crazy_banner_h
