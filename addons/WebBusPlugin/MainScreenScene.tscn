@@ -27,29 +27,92 @@ size_flags_vertical = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="CrazyBannerSize" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
 text = "Crazy Games banner size: "
 
-[node name="SpinBox" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="crazy_banner_w" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
-min_value = 120.0
-max_value = 970.0
-value = 728.0
+selected = 0
+fit_to_longest_item = false
+item_count = 13
+popup/item_0/text = "120px"
+popup/item_1/text = "160px"
+popup/item_1/id = 1
+popup/item_2/text = "250px"
+popup/item_2/id = 2
+popup/item_3/text = "300px"
+popup/item_3/id = 3
+popup/item_4/text = "320px"
+popup/item_4/id = 4
+popup/item_5/text = "336px"
+popup/item_5/id = 5
+popup/item_6/text = "468px"
+popup/item_6/id = 6
+popup/item_7/text = "728px"
+popup/item_7/id = 7
+popup/item_8/text = "970px"
+popup/item_8/id = 8
+popup/item_9/text = "25%"
+popup/item_9/id = 9
+popup/item_10/text = "50%"
+popup/item_10/id = 10
+popup/item_11/text = "75%"
+popup/item_11/id = 11
+popup/item_12/text = "100%"
+popup/item_12/id = 12
 
-[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
 text = "x"
 
-[node name="SpinBox2" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+[node name="crazy_banner_h" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
-min_value = 50.0
-max_value = 600.0
-value = 90.0
+selected = 0
+fit_to_longest_item = false
+item_count = 10
+popup/item_0/text = "50px"
+popup/item_1/text = "60px"
+popup/item_1/id = 1
+popup/item_2/text = "90px"
+popup/item_2/id = 2
+popup/item_3/text = "250px"
+popup/item_3/id = 3
+popup/item_4/text = "280px"
+popup/item_4/id = 4
+popup/item_5/text = "600px"
+popup/item_5/id = 5
+popup/item_6/text = "25%"
+popup/item_6/id = 9
+popup/item_7/text = "50%"
+popup/item_7/id = 10
+popup/item_8/text = "75%"
+popup/item_8/id = 11
+popup/item_9/text = "100%"
+popup/item_9/id = 12
+
+[node name="CrazyBannerPos" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos"]
+layout_mode = 2
+text = "Crazy Games banner position: "
+
+[node name="crazy_banner_pos" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos"]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "bottom"
+popup/item_1/text = "top"
+popup/item_1/id = 1
+popup/item_2/text = "left"
+popup/item_2/id = 2
+popup/item_3/text = "right"
+popup/item_3/id = 3
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(368, 179)
@@ -64,5 +127,6 @@ focus_mode = 1
 text = "Update
 "
 
-[connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/SpinBox" to="." method="_on_spin_box_value_changed"]
-[connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/SpinBox2" to="." method="_on_spin_box_2_value_changed"]
+[connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_w" to="." method="_on_crazy_banner_w_item_selected"]
+[connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_h" to="." method="_on_crazy_banner_h_item_selected"]
+[connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos/crazy_banner_pos" to="." method="_on_crazy_banner_pos_item_selected"]

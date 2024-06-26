@@ -17,8 +17,9 @@ var is_crazy := false
 var is_gamedistribution := false
 var export_path := ""
 
-var crazy_banner_w := 728
-var crazy_banner_h := 90
+var crazy_banner_w := "728px"
+var crazy_banner_h := "90px"
+var crazy_banner_pos := "bottom" 
 
 func _get_name() -> String:
 	return "WebBus"
@@ -57,7 +58,7 @@ func _export_end() -> void:
 		var html := file.get_as_text()
 		file.close()
 		var pos = html.find('</head>')
-		CRAZY_BANNER_STYLE = "width: " + str(crazy_banner_w) + "px; height: " + str(crazy_banner_h) + "px; position: fixed; bottom:0; z-index:9999"
+		CRAZY_BANNER_STYLE = "width: " + str(crazy_banner_w) + "; height: " + str(crazy_banner_h) + "; position: fixed; " + crazy_banner_pos + ":0; z-index:9999"
 		html = html.insert(pos, 
 				'<script src="' + JS_CRAZY_SDK_REF + '"></script>\n' +
 				'<div id="responsive-banner-container" hidden="hidden" style="'
