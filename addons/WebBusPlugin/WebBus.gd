@@ -253,7 +253,9 @@ func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = 
 			window.SaveLeaderboardScore(leaderboard, score, extra_data)
 			return
 		push_warning("Bad request setting leaderboard score")
+
 #endregion
+
 #region Crazy Games
 func crazy_happytime():
 	if CrazySDK:
