@@ -143,6 +143,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "leaderboard name:String"
 
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="get_yandex_leaderboard_entries" type="Button" parent="VBoxContainer/Yandex/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_yandex_leaderboard_entries"
+
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "leaderboard name:String"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -177,4 +192,5 @@ placeholder_text = "score:int"
 [connection signal="pressed" from="VBoxContainer/Yandex/yandex_ready" to="." method="_on_yandex_ready_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer3/get_yandex_leaderboard_player_entry" to="." method="_on_get_yandex_leaderboard_player_entry_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer4/get_yandex_leaderboard_entries" to="." method="_on_get_yandex_leaderboard_entries_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]

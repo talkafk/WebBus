@@ -7,6 +7,7 @@ func _ready():
 	WebBus.reward_added.connect(reward_added)
 	WebBus.leaderboard_info_recieved.connect(getting_leaderboard_info)
 	WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
+	WebBus.leaderboard_entries_recieved.connect(getting_leaderboard_entries)
 
 func _on_show_ad_pressed():
 	WebBus.show_ad()
@@ -71,8 +72,17 @@ func _on_get_yandex_leaderboard_player_entry_pressed():
 	WebBus.get_leaderboard_player_entry(name_leaderboard)
 
 func getting_leaderboard_player_entry(info):
-	print(info.score)
-
+	print(info)
+	
+	
+func _on_get_yandex_leaderboard_entries_pressed():
+	var name_leaderboard :String = $VBoxContainer/Yandex/HBoxContainer4/leaderboard.text
+	WebBus.get_leaderboard_entries(name_leaderboard)
+	
+func getting_leaderboard_entries(info):
+	print(info)
+	
+	
 func _on_happytime_pressed():
 	WebBus.crazy_happytime()
 

@@ -1,11 +1,9 @@
 let lb;
 let ysdk;
-let yandex_init = false;
-YaGames.init().then(_ysdk => { window.ysdk = _ysdk;
-ysdk = _ysdk; 
-_ysdk.getLeaderboards() .then(_lb => lb = _lb);
-yandex_init = true;
-console.log("Yandex init");
+YaGames.init().then(_ysdk => {
+    ysdk = _ysdk; 
+    _ysdk.getLeaderboards() .then(_lb => lb = _lb);
+    console.log("Yandex init");
 });
 
 
@@ -20,23 +18,19 @@ function GetLeaderboardInfo(leaderboardName, callback){
     console.log('Getting leaderboard', leaderboardName, "description");
     lb.getLeaderboardDescription(leaderboardName).then((_info) => {
         callback(_info);
-    }).catch(err => {
-        console.log('Leaderboard description load error');
     });
 }
 
 function GetLeaderboardPlayerEntry(leaderboardName, callback){
     console.log('Getting leaderboard', leaderboardName, "player entry");
-    lb.getLeaderboardPlayerEntry(leaderboardName)
-    .then(res => {
-        callback(res);
-    })
-    .catch(err => {
-        if (err.code === 'LEADERBOARD_PLAYER_NOT_PRESENT') {
-            console.log('leaderboard player not present');
-        }
-        else {
-            console.log('Leaderboard description load error');
-        }
+    lb.getLeaderboardPlayerEntry(leaderboardName).then((_res) => {
+        callback(_res);
+    });
+}
+
+function GetLeaderboardEntries(leaderboardName, config, callback) {
+    console.log('Getting leaderboard', leaderboardName, "entries");
+    lb.getLeaderboardEntries(leaderboardName, config).then((_res) => {
+        callback(_res);
     });
 }

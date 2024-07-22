@@ -208,7 +208,7 @@ func _adError(args):
 func _adStarted(args):
 	ad_started.emit()
 
-#TODO need test banner
+
 func show_banner():
 	if OS.has_feature("yandexgames"):
 		while not YandexSDK:
@@ -293,6 +293,24 @@ func get_leaderboard_player_entry(leaderboard:String):
 		
 func _leaderboard_player_entry_recieved(info):
 	leaderboard_player_entry_recieved.emit(info[0])
+	
+signal leaderboard_entries_recieved
+var callback_entries_recieved = JavaScriptBridge.create_callback(_leaderboard_entries_recieved)
+
+#TODO need test
+func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quantity_around:int = 5, quantity_top:int = 5):
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		var config = {
+			"includeUser": include_user,
+			"quantityAround": quantity_around,
+			"quantityTop": quantity_top,
+		}
+		window.GetLeaderboardEntries(leaderboard, config, callback_entries_recieved)
+		
+func _leaderboard_entries_recieved(info):
+	leaderboard_entries_recieved.emit(info[0])
 
 #endregion
 
