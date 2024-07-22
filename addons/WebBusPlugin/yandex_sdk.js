@@ -1,6 +1,6 @@
-var lb;
-var ysdk;
-var yandex_init = false;
+let lb;
+let ysdk;
+let yandex_init = false;
 YaGames.init().then(_ysdk => { window.ysdk = _ysdk;
 ysdk = _ysdk; 
 _ysdk.getLeaderboards() .then(_lb => lb = _lb);
@@ -16,14 +16,12 @@ function SaveLeaderboardScore(leaderboardName, score, extraData) {
     });
 }
 
-async function GetLeaderboardInfo(leaderboardName){
-    console.log('Getting leaderboard', leaderboardName, "info")
-    var info = await lb.getLeaderboardDescription(leaderboardName)
-    return info
+function GetLeaderboardInfo(leaderboardName, callback){
+    console.log('Getting leaderboard', leaderboardName, "description");
+    lb.getLeaderboardDescription(leaderboardName).then((_info) => {
+        callback(_info);
+        console.log(_info)
+    }).catch(err => {
+        console.log('Leaderboard description load error');
+    });
 }
-
-function GetLang(callback) {
- 	console.log('Get language');
-	callback(ysdk.environment.i18n.lang);
-}
-

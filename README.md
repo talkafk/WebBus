@@ -107,7 +107,7 @@ WebBus.yandex_ready()
 
 Features exclusive to Yandex games.
 
-Get info about leaderboard:
+Get leaderboard description:
 ```gdscrript
 WebBus.leaderboard_info_recieved.connect(getting_leaderboard_info)
 

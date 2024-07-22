@@ -64,7 +64,7 @@ func _on_get_yandex_leaderboard_info_pressed():
 	
 func getting_leaderboard_info(info):
 	leaderboard_info = info 
-	print(leaderboard_info)
+	print(leaderboard_info.name)
 
 
 func _on_happytime_pressed():

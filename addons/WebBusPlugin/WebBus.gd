@@ -234,18 +234,20 @@ func yandex_ready():
 		JavaScriptBridge.eval("ysdk.features.LoadingAPI?.ready()")
 
 signal leaderboard_info_recieved
+var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
 
-#TODO need test
+
 func get_leaderboard_info(leaderboard:String):
 	if OS.has_feature("yandexgames"):
 		if leaderboard:
 			while not YandexSDK:
 				await _SDK_inited
-			var info:JavaScriptObject = await window.GetLeaderboardInfo(leaderboard)
-			leaderboard_info_recieved.emit(info)
+			window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
 			return
 		push_warning("Bad requst getting leaderboard")
 
+func _leaderboard_info_recieved(info):
+	leaderboard_info_recieved.emit(info[0])
 
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
@@ -302,7 +304,6 @@ func get_type_device():
 		if info:
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
-	
 
 
 signal _system_info_recieved
