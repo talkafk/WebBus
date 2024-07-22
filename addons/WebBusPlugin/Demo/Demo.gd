@@ -78,11 +78,11 @@ func _on_happytime_pressed():
 
 
 func _on_start_gameplay_pressed():
-	WebBus.crazy_start_gameplay()
+	WebBus.start_gameplay()
 
 
 func _on_stop_gameplay_pressed():
-	WebBus.crazy_stop_gameplay()
+	WebBus.stop_gameplay()
 
 
 func _on_start_loading_pressed():

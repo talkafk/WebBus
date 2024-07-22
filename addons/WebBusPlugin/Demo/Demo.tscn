@@ -78,6 +78,7 @@ text = "stop_gameplay"
 [node name="Crazy" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
 columns = 3
 
 [node name="happytime" type="Button" parent="VBoxContainer/Crazy"]
