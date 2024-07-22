@@ -117,6 +117,18 @@ func getting_leaderboard_info(info):
 	print(info)
 
 ```
+
+Get leaderboard player entry:
+```gdscrript
+WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
+
+WebBus.get_leaderboard_player_entry(name_leaderboard)
+
+func getting_leaderboard_player_entry(info):
+	print(info.score)
+
+```
+
 `name_leaderboard` : **String** type
 
 
