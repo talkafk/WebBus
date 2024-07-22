@@ -74,6 +74,20 @@ WebBus.hide_banner()
 ```
 >For Crazy Games banner you can set the size and position in the [Main Screen Menu](#main-screen-menu)
 
+#### Game
+
+The `start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
+
+```gdscript
+WebBus.start_gameplay()
+```
+
+The `stop_gameplay()` function has to be called on every game break don't forget to call `start_gameplay(` when the gameplay resumes.
+
+```gdscript
+WebBus.stop_gameplay()
+```
+
 #### Other
 
 Getting type of device:
@@ -91,6 +105,7 @@ The function return 2 letter is language code.
 ```gdscript
 var language = WebBus.get_language()
 ```
+
 
 ### Yandex
 
@@ -151,17 +166,7 @@ The `crazy_happytime()` method can be called on various player achievements.
 ```gdscript
 WebBus.crazy_happytime()
 ```
-The `crazy_start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
 
-```gdscript
-WebBus.crazy_start_gameplay()
-```
-
-The `crazy_stop_gameplay()` function has to be called on every game break don't forget to call `gameplayStart()` when the gameplay resumes.
-
-```gdscript
-WebBus.crazy_stop_gameplay()
-```
 The `crazy_start_loading()` function has to be called whenever you start loading your game.
 
 ```gdscript
