@@ -1,20 +1,21 @@
 # WebBus
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
-This version is for Godot 4.
+This version is for Godot 4.x.
 ### Contents
 
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
 - [Usage](#usage)
   - [General](#general)
-	- [Advertisement](#advertisement)
-	- [Other](#other)
+	  - [Advertisement](#advertisement)
+    - [Game](#game-1)
+    - [Other](#other)
   - [Yandex](#yandex)
 	- [Ready](#ready)
 	- [Leaderboards](#leaderboards)
   - [Crazy Games](#crazy-games)
-	- [Game](#game)
+	  - [Game](#game)
   - [Main Screen Menu](#main-screen-menu)
 - [Features](#features)
   - [Archive](#archive)
@@ -74,6 +75,20 @@ WebBus.hide_banner()
 ```
 >For Crazy Games banner you can set the size and position in the [Main Screen Menu](#main-screen-menu)
 
+#### Game
+
+The `start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
+
+```gdscript
+WebBus.start_gameplay()
+```
+
+The `stop_gameplay()` function has to be called on every game break don't forget to call `start_gameplay(` when the gameplay resumes.
+
+```gdscript
+WebBus.stop_gameplay()
+```
+
 #### Other
 
 Getting type of device:
@@ -92,6 +107,7 @@ The function return 2 letter is language code.
 var language = WebBus.get_language()
 ```
 
+
 ### Yandex
 
 #### Ready
@@ -107,7 +123,7 @@ WebBus.yandex_ready()
 
 Features exclusive to Yandex games.
 
-Get info about leaderboard:
+Get leaderboard description:
 ```gdscrript
 WebBus.leaderboard_info_recieved.connect(getting_leaderboard_info)
 
@@ -117,8 +133,46 @@ func getting_leaderboard_info(info):
 	print(info)
 
 ```
+
 `name_leaderboard` : **String** type
 
+`info` : **JavaScriptObject** type
+
+Get leaderboard player entry:
+```gdscrript
+WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
+
+WebBus.get_leaderboard_player_entry(name_leaderboard)
+
+func getting_leaderboard_player_entry(info):
+	print(info.score)
+
+```
+
+`name_leaderboard` : **String** type
+
+`info` : **JavaScriptObject** type
+
+Get leaderboard entries:
+```gdscrript
+WebBus.leaderboard_entries_recieved.connect(getting_leaderboard_entries)
+
+WebBus.get_leaderboard_entries(name_leaderboard, include_user=true, quantity_around=5, quantity_top=5)
+
+func getting_leaderboard_entries(info):
+	print(info.userRank)
+
+```
+
+`name_leaderboard` : **String** type
+
+`include_user` : **bool** type, optional parameter
+
+`quantity_around` : **int** type, optional parameter
+
+`quantity_top` : **int** type, optional parameter
+
+`info` : **JavaScriptObject** type
 
 Save score in leaderboard:
 ```gdscript
@@ -139,17 +193,7 @@ The `crazy_happytime()` method can be called on various player achievements.
 ```gdscript
 WebBus.crazy_happytime()
 ```
-The `crazy_start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
 
-```gdscript
-WebBus.crazy_start_gameplay()
-```
-
-The `crazy_stop_gameplay()` function has to be called on every game break don't forget to call `gameplayStart()` when the gameplay resumes.
-
-```gdscript
-WebBus.crazy_stop_gameplay()
-```
 The `crazy_start_loading()` function has to be called whenever you start loading your game.
 
 ```gdscript

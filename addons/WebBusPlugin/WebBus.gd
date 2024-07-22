@@ -208,7 +208,7 @@ func _adError(args):
 func _adStarted(args):
 	ad_started.emit()
 
-#TODO need test banner
+
 func show_banner():
 	if OS.has_feature("yandexgames"):
 		while not YandexSDK:
@@ -227,49 +227,97 @@ func hide_banner():
 		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
 		CrazySDK.banner.clearBanner("responsive-banner-container")
 #endregion
+#region game
+	
+func start_gameplay():
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.GameplayAPI.start()
+	elif OS.has_feature("crazygames"):
+		while not CrazySDK:
+			await _SDK_inited
+		CrazySDK.game.gameplayStart()
+	
+func stop_gameplay():
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.GameplayAPI.stop()
+	elif OS.has_feature("crazygames"):
+		while not CrazySDK:
+			await _SDK_inited
+		CrazySDK.game.gameplayStop()
+	
+#endregion
+
 #region Yandex
 
 func yandex_ready():
 	if OS.has_feature("yandexgames"):
-		JavaScriptBridge.eval("ysdk.features.LoadingAPI?.ready()")
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.LoadingAPI.ready()
 
 signal leaderboard_info_recieved
+var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
 
-#TODO need test
+
 func get_leaderboard_info(leaderboard:String):
 	if OS.has_feature("yandexgames"):
-		if leaderboard:
-			while not YandexSDK:
-				await _SDK_inited
-			var info:JavaScriptObject = await window.GetLeaderboardInfo(leaderboard)
-			leaderboard_info_recieved.emit(info)
-			return
+		while not YandexSDK:
+			await _SDK_inited
+		window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
+		return
 		push_warning("Bad requst getting leaderboard")
 
+func _leaderboard_info_recieved(info):
+	leaderboard_info_recieved.emit(info[0])
 
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
-		if leaderboard and score:
-			window.SaveLeaderboardScore(leaderboard, score, extra_data)
-			return
-		push_warning("Bad request setting leaderboard score")
+		while not YandexSDK:
+			await _SDK_inited
+		window.SaveLeaderboardScore(leaderboard, score, extra_data)
+		return
+	push_warning("Bad request setting leaderboard score")
+
+signal leaderboard_player_entry_recieved
+var callback_player_entry_recieved = JavaScriptBridge.create_callback(_leaderboard_player_entry_recieved)
+
+func get_leaderboard_player_entry(leaderboard:String):
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		window.GetLeaderboardPlayerEntry(leaderboard, callback_player_entry_recieved)
+		
+func _leaderboard_player_entry_recieved(info):
+	leaderboard_player_entry_recieved.emit(info[0])
+	
+signal leaderboard_entries_recieved
+var callback_entries_recieved = JavaScriptBridge.create_callback(_leaderboard_entries_recieved)
+
+#TODO need test
+func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quantity_around:int = 5, quantity_top:int = 5):
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		var config = {
+			"includeUser": include_user,
+			"quantityAround": quantity_around,
+			"quantityTop": quantity_top,
+		}
+		window.GetLeaderboardEntries(leaderboard, config, callback_entries_recieved)
+		
+func _leaderboard_entries_recieved(info):
+	leaderboard_entries_recieved.emit(info[0])
+
 #endregion
+
 #region Crazy Games
 func crazy_happytime():
 	if CrazySDK:
 		CrazySDK.game.happytime()
-	else:
-		push_warning("SDK not initialized")
-	
-func crazy_start_gameplay():
-	if CrazySDK:
-		CrazySDK.game.gameplayStart()
-	else:
-		push_warning("SDK not initialized")
-	
-func crazy_stop_gameplay():
-	if CrazySDK:
-		CrazySDK.game.gameplayStop()
 	else:
 		push_warning("SDK not initialized")
 	
@@ -300,7 +348,6 @@ func get_type_device():
 		if info:
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
-	
 
 
 signal _system_info_recieved

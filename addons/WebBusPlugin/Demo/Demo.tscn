@@ -61,9 +61,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "get_type_device"
 
+[node name="start_gameplay" type="Button" parent="VBoxContainer/General"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "start_gameplay"
+
+[node name="stop_gameplay" type="Button" parent="VBoxContainer/General"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "stop_gameplay"
+
 [node name="Crazy" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
 columns = 3
 
 [node name="happytime" type="Button" parent="VBoxContainer/Crazy"]
@@ -72,20 +87,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "happytime"
-
-[node name="start_gameplay" type="Button" parent="VBoxContainer/Crazy"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "start_gameplay"
-
-[node name="stop_gameplay" type="Button" parent="VBoxContainer/Crazy"]
-auto_translate_mode = 1
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "stop_gameplay"
 
 [node name="start_loading" type="Button" parent="VBoxContainer/Crazy"]
 auto_translate_mode = 1
@@ -127,6 +128,36 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "leaderboard name:String"
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="get_yandex_leaderboard_player_entry" type="Button" parent="VBoxContainer/Yandex/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_yandex_leaderboard_player_entry"
+
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "leaderboard name:String"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="get_yandex_leaderboard_entries" type="Button" parent="VBoxContainer/Yandex/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_yandex_leaderboard_entries"
+
+[node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "leaderboard name:String"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -153,11 +184,13 @@ placeholder_text = "score:int"
 [connection signal="pressed" from="VBoxContainer/General/hide_banner" to="." method="_on_hide_banner_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/get_language" to="." method="_on_get_language_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/get_type_device" to="." method="_on_get_type_device_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/start_gameplay" to="." method="_on_start_gameplay_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
-[connection signal="pressed" from="VBoxContainer/Crazy/start_gameplay" to="." method="_on_start_gameplay_pressed"]
-[connection signal="pressed" from="VBoxContainer/Crazy/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/stop_loading" to="." method="_on_stop_loading_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/yandex_ready" to="." method="_on_yandex_ready_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer3/get_yandex_leaderboard_player_entry" to="." method="_on_get_yandex_leaderboard_player_entry_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer4/get_yandex_leaderboard_entries" to="." method="_on_get_yandex_leaderboard_entries_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]
