@@ -239,11 +239,10 @@ var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_
 
 func get_leaderboard_info(leaderboard:String):
 	if OS.has_feature("yandexgames"):
-		if leaderboard:
-			while not YandexSDK:
-				await _SDK_inited
-			window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
-			return
+		while not YandexSDK:
+			await _SDK_inited
+		window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
+		return
 		push_warning("Bad requst getting leaderboard")
 
 func _leaderboard_info_recieved(info):
@@ -251,10 +250,23 @@ func _leaderboard_info_recieved(info):
 
 func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
 	if OS.has_feature("yandexgames"):
-		if leaderboard and score:
-			window.SaveLeaderboardScore(leaderboard, score, extra_data)
-			return
-		push_warning("Bad request setting leaderboard score")
+		while not YandexSDK:
+			await _SDK_inited
+		window.SaveLeaderboardScore(leaderboard, score, extra_data)
+		return
+	push_warning("Bad request setting leaderboard score")
+
+signal leaderboard_player_entry_recieved
+var callback_player_entry_recieved = JavaScriptBridge.create_callback(_leaderboard_player_entry_recieved)
+
+func get_leaderboard_player_entry(leaderboard:String):
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		window.GetLeaderboardPlayerEntry(leaderboard, callback_player_entry_recieved)
+		
+func _leaderboard_player_entry_recieved(info):
+	leaderboard_player_entry_recieved.emit(info[0])
 
 #endregion
 

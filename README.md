@@ -1,7 +1,7 @@
 # WebBus
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
-This version is for Godot 4.
+This version is for Godot 4.x.
 ### Contents
 
 - [Supported platforms](#supported-platforms)
