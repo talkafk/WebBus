@@ -29,7 +29,6 @@ func _on_get_language_pressed():
 	print("language:", lang)
 	
 
-
 func _on_get_type_device_pressed():
 	var type = WebBus.get_type_device()
 	print("device type:", type)

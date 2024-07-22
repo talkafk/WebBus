@@ -227,11 +227,37 @@ func hide_banner():
 		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
 		CrazySDK.banner.clearBanner("responsive-banner-container")
 #endregion
+#region game
+	
+func start_gameplay():
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.GameplayAPI.start()
+	elif OS.has_feature("crazygames"):
+		while not CrazySDK:
+			await _SDK_inited
+		CrazySDK.game.gameplayStart()
+	
+func stop_gameplay():
+	if OS.has_feature("yandexgames"):
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.GameplayAPI.stop()
+	elif OS.has_feature("crazygames"):
+		while not CrazySDK:
+			await _SDK_inited
+		CrazySDK.game.gameplayStop()
+	
+#endregion
+
 #region Yandex
 
 func yandex_ready():
 	if OS.has_feature("yandexgames"):
-		JavaScriptBridge.eval("ysdk.features.LoadingAPI?.ready()")
+		while not YandexSDK:
+			await _SDK_inited
+		YandexSDK.features.LoadingAPI.ready()
 
 signal leaderboard_info_recieved
 var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
@@ -274,18 +300,6 @@ func _leaderboard_player_entry_recieved(info):
 func crazy_happytime():
 	if CrazySDK:
 		CrazySDK.game.happytime()
-	else:
-		push_warning("SDK not initialized")
-	
-func crazy_start_gameplay():
-	if CrazySDK:
-		CrazySDK.game.gameplayStart()
-	else:
-		push_warning("SDK not initialized")
-	
-func crazy_stop_gameplay():
-	if CrazySDK:
-		CrazySDK.game.gameplayStop()
 	else:
 		push_warning("SDK not initialized")
 	
