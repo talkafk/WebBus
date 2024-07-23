@@ -6,8 +6,8 @@ const JS_YANDEX_FILE = "yandex_sdk.js"
 const JS_YANDEX_SDK_REF = "https://yandex.ru/games/sdk/v2"
 const JS_CRAZY_SDK_REF = "https://sdk.crazygames.com/crazygames-sdk-v2.js"
 
-# You can change archive name
-const YANDEX_ARCHIVE_NAME = "yandex_export.zip"
+
+var YANDEX_ARCHIVE_NAME = "yandex_export.zip"
 
 var CRAZY_BANNER_STYLE = "width: 720px; height: 90px; position: fixed; bottom:0; z-index:9999"
 

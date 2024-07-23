@@ -9,8 +9,8 @@ This version is for Godot 4.x.
 - [Usage](#usage)
   - [General](#general)
 	  - [Advertisement](#advertisement)
-    - [Game](#game-1)
-    - [Other](#other)
+	- [Game](#game-1)
+	- [Other](#other)
   - [Yandex](#yandex)
 	- [Ready](#ready)
 	- [Leaderboards](#leaderboards)
@@ -215,10 +215,4 @@ In the main screen menu you can set your settings.
 
 ### Archive
 
-For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in file `res://addons/WebSDKPlugin/export_plugin.gd`.
-
-Example:
-```gdscript
-# You can change the archive name
-const YANDEX_ARCHIVE_NAME = "you_archive_name.zip"
-```
+For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in [Main Screen Menu](#main-screen-menu).
