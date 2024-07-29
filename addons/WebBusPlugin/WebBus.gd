@@ -357,3 +357,19 @@ func _callback_crazy_system_info(args:Array):
 	system_info = args[1]
 	emit_signal("_system_info_recieved", system_info)
 #endregion
+
+#region purchases
+var payments:JavaScriptObject
+var payment_callback: = JavaScriptBridge.create_callback(func(_payments): payments = _payments)
+
+func init_payments():
+	YandexSDK.getPayments().then(func(_payments): payments = _payments)
+
+func purchase(id:String, developer_payload:String = ""):
+	var settings:JavaScriptObject
+	settings.id = id
+	if developer_payload:
+		settings.developerPayload = developer_payload
+	if payments:
+		payments.purchase(settings).then(func(_payments): payments = _payments).catch(func(_err): print("Error payment"))
+#endregion
