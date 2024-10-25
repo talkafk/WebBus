@@ -279,6 +279,11 @@ func ready():
 			while not YandexSDK:
 				await _SDK_inited
 			YandexSDK.features.LoadingAPI.ready()
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.sdkGameLoadingStop()
+
 
 signal leaderboard_info_recieved
 var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
@@ -351,14 +356,6 @@ func start_loading():
 		Platform.CRAZY:
 			if CrazySDK:
 				CrazySDK.game.sdkGameLoadingStart()
-			else:
-				push_warning("SDK not initialized")
-	
-func stop_loading():
-	match platform:
-		Platform.CRAZY:
-			if CrazySDK:
-				CrazySDK.game.sdkGameLoadingStop()
 			else:
 				push_warning("SDK not initialized")
 	

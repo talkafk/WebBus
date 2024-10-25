@@ -137,9 +137,8 @@ layout_mode = 2
 layout_mode = 2
 text = "Is archive build: "
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+[node name="Is Archive" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
-button_pressed = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
@@ -161,4 +160,5 @@ text = "Ensure that your export folder does not contain any external files."
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_w" to="." method="_on_crazy_banner_w_item_selected"]
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_h" to="." method="_on_crazy_banner_h_item_selected"]
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos/crazy_banner_pos" to="." method="_on_crazy_banner_pos_item_selected"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2/Is Archive" to="." method="_on_is_archive_toggled"]
 [connection signal="text_submitted" from="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/yandex_archive_name" to="." method="_on_yandex_archive_name_text_submitted"]

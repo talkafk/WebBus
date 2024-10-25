@@ -17,6 +17,7 @@ var export_path := ""
 var crazy_banner_w := "728px"
 var crazy_banner_h := "90px"
 var crazy_banner_pos := "bottom" 
+var is_archive:bool
 
 func _get_name() -> String:
 	return "WebBus"
@@ -33,7 +34,7 @@ func _export_end() -> void:
 	var pos = html.find('</head>')
 	
 	html = html.insert(pos, 
-			'<script src="' + JS__FILE + '"></script>\n')
+			'<script src="' + JS_FILE + '"></script>\n')
 	DirAccess.open(".")\
 			.copy(plugin_path + '/' + JS_FILE,\
 			export_path.get_base_dir() + '/' + JS_FILE)
@@ -45,8 +46,8 @@ func _export_end() -> void:
 	file = FileAccess.open(export_path, FileAccess.WRITE)
 	file.store_string(html)
 	file.close()
-	
-	zip_export(YANDEX_ARCHIVE_NAME)
+	if is_archive:
+		zip_export(YANDEX_ARCHIVE_NAME)
 	
 	
 	

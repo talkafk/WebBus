@@ -100,17 +100,15 @@ The function return 2 letter is language code.
 var language = WebBus.get_language()
 ```
 
-
-### Yandex
-
 #### Ready
 
-Call `yandex_ready()` function when the game ready for game.
+Call `ready()` function when the game ready for game.
 
 ```gdscript
-WebBus.yandex_ready()
+WebBus.ready()
 ```
 
+### Yandex
 
 #### Leaderboards
 
@@ -181,31 +179,22 @@ WebBus.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 ### Crazy Games
 #### Game
 
-The `crazy_happytime()` method can be called on various player achievements.
+The `happytime()` method can be called on various player achievements.
 
 ```gdscript
-WebBus.crazy_happytime()
+WebBus.happytime()
 ```
 
-The `crazy_start_loading()` function has to be called whenever you start loading your game.
+The `start_loading()` function has to be called whenever you start loading your game.
 
 ```gdscript
 WebBus.crazy_start_loading()
-```
-The `crazy_stop_loading()` function has to be called when the loading is complete and eventually the gameplay starts.
-
-```gdscript
-WebBus.crazy_stop_loading()
 ```
 
 ### Main Screen Menu
 
 In the main screen menu you can set your settings.
 
+>You can enable automatic build archiving, but make sure the export folder does not contain any extraneous files.
+
 ![alt text](image.png)
-
-## Features
-
-### Archive
-
-For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in [Main Screen Menu](#main-screen-menu).
