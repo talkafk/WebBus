@@ -1,10 +1,40 @@
 let lb;
 let ysdk;
-YaGames.init().then(_ysdk => {
-    ysdk = _ysdk; 
-    _ysdk.getLeaderboards() .then(_lb => lb = _lb);
-    console.log("Yandex init");
-});
+
+let url = window.location.href
+
+if (url.includes('yandex')) {
+    window.platform = 'yandex'
+}
+if (url.includes('crazygames')) {
+    window.platform = 'crazy'
+}
+if (url.includes('gamedistribution')) {
+    window.platform = 'gamedistribution'
+}
+let url_src
+switch ( window.platform) {
+    case "yandex":
+        url_src="https://yandex.ru/games/sdk/v2";
+        var script = document.createElement('script');
+        script.src = url_src;
+        document.head.appendChild(script);
+        YaGames.init().then(_ysdk => {
+            ysdk = _ysdk; 
+            _ysdk.getLeaderboards() .then(_lb => lb = _lb);
+            console.log("Yandex init");
+        });
+        break;
+    case "crazy":
+        url_src="https://sdk.crazygames.com/crazygames-sdk-v2.js";
+        var script = document.createElement('script');
+        script.src = url_src;
+        document.head.appendChild(script);
+        console.log("Crazy init");
+        break;
+}
+
+
 
 
 function SaveLeaderboardScore(leaderboardName, score, extraData) {

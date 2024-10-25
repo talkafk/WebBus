@@ -127,6 +127,38 @@ focus_mode = 1
 text = "Update
 "
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+layout_mode = 2
+text = "Is archive build: "
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
+layout_mode = 2
+button_pressed = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Archive name:"
+
+[node name="yandex_archive_name" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "you_archive_name.zip"
+max_length = 30
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Ensure that your export folder does not contain any external files."
+
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_w" to="." method="_on_crazy_banner_w_item_selected"]
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize/crazy_banner_h" to="." method="_on_crazy_banner_h_item_selected"]
 [connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos/crazy_banner_pos" to="." method="_on_crazy_banner_pos_item_selected"]
+[connection signal="text_submitted" from="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer/yandex_archive_name" to="." method="_on_yandex_archive_name_text_submitted"]

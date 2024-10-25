@@ -30,14 +30,7 @@ This version is for Godot 4.x.
 1. Download the plugin as a ZIP archive.
 2. Extract the ZIP archive and move the `addons/` folder it contains into your project folder.
 3. Enable the plugin in **Project > Project Settings > Plugins**.
-4. Create web export presets.
-5. Add the custom feature `yandexgames` or `crazygames` in the web export preset.
-   >Add only one custom feature in one export preset.
-6. Create an empty folder and set the **Export path** in this folder.
-   > It is important that there are no extraneous files in the folder,
-   > otherwise they will end up in the created zip archive.
 
-![img.png](img.png)
 
 ## Usage
 
@@ -215,10 +208,4 @@ In the main screen menu you can set your settings.
 
 ### Archive
 
-For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in file `res://addons/WebSDKPlugin/export_plugin.gd`.
-
-Example:
-```gdscript
-# You can change the archive name
-const YANDEX_ARCHIVE_NAME = "you_archive_name.zip"
-```
+For yandex export preset the zip archive will be generated automatically with the name `yandex_export.zip`. You can change the name to your own in [Main Screen Menu](#main-screen-menu).

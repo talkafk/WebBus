@@ -48,3 +48,4 @@ func _update_data_from_main_screen():
 	export_plugin.crazy_banner_w = main_screen_scene_instance.crazy_banner_w
 	export_plugin.crazy_banner_h = main_screen_scene_instance.crazy_banner_h
 	export_plugin.crazy_banner_pos = main_screen_scene_instance.crazy_banner_pos
+	export_plugin.YANDEX_ARCHIVE_NAME = main_screen_scene_instance.yandex_archive_name
