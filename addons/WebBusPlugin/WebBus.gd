@@ -6,19 +6,19 @@ signal ad_closed
 signal ad_error
 signal ad_started 
 
-var adCallbacks = null
-var adRewardCallbacks = null
-var adStartedCallback = null
-var adErrorCallback = null
-var adFinishedCallback = null
-var adFinishedRewardCallback = null
-var window = null
+var adCallbacks:JavaScriptObject
+var adRewardCallbacks:JavaScriptObject
+var adStartedCallback:JavaScriptObject
+var adErrorCallback:JavaScriptObject
+var adFinishedCallback:JavaScriptObject
+var adFinishedRewardCallback:JavaScriptObject
+var window:JavaScriptObject
 
-var YandexSDK = null
-var CrazySDK = null
-var GameDistSDK = null
+var YandexSDK:JavaScriptObject
+var CrazySDK:JavaScriptObject
+var GameDistSDK:JavaScriptObject
 
-var info = {}
+var info := {}
 
 const LANGUAGE_CODES = {'AF': 'uz', 'AX': 'sv', 'AL': 'en', 'DZ': 'kab',
  'AS': 'en', 'AD': 'en', 'AO': 'pt', 'AI': 'es', 'AG': 'es', 'AR': 'es',
@@ -64,6 +64,10 @@ const LANGUAGE_CODES = {'AF': 'uz', 'AX': 'sv', 'AL': 'en', 'DZ': 'kab',
  'VN': 'vi', 'WF': 'fr', 'EH': 'ar', '001': 'yi', 'YE': 'ar', 'ZM': 'en',
  'ZW': 'sn'}
 
+enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION}
+
+var platform : int
+
 #region _ready
 func _ready():
 	match OS.get_name():
@@ -75,67 +79,77 @@ func _ready():
 			adErrorCallback = JavaScriptBridge.create_callback(_adError)
 			adFinishedCallback = JavaScriptBridge.create_callback(_ad)
 			adFinishedRewardCallback = JavaScriptBridge.create_callback(_rewarded_ad)
-			if OS.has_feature("yandexgames"):
-				var callbacks = JavaScriptBridge.create_object("Object")
-				var rewardcallbacks = JavaScriptBridge.create_object("Object")
-				callbacks["onClose"] = adFinishedCallback
-				callbacks["onError"] = adErrorCallback
-				callbacks["onOffline"] = adErrorCallback
-				callbacks["onOpen"] = adStartedCallback
-				adCallbacks["callbacks"] = callbacks
-				rewardcallbacks["onRewarded"] = adFinishedRewardCallback
-				rewardcallbacks["onError"] = adErrorCallback
-				rewardcallbacks["onClose"] = adFinishedCallback
-				rewardcallbacks["onOpen"] = adStartedCallback
-				adRewardCallbacks["callbacks"] = rewardcallbacks
-				while not YandexSDK:
-					YandexSDK = window.ysdk
-					await get_tree().create_timer(0.1).timeout # ждём яндекс sdk
-				emit_signal("_SDK_inited")
-				print('gd init yandex')
-			elif OS.has_feature("crazygames"):
-				adCallbacks["adFinished"] = adFinishedCallback
-				adCallbacks["adError"] = adErrorCallback
-				adCallbacks["adStarted"] = adStartedCallback
-				adRewardCallbacks["adFinished"] = adFinishedRewardCallback
-				adRewardCallbacks["adError"] = adErrorCallback
-				adRewardCallbacks["adStarted"] = adStartedCallback
-				print("waiting sdk..")
-				while not CrazySDK:
-					CrazySDK = window.CrazyGames.SDK
-					await get_tree().create_timer(0.1).timeout
+			var str_palform = window.platform
+			match window.platform:
+				"yandex":
+					platform = Platform.YANDEX
+				"crazy":
+					platform = Platform.CRAZY
+				"gamedistribution":
+					platform = Platform.GAMEDISTRIBUTION
+			match platform:
+				Platform.YANDEX:
+					var callbacks = JavaScriptBridge.create_object("Object")
+					var rewardcallbacks = JavaScriptBridge.create_object("Object")
+					callbacks["onClose"] = adFinishedCallback
+					callbacks["onError"] = adErrorCallback
+					callbacks["onOffline"] = adErrorCallback
+					callbacks["onOpen"] = adStartedCallback
+					adCallbacks["callbacks"] = callbacks
+					rewardcallbacks["onRewarded"] = adFinishedRewardCallback
+					rewardcallbacks["onError"] = adErrorCallback
+					rewardcallbacks["onClose"] = adFinishedCallback
+					rewardcallbacks["onOpen"] = adStartedCallback
+					adRewardCallbacks["callbacks"] = rewardcallbacks
+					while not YandexSDK:
+						YandexSDK = window.ysdk
+						await get_tree().create_timer(0.1).timeout # ждём яндекс sdk
+					emit_signal("_SDK_inited")
+					print('gd init yandex')
+				Platform.CRAZY:
+					adCallbacks["adFinished"] = adFinishedCallback
+					adCallbacks["adError"] = adErrorCallback
+					adCallbacks["adStarted"] = adStartedCallback
+					adRewardCallbacks["adFinished"] = adFinishedRewardCallback
+					adRewardCallbacks["adError"] = adErrorCallback
+					adRewardCallbacks["adStarted"] = adStartedCallback
+					print("waiting sdk..")	
+					while not CrazySDK:
+						CrazySDK = window.CrazyGames.SDK
+						await get_tree().create_timer(0.1).timeout
+						
+					var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info)
+					CrazySDK.user.getSystemInfo(callback)
+					await _system_info_recieved
 					
-				var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info)
-				CrazySDK.user.getSystemInfo(callback)
-				await _system_info_recieved
-				
-				emit_signal("_SDK_inited")
-				print('gd init crazy')
-			elif OS.has_feature("gamedistribution"):
-				adCallbacks["ad_stop"] = adFinishedCallback
-				adCallbacks["ad_start"] = adStartedCallback
-				adCallbacks["ad_rewarded"] = adFinishedRewardCallback
-				window.setcallbacks(adCallbacks)
-				GameDistSDK = window.gdsdk
-				emit_signal("_SDK_inited")
-				print('gd init gamedistribution')
+					emit_signal("_SDK_inited")
+					print('gd init crazy')
+				Platform.GAMEDISTRIBUTION:
+					adCallbacks["ad_stop"] = adFinishedCallback
+					adCallbacks["ad_start"] = adStartedCallback
+					adCallbacks["ad_rewarded"] = adFinishedRewardCallback
+					window.setcallbacks(adCallbacks)
+					GameDistSDK = window.gdsdk
+					emit_signal("_SDK_inited")
+					print('gd init gamedistribution')
 			_get_info()
 				
 				
 func _get_info():
 	var lang:String
 	var type:String
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		lang = YandexSDK.environment.i18n.lang
-		type = YandexSDK.deviceInfo.type
-	elif OS.has_feature("crazygames"):
-		while not system_info:
-			await _SDK_inited
-		var c_code = system_info.countryCode
-		lang = LANGUAGE_CODES[c_code]
-		type = system_info.device.type
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			lang = YandexSDK.environment.i18n.lang
+			type = YandexSDK.deviceInfo.type
+		Platform.CRAZY: 
+			while not system_info:
+				await _SDK_inited
+			var c_code = system_info.countryCode
+			lang = LANGUAGE_CODES[c_code]
+			type = system_info.device.type
 	info["language"] = lang
 	info["device_type"] = type
 	
@@ -144,21 +158,23 @@ func _get_info():
 #region Ads
 func show_ad():
 	if OS.get_name() == "Web":
-		if OS.has_feature("crazygames"):
-			crazy_show_ad()
-		elif OS.has_feature("yandexgames"):
-			yandex_show_ad()
-		elif OS.has_feature("gamedistribution"):
-			game_dist_show_ad()
+		match platform:
+			Platform.CRAZY:
+				crazy_show_ad()
+			Platform.YANDEX:
+				yandex_show_ad()
+			Platform.GAMEDISTRIBUTION:
+				game_dist_show_ad()
 
 func show_rewarded_ad():
 	if OS.get_name() == "Web":
-		if OS.has_feature("crazygames"):
-			crazy_show_rewarded_ad()
-		elif OS.has_feature("yandexgames"):
-			yandex_show_rewarded_ad()
-		elif OS.has_feature("gamedistribution"):
-			game_dist_show_rewarded_ad()
+		match platform:
+			Platform.CRAZY:
+				crazy_show_rewarded_ad()
+			Platform.YANDEX:
+				yandex_show_rewarded_ad()
+			Platform.GAMEDISTRIBUTION:
+				game_dist_show_rewarded_ad()
 	
 # Yandex Games Block
 
@@ -210,86 +226,99 @@ func _adStarted(args):
 
 
 func show_banner():
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		YandexSDK.adv.showBannerAdv()
-	elif OS.has_feature("crazygames"):
-		while not CrazySDK:
-			await _SDK_inited
-		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
-		CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.adv.showBannerAdv()
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
+			CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
 		
 func hide_banner():
-	if OS.has_feature("yandexgames"):
-		YandexSDK.adv.hideBannerAdv()
-	elif OS.has_feature("crazygames"):
-		JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
-		CrazySDK.banner.clearBanner("responsive-banner-container")
+	match platform:
+		Platform.YANDEX:
+			YandexSDK.adv.hideBannerAdv()
+		Platform.CRAZY:
+			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
+			CrazySDK.banner.clearBanner("responsive-banner-container")
 #endregion
 #region game
 	
 func start_gameplay():
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		YandexSDK.features.GameplayAPI.start()
-	elif OS.has_feature("crazygames"):
-		while not CrazySDK:
-			await _SDK_inited
-		CrazySDK.game.gameplayStart()
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.features.GameplayAPI.start()
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.gameplayStart()
 	
 func stop_gameplay():
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		YandexSDK.features.GameplayAPI.stop()
-	elif OS.has_feature("crazygames"):
-		while not CrazySDK:
-			await _SDK_inited
-		CrazySDK.game.gameplayStop()
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.features.GameplayAPI.stop()
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.gameplayStop()
 	
 #endregion
 
 #region Yandex
 
-func yandex_ready():
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		YandexSDK.features.LoadingAPI.ready()
+func ready():
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.features.LoadingAPI.ready()
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.sdkGameLoadingStop()
+
 
 signal leaderboard_info_recieved
 var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
 
 
 func get_leaderboard_info(leaderboard:String):
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
-		return
-		push_warning("Bad requst getting leaderboard")
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
+			return
+			push_warning("Bad requst getting leaderboard")
 
 func _leaderboard_info_recieved(info):
 	leaderboard_info_recieved.emit(info[0])
 
-func set_yandex_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		window.SaveLeaderboardScore(leaderboard, score, extra_data)
-		return
+func set_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			window.SaveLeaderboardScore(leaderboard, score, extra_data)
+			return
 	push_warning("Bad request setting leaderboard score")
 
 signal leaderboard_player_entry_recieved
 var callback_player_entry_recieved = JavaScriptBridge.create_callback(_leaderboard_player_entry_recieved)
 
 func get_leaderboard_player_entry(leaderboard:String):
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		window.GetLeaderboardPlayerEntry(leaderboard, callback_player_entry_recieved)
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			window.GetLeaderboardPlayerEntry(leaderboard, callback_player_entry_recieved)
 		
 func _leaderboard_player_entry_recieved(info):
 	leaderboard_player_entry_recieved.emit(info[0])
@@ -302,11 +331,10 @@ func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quant
 	if OS.has_feature("yandexgames"):
 		while not YandexSDK:
 			await _SDK_inited
-		var config = {
-			"includeUser": include_user,
-			"quantityAround": quantity_around,
-			"quantityTop": quantity_top,
-		}
+		var config := JavaScriptBridge.create_object("Object")
+		config["includeUser"] = include_user
+		config["quantityAround"] = quantity_around
+		config["quantityTop"] = quantity_top
 		window.GetLeaderboardEntries(leaderboard, config, callback_entries_recieved)
 		
 func _leaderboard_entries_recieved(info):
@@ -315,23 +343,21 @@ func _leaderboard_entries_recieved(info):
 #endregion
 
 #region Crazy Games
-func crazy_happytime():
-	if CrazySDK:
-		CrazySDK.game.happytime()
-	else:
-		push_warning("SDK not initialized")
+func happytime():
+	match platform:
+		Platform.CRAZY:
+			if CrazySDK:
+				CrazySDK.game.happytime()
+			else:
+				push_warning("SDK not initialized")
 	
-func crazy_start_loading():
-	if CrazySDK:
-		CrazySDK.game.sdkGameLoadingStart()
-	else:
-		push_warning("SDK not initialized")
-	
-func crazy_stop_loading():
-	if CrazySDK:
-		CrazySDK.game.sdkGameLoadingStop()
-	else:
-		push_warning("SDK not initialized")
+func start_loading():
+	match platform:
+		Platform.CRAZY:
+			if CrazySDK:
+				CrazySDK.game.sdkGameLoadingStart()
+			else:
+				push_warning("SDK not initialized")
 	
 #endregion
 #region getting data

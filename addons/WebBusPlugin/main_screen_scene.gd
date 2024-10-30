@@ -5,6 +5,7 @@ var crazy_banner_w := "728px"
 var crazy_banner_h := "90px"
 var crazy_banner_pos := "bottom"
 var yandex_archive_name := "yandex_export.zip"
+var is_archive :bool = false
 
 signal main_scene_data_change
 
@@ -39,4 +40,9 @@ func _on_yandex_archive_name_text_submitted(new_text:String):
 		yandex_archive_name = new_text
 	else:
 		yandex_archive_name = new_text + ".zip"
+	main_scene_data_change.emit()
+
+
+func _on_is_archive_toggled(toggled_on:bool):
+	is_archive = toggled_on
 	main_scene_data_change.emit()
