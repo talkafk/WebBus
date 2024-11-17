@@ -6,12 +6,12 @@ signal ad_closed
 signal ad_error
 signal ad_started 
 
-var adCallbacks:JavaScriptObject
-var adRewardCallbacks:JavaScriptObject
-var adStartedCallback:JavaScriptObject
-var adErrorCallback:JavaScriptObject
-var adFinishedCallback:JavaScriptObject
-var adFinishedRewardCallback:JavaScriptObject
+var _adCallbacks:JavaScriptObject
+var _adRewardCallbacks:JavaScriptObject
+var _adStartedCallback:JavaScriptObject
+var _adErrorCallback:JavaScriptObject
+var _adFinishedCallback:JavaScriptObject
+var _adFinishedRewardCallback:JavaScriptObject
 var window:JavaScriptObject
 
 var YandexSDK:JavaScriptObject
@@ -68,17 +68,19 @@ enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION}
 
 var platform : int
 
+signal _inited
+
 #region _ready
 func _ready():
 	match OS.get_name():
 		"Web":
 			window = JavaScriptBridge.get_interface("window")
-			adCallbacks = JavaScriptBridge.create_object("Object")
-			adRewardCallbacks = JavaScriptBridge.create_object("Object")
-			adStartedCallback = JavaScriptBridge.create_callback(_adStarted)
-			adErrorCallback = JavaScriptBridge.create_callback(_adError)
-			adFinishedCallback = JavaScriptBridge.create_callback(_ad)
-			adFinishedRewardCallback = JavaScriptBridge.create_callback(_rewarded_ad)
+			_adCallbacks = JavaScriptBridge.create_object("Object")
+			_adRewardCallbacks = JavaScriptBridge.create_object("Object")
+			_adStartedCallback = JavaScriptBridge.create_callback(_adStarted)
+			_adErrorCallback = JavaScriptBridge.create_callback(_adError)
+			_adFinishedCallback = JavaScriptBridge.create_callback(_ad)
+			_adFinishedRewardCallback = JavaScriptBridge.create_callback(_rewarded_ad)
 			var str_palform = window.platform
 			match window.platform:
 				"yandex":
@@ -91,28 +93,32 @@ func _ready():
 				Platform.YANDEX:
 					var callbacks = JavaScriptBridge.create_object("Object")
 					var rewardcallbacks = JavaScriptBridge.create_object("Object")
-					callbacks["onClose"] = adFinishedCallback
-					callbacks["onError"] = adErrorCallback
-					callbacks["onOffline"] = adErrorCallback
-					callbacks["onOpen"] = adStartedCallback
-					adCallbacks["callbacks"] = callbacks
-					rewardcallbacks["onRewarded"] = adFinishedRewardCallback
-					rewardcallbacks["onError"] = adErrorCallback
-					rewardcallbacks["onClose"] = adFinishedCallback
-					rewardcallbacks["onOpen"] = adStartedCallback
-					adRewardCallbacks["callbacks"] = rewardcallbacks
-					while not YandexSDK:
-						YandexSDK = window.ysdk
-						await get_tree().create_timer(0.1).timeout # ждём яндекс sdk
+					callbacks["onClose"] = _adFinishedCallback
+					callbacks["onError"] = _adErrorCallback
+					callbacks["onOffline"] = _adErrorCallback
+					callbacks["onOpen"] = _adStartedCallback
+					_adCallbacks["callbacks"] = callbacks
+					rewardcallbacks["onRewarded"] = _adFinishedRewardCallback
+					rewardcallbacks["onError"] = _adErrorCallback
+					rewardcallbacks["onClose"] = _adFinishedCallback
+					rewardcallbacks["onOpen"] = _adStartedCallback
+					_adRewardCallbacks["callbacks"] = rewardcallbacks
+
+					var _init_callback := JavaScriptBridge.create_callback(func(args):
+						YandexSDK = args[0]
+						_inited.emit()
+						)
+					window.YaGames.init().then(_init_callback)
+					await _inited
 					emit_signal("_SDK_inited")
 					print('gd init yandex')
 				Platform.CRAZY:
-					adCallbacks["adFinished"] = adFinishedCallback
-					adCallbacks["adError"] = adErrorCallback
-					adCallbacks["adStarted"] = adStartedCallback
-					adRewardCallbacks["adFinished"] = adFinishedRewardCallback
-					adRewardCallbacks["adError"] = adErrorCallback
-					adRewardCallbacks["adStarted"] = adStartedCallback
+					_adCallbacks["adFinished"] = _adFinishedCallback
+					_adCallbacks["adError"] = _adErrorCallback
+					_adCallbacks["adStarted"] = _adStartedCallback
+					_adRewardCallbacks["adFinished"] = _adFinishedRewardCallback
+					_adRewardCallbacks["adError"] = _adErrorCallback
+					_adRewardCallbacks["adStarted"] = _adStartedCallback
 					print("waiting sdk..")	
 					while not CrazySDK:
 						CrazySDK = window.CrazyGames.SDK
@@ -125,10 +131,10 @@ func _ready():
 					emit_signal("_SDK_inited")
 					print('gd init crazy')
 				Platform.GAMEDISTRIBUTION:
-					adCallbacks["ad_stop"] = adFinishedCallback
-					adCallbacks["ad_start"] = adStartedCallback
-					adCallbacks["ad_rewarded"] = adFinishedRewardCallback
-					window.setcallbacks(adCallbacks)
+					_adCallbacks["ad_stop"] = _adFinishedCallback
+					_adCallbacks["ad_start"] = _adStartedCallback
+					_adCallbacks["ad_rewarded"] = _adFinishedRewardCallback
+					window.setcallbacks(_adCallbacks)
 					GameDistSDK = window.gdsdk
 					emit_signal("_SDK_inited")
 					print('gd init gamedistribution')
@@ -181,24 +187,24 @@ func show_rewarded_ad():
 func yandex_show_ad():
 	while not YandexSDK:
 		await _SDK_inited
-	YandexSDK.adv.showFullscreenAdv(adCallbacks)
+	YandexSDK.adv.showFullscreenAdv(_adCallbacks)
 
 func yandex_show_rewarded_ad():
 	while not YandexSDK:
 		await _SDK_inited
-	YandexSDK.adv.showRewardedVideo(adRewardCallbacks)
+	YandexSDK.adv.showRewardedVideo(_adRewardCallbacks)
 
 # Crazy Games
 
 func crazy_show_ad():
 	while not CrazySDK:
 		await _SDK_inited
-	CrazySDK.ad.requestAd("midgame", adCallbacks)
+	CrazySDK.ad.requestAd("midgame", _adCallbacks)
 	
 func crazy_show_rewarded_ad():
 	while not CrazySDK:
 		await _SDK_inited
-	CrazySDK.ad.requestAd("rewarded", adRewardCallbacks)
+	CrazySDK.ad.requestAd("rewarded", _adRewardCallbacks)
 
 # Game Distribution
 func game_dist_show_ad():
@@ -361,6 +367,17 @@ func start_loading():
 	
 #endregion
 #region getting data
+
+func get_platform():
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				return "yandex"
+			Platform.CRAZY:
+				return "crazy_games"
+			Platform.GAMEDISTRIBUTION:
+				return "game_distribution"
+
 
 func get_language():
 	if OS.get_name() == "Web":

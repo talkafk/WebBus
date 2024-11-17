@@ -41,7 +41,7 @@ func _on_set_yandex_leaderboard_pressed():
 	WebBus.set_yandex_leaderboard(name_leaderboard, score)
 	
 func _on_yandex_ready_pressed():
-	WebBus.yandex_ready()
+	WebBus.ready()
 
 func ad_closed():
 	print("ad_closed")

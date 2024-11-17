@@ -3,11 +3,8 @@ extends EditorExportPlugin
 class_name  HTMLExportPlugin
 
 const JS_FILE = "webbus_sdk.js"
-const JS_YANDEX_SDK_REF = "https://yandex.ru/games/sdk/v2"
-const JS_CRAZY_SDK_REF = "https://sdk.crazygames.com/crazygames-sdk-v2.js"
 
-
-var YANDEX_ARCHIVE_NAME = "export.zip"
+var ARCHIVE_NAME = "export.zip"
 
 var CRAZY_BANNER_STYLE = "width: 720px; height: 90px; position: fixed; bottom:0; z-index:9999"
 
@@ -47,7 +44,7 @@ func _export_end() -> void:
 	file.store_string(html)
 	file.close()
 	if is_archive:
-		zip_export(YANDEX_ARCHIVE_NAME)
+		zip_export(ARCHIVE_NAME)
 	
 	
 	

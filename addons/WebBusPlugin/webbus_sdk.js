@@ -1,21 +1,22 @@
 let lb;
 let ysdk;
+let platform
 
 let url = window.location.href
 
 if (url.includes('yandex')) {
-    window.platform = 'yandex'
+    platform = 'yandex'
 }
 if (url.includes('crazygames')) {
-    window.platform = 'crazy'
+    platform = 'crazy'
 }
 if (url.includes('gamedistribution')) {
-    window.platform = 'gamedistribution'
+    platform = 'gamedistribution'
 }
 let url_src
-switch ( window.platform) {
+switch (platform) {
     case "yandex":
-        url_src="https://yandex.ru/games/sdk/v2";
+        url_src="/sdk.js";
         var script = document.createElement('script');
         script.src = url_src;
         document.head.appendChild(script);
