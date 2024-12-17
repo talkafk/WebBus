@@ -130,7 +130,7 @@ func getting_leaderboard_info(info):
 `info` : **JavaScriptObject** type
 
 Get leaderboard player entry:
-```gdscrript
+```gdscript
 WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
 
 WebBus.get_leaderboard_player_entry(name_leaderboard)
@@ -145,7 +145,7 @@ func getting_leaderboard_player_entry(info):
 `info` : **JavaScriptObject** type
 
 Get leaderboard entries:
-```gdscrript
+```gdscript
 WebBus.leaderboard_entries_recieved.connect(getting_leaderboard_entries)
 
 WebBus.get_leaderboard_entries(name_leaderboard, include_user=true, quantity_around=5, quantity_top=5)
