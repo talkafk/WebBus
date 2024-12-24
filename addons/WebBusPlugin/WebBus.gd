@@ -15,6 +15,7 @@ var _adFinishedRewardCallback:JavaScriptObject
 var window:JavaScriptObject
 
 var YandexSDK:JavaScriptObject
+var leaderboards:JavaScriptObject
 var CrazySDK:JavaScriptObject
 var GameDistSDK:JavaScriptObject
 
@@ -103,10 +104,15 @@ func _ready():
 					rewardcallbacks["onClose"] = _adFinishedCallback
 					rewardcallbacks["onOpen"] = _adStartedCallback
 					_adRewardCallbacks["callbacks"] = rewardcallbacks
-
+					print('waiting sdk..')
+					while not window.YaGames:
+						await get_tree().create_timer(0.1).timeout
+					var _lb_callback := JavaScriptBridge.create_callback(func(args):
+							leaderboards = args[0]
+							_inited.emit())
 					var _init_callback := JavaScriptBridge.create_callback(func(args):
 						YandexSDK = args[0]
-						_inited.emit()
+						YandexSDK.getLeaderboards().then(_lb_callback)
 						)
 					window.YaGames.init().then(_init_callback)
 					await _inited
@@ -243,7 +249,7 @@ func show_banner():
 			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
 			CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
 		
-func hide_banner():
+func hide_banner():	
 	match platform:
 		Platform.YANDEX:
 			YandexSDK.adv.hideBannerAdv()
@@ -300,19 +306,25 @@ func get_leaderboard_info(leaderboard:String):
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			window.GetLeaderboardInfo(leaderboard, callback_info_recieved)
+			leaderboards.getLeaderboardDescription(leaderboard).then(callback_info_recieved)
 			return
 			push_warning("Bad requst getting leaderboard")
 
 func _leaderboard_info_recieved(info):
 	leaderboard_info_recieved.emit(info[0])
 
-func set_leaderboard(leaderboard:String, score: int, extra_data:String = ""):
+signal leaderboard_score_setted
+
+func set_leaderboard_score(leaderboard:String, score: int, extra_data:String = ""):
 	match platform:
 		Platform.YANDEX:
-			while not YandexSDK:
+			while not leaderboards:
 				await _SDK_inited
-			window.SaveLeaderboardScore(leaderboard, score, extra_data)
+			leaderboards.setLeaderboardScore(leaderboard, score, extra_data).then(
+				JavaScriptBridge.create_callback(func(args):
+					leaderboard_score_setted.emit()
+					)
+			)
 			return
 	push_warning("Bad request setting leaderboard score")
 
@@ -324,7 +336,7 @@ func get_leaderboard_player_entry(leaderboard:String):
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			window.GetLeaderboardPlayerEntry(leaderboard, callback_player_entry_recieved)
+			leaderboards.getLeaderboardPlayerEntry(leaderboard).then(callback_player_entry_recieved)
 		
 func _leaderboard_player_entry_recieved(info):
 	leaderboard_player_entry_recieved.emit(info[0])
@@ -341,10 +353,11 @@ func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quant
 		config["includeUser"] = include_user
 		config["quantityAround"] = quantity_around
 		config["quantityTop"] = quantity_top
-		window.GetLeaderboardEntries(leaderboard, config, callback_entries_recieved)
+		leaderboards.getLeaderboardEntries(leaderboard, config).then(callback_entries_recieved)
 		
 func _leaderboard_entries_recieved(info):
 	leaderboard_entries_recieved.emit(info[0])
+
 
 #endregion
 
@@ -364,6 +377,15 @@ func start_loading():
 				CrazySDK.game.sdkGameLoadingStart()
 			else:
 				push_warning("SDK not initialized")
+				
+#func stop_loading():
+	#match platform:
+		#Platform.CRAZY:
+			#if CrazySDK:
+				#CrazySDK.game.sdkGameLoadingStop()
+			#else:
+				#push_warning("SDK not initialized")
+	
 	
 #endregion
 #region getting data
@@ -403,16 +425,31 @@ func _callback_crazy_system_info(args:Array):
 
 #region purchases
 var payments:JavaScriptObject
-var payment_callback: = JavaScriptBridge.create_callback(func(_payments): payments = _payments)
 
-func init_payments():
-	YandexSDK.getPayments().then(func(_payments): payments = _payments)
+func init_payments(signed:bool = false):
+	var conf := JavaScriptBridge.create_object("Object")
+	if signed:
+		conf["signed"] = signed
+	var callback := JavaScriptBridge.create_callback(func(args):
+		print('init_payments')
+		payments = args[0])
+	YandexSDK.getPayments(conf).then(callback)
+
+signal _purchase
 
 func purchase(id:String, developer_payload:String = ""):
-	var settings:JavaScriptObject
-	settings.id = id
+	var settings := JavaScriptBridge.create_object("Object")
+	settings["id"] = id
+	var callback := JavaScriptBridge.create_callback(func(args):
+		_purchase.emit(args[0]))
+	var error_callback := JavaScriptBridge.create_callback(func(args):
+		print("Error payment", args[0])
+		_purchase.emit(args[0]))
 	if developer_payload:
-		settings.developerPayload = developer_payload
+		settings["developerPayload"] = developer_payload
 	if payments:
-		payments.purchase(settings).then(func(_payments): payments = _payments).catch(func(_err): print("Error payment"))
+		payments.purchase(settings).then(callback).catch(error_callback)
+	var result = await _purchase
+	return result
+
 #endregion
