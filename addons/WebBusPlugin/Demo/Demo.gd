@@ -40,7 +40,7 @@ func _on_set_yandex_leaderboard_pressed():
 	var score: int = int($VBoxContainer/Yandex/HBoxContainer2/score.text)
 	WebBus.set_leaderboard_score(name_leaderboard, score)
 	
-func _on_yandex_ready_pressed():
+func _on_ready_pressed():
 	WebBus.ready()
 
 func ad_closed():

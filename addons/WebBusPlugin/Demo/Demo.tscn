@@ -75,7 +75,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "stop_gameplay"
 
-[node name="yandex_ready" type="Button" parent="VBoxContainer/General"]
+[node name="ready" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -172,6 +172,7 @@ size_flags_horizontal = 3
 placeholder_text = "score:int"
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
@@ -188,6 +189,7 @@ text = "Signed
 "
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
@@ -215,7 +217,7 @@ placeholder_text = "developer_payload:String"
 [connection signal="pressed" from="VBoxContainer/General/get_type_device" to="." method="_on_get_type_device_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/start_gameplay" to="." method="_on_start_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
-[connection signal="pressed" from="VBoxContainer/General/yandex_ready" to="." method="_on_yandex_ready_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/ready" to="." method="_on_ready_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]

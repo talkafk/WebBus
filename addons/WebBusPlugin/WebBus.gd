@@ -70,6 +70,9 @@ enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION}
 var platform : int
 
 signal _inited
+signal _system_info_recieved
+var system_info
+
 
 #region _ready
 func _ready():
@@ -125,12 +128,14 @@ func _ready():
 					_adRewardCallbacks["adFinished"] = _adFinishedRewardCallback
 					_adRewardCallbacks["adError"] = _adErrorCallback
 					_adRewardCallbacks["adStarted"] = _adStartedCallback
-					print("waiting sdk..")	
+					print("waiting sdk..")
+					CrazySDK = window.CrazyGames.SDK
 					while not CrazySDK:
 						CrazySDK = window.CrazyGames.SDK
 						await get_tree().create_timer(0.1).timeout
-						
-					var callback = JavaScriptBridge.create_callback(_callback_crazy_system_info)
+					var callback = JavaScriptBridge.create_callback(func(args:Array):
+						system_info = args[1]
+						emit_signal("_system_info_recieved", system_info))
 					CrazySDK.user.getSystemInfo(callback)
 					await _system_info_recieved
 					
@@ -378,17 +383,9 @@ func start_loading():
 			else:
 				push_warning("SDK not initialized")
 				
-#func stop_loading():
-	#match platform:
-		#Platform.CRAZY:
-			#if CrazySDK:
-				#CrazySDK.game.sdkGameLoadingStop()
-			#else:
-				#push_warning("SDK not initialized")
-	
-	
 #endregion
 #region getting data
+
 
 func get_platform():
 	if OS.get_name() == "Web":
@@ -414,13 +411,6 @@ func get_type_device():
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
 
-
-signal _system_info_recieved
-var system_info:JavaScriptObject
-
-func _callback_crazy_system_info(args:Array):
-	system_info = args[1]
-	emit_signal("_system_info_recieved", system_info)
 #endregion
 
 #region purchases

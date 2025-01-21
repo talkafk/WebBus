@@ -5,21 +5,20 @@ let platform
 let url = window.location.href
 
 if (url.includes('yandex')) {
-    platform = 'yandex'
+    window.platform = 'yandex'
 }
 if (url.includes('crazygames')) {
-    platform = 'crazy'
+    window.platform = 'crazy'
 }
 if (url.includes('gamedistribution')) {
-    platform = 'gamedistribution'
+    window.platform = 'gamedistribution'
 }
 let url_src
-switch (platform) {
+switch (window.platform) {
     case "yandex":
         url_src="/sdk.js";
         var script = document.createElement('script');
         script.src = url_src;
-        script.onload  = initSDK;
         document.head.appendChild(script);
         console.log("Yandex JS init");
         break;
