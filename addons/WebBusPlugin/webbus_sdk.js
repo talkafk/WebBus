@@ -5,33 +5,29 @@ let platform
 let url = window.location.href
 
 if (url.includes('yandex')) {
-    platform = 'yandex'
+    window.platform = 'yandex'
 }
 if (url.includes('crazygames')) {
-    platform = 'crazy'
+    window.platform = 'crazy'
 }
 if (url.includes('gamedistribution')) {
-    platform = 'gamedistribution'
+    window.platform = 'gamedistribution'
 }
 let url_src
-switch (platform) {
+switch (window.platform) {
     case "yandex":
         url_src="/sdk.js";
         var script = document.createElement('script');
         script.src = url_src;
         document.head.appendChild(script);
-        YaGames.init().then(_ysdk => {
-            ysdk = _ysdk; 
-            _ysdk.getLeaderboards() .then(_lb => lb = _lb);
-            console.log("Yandex init");
-        });
+        console.log("Yandex JS init");
         break;
     case "crazy":
         url_src="https://sdk.crazygames.com/crazygames-sdk-v2.js";
         var script = document.createElement('script');
         script.src = url_src;
         document.head.appendChild(script);
-        console.log("Crazy init");
+        console.log("Crazy JS init");
         break;
 }
 

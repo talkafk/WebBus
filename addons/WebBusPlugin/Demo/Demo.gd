@@ -32,15 +32,15 @@ func _on_get_language_pressed():
 
 func _on_get_type_device_pressed():
 	var type = WebBus.get_type_device()
-	print("device type:", type)
+	print("device type:", type)	
 
 
 func _on_set_yandex_leaderboard_pressed():
 	var name_leaderboard :String = $VBoxContainer/Yandex/HBoxContainer2/leaderboard.text
 	var score: int = int($VBoxContainer/Yandex/HBoxContainer2/score.text)
-	WebBus.set_yandex_leaderboard(name_leaderboard, score)
+	WebBus.set_leaderboard_score(name_leaderboard, score)
 	
-func _on_yandex_ready_pressed():
+func _on_ready_pressed():
 	WebBus.ready()
 
 func ad_closed():
@@ -84,7 +84,7 @@ func getting_leaderboard_entries(info):
 	
 	
 func _on_happytime_pressed():
-	WebBus.crazy_happytime()
+	WebBus.happytime()
 
 
 func _on_start_gameplay_pressed():
@@ -96,8 +96,12 @@ func _on_stop_gameplay_pressed():
 
 
 func _on_start_loading_pressed():
-	WebBus.crazy_start_loading()
+	WebBus.start_loading()
 
 
-func _on_stop_loading_pressed():
-	WebBus.crazy_stop_loading()
+func _on_init_payments_pressed() -> void:
+	WebBus.init_payments($VBoxContainer/Yandex/HBoxContainer5/signed.button_pressed)
+
+
+func _on_purchase_pressed() -> void:
+	print(await WebBus.purchase($VBoxContainer/Yandex/HBoxContainer6/id_String.text, $VBoxContainer/Yandex/HBoxContainer6/developer_payload_String.text))

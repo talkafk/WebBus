@@ -102,7 +102,7 @@ var language = WebBus.get_language()
 
 #### Ready
 
-Call `ready()` function when the game ready for game.
+Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`.
 
 ```gdscript
 WebBus.ready()
