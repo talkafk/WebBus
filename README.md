@@ -10,8 +10,8 @@ This version is for Godot 4.x.
   - [General](#general)
 	  - [Advertisement](#advertisement)
     - [Game](#game)
-    - [Other](#other)
     - [Ready](#ready)
+    - [Other](#other)
   - [Yandex](#yandex)
 	- [Leaderboards](#leaderboards)
   - [Crazy Games](#crazy-games)
@@ -82,6 +82,14 @@ The `stop_gameplay()` function has to be called on every game break don't forget
 WebBus.stop_gameplay()
 ```
 
+#### Ready
+
+Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`.
+
+```gdscript
+WebBus.ready()
+```
+
 #### Other
 
 Getting type of device:
@@ -98,14 +106,6 @@ The function return 2 letter is language code.
 
 ```gdscript
 var language = WebBus.get_language()
-```
-
-#### Ready
-
-Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`.
-
-```gdscript
-WebBus.ready()
 ```
 
 ### Yandex
