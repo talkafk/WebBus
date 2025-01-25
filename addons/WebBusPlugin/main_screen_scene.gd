@@ -22,12 +22,12 @@ func _save_config() -> void:
 	config.set_value("config", "archive_name", archive_name)
 	config.set_value("config", "is_archive", is_archive)
 	
-	config.save("res://addons/WebBusPlugin/settings.cfg")
+	config.save("res://.webbus_settings.cfg")
 
 
 func _load_config() -> void:
 	var config = ConfigFile.new()
-	var err = config.load("res://addons/WebBusPlugin/settings.cfg")
+	var err = config.load("res://.webbus_settings.cfg")
 	if err != OK:
 		_save_config()
 		return
