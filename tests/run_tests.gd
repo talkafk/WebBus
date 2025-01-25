@@ -27,5 +27,6 @@ func _init():
 	print("✅ Passed:", passed)
 	print("❌ Failed:", failed)
 	if failed > 0:
-		quit(1)
-	quit()
+		quit(13)
+	else:
+		quit(0)
