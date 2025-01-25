@@ -27,19 +27,25 @@ jobs:
     - name: Import files
       run: | 
         godot --editor --import --headless
-        
-    - name: Create export folder
-      run: | 
-        mkdir export
 
-    # Сборка HTML5
-    - name: Export HTML5
+
+    - name: Testing
       run: |
-        godot --editor --headless --export-release "HTML5" export/index.html --quit
+        godot --headless -s test/run_test.gd
 
-    # Загрузка результата на GitHub Pages
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: export/
+        
+    # - name: Create export folder
+    #  run: | 
+    #    mkdir export
+
+    # # Сборка HTML5
+    # - name: Export HTML5
+    #   run: |
+    #     godot --editor --headless --export-release "HTML5" export/index.html --quit
+
+    # # Загрузка результата на GitHub Pages
+    # - name: Deploy to GitHub Pages
+    #   uses: peaceiris/actions-gh-pages@v4
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     publish_dir: export/
