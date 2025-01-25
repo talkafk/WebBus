@@ -31,7 +31,7 @@ jobs:
 
     - name: Testing
       run: |
-        godot --headless -s test/run_test.gd
+        godot --headless -s tests/run_tests.gd
 
         
     # - name: Create export folder
