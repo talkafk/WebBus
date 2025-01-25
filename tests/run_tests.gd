@@ -26,4 +26,6 @@ func _init():
 	print("\nRESULTS:")
 	print("✅ Passed:", passed)
 	print("❌ Failed:", failed)
+	if failed > 0:
+		quit(1)
 	quit()
