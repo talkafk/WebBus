@@ -26,7 +26,7 @@ WebBus="*res://addons/WebBusPlugin/WebBus.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/WebBusPlugin/plugin.cfg", "res://addons/script-ide/plugin.cfg", "res://addons/wakatime/plugin.cfg")
+enabled=PackedStringArray("res://addons/WebBusPlugin/plugin.cfg")
 
 [rendering]
 
