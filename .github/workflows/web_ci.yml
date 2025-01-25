@@ -27,7 +27,7 @@ jobs:
     # Сборка HTML5
     - name: Export HTML5
       run: |
-        godot --headless --export-release "HTML5" export/index.html --quit
+        godot --headless --editor --export-release "HTML5" export/index.html --quit
 
     # Загрузка результата на GitHub Pages
     - name: Deploy to GitHub Pages
