@@ -26,7 +26,7 @@ jobs:
 
     - name: Import files
       run: | 
-        godot --import --headless
+        godot --editor --import --headless
         
     - name: Create export folder
       run: | 
@@ -35,7 +35,7 @@ jobs:
     # Сборка HTML5
     - name: Export HTML5
       run: |
-        godot --headless --export-release "HTML5" export/index.html --quit
+        godot --editor --headless --export-release "HTML5" export/index.html --quit
 
     # Загрузка результата на GitHub Pages
     - name: Deploy to GitHub Pages
