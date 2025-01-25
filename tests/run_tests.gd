@@ -8,7 +8,7 @@ func _init():
 	
 	# Подключение тестов
 	var test_files = [
-		"res://tests/test_example.gd"
+		"res://tests/test_general.gd"
 	]
 	
 	for test_file in test_files:
@@ -17,15 +17,15 @@ func _init():
 			if test_method.name.begins_with("test_"):
 				var result = test_instance.call(test_method.name)
 				if result == OK:
-					print("✅", test_method.name, "PASSED")
+					print("✅", test_method.name, " PASSED")
 					passed += 1
 				else:
-					print("❌", test_method.name, "FAILED")
+					print("❌", test_method.name, " FAILED")
 					failed += 1
 	
 	print("\nRESULTS:")
-	print("✅ Passed:", passed)
-	print("❌ Failed:", failed)
+	print("✅ Passed: ", passed)
+	print("❌ Failed: ", failed)
 	if failed > 0:
 		quit(13)
 	else:
