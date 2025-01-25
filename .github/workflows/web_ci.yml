@@ -21,15 +21,17 @@ jobs:
       uses: chickensoft-games/setup-godot@v1
       with:
         version: 4.3.0
+        use-dotnet: false
+        include-templates: true
 
     # Сборка HTML5
     - name: Export HTML5
       run: |
-        godot --export "HTML5" export/index.html
+        godot --headless --export-release "HTML5" export/index.html --quit
 
     # Загрузка результата на GitHub Pages
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: export/
