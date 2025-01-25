@@ -24,6 +24,10 @@ jobs:
         use-dotnet: false
         include-templates: true
 
+    - name: Import files
+      run: | 
+        godot --import --headless
+
     # Сборка HTML5
     - name: Export HTML5
       run: |
