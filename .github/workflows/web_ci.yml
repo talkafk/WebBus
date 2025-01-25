@@ -20,7 +20,7 @@ jobs:
     - name: Set up Godot
       uses: chickensoft-games/setup-godot@v1
       with:
-        godot-version: 4.3.0
+        godot-version: 4.0.0
 
     # Сборка HTML5
     - name: Export HTML5
