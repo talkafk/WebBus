@@ -37,7 +37,7 @@ text = "Crazy Games banner size: "
 
 [node name="crazy_banner_w" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
-selected = 0
+selected = 10
 fit_to_longest_item = false
 item_count = 13
 popup/item_0/text = "120px"
@@ -72,7 +72,7 @@ text = "x"
 
 [node name="crazy_banner_h" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerSize"]
 layout_mode = 2
-selected = 0
+selected = 9
 fit_to_longest_item = false
 item_count = 10
 popup/item_0/text = "50px"
@@ -104,7 +104,7 @@ text = "Crazy Games banner position: "
 
 [node name="crazy_banner_pos" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/CrazyBannerPos"]
 layout_mode = 2
-selected = 0
+selected = 1
 item_count = 4
 popup/item_0/text = "bottom"
 popup/item_1/text = "top"
@@ -139,6 +139,7 @@ text = "Is archive build: "
 
 [node name="Is Archive" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer2"]
 layout_mode = 2
+button_pressed = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
@@ -150,6 +151,7 @@ text = "Archive name:"
 [node name="yandex_archive_name" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+text = "export.zip"
 placeholder_text = "you_archive_name.zip"
 max_length = 30
 
