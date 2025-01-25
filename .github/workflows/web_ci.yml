@@ -1,0 +1,35 @@
+name: Godot Web CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Устанавливаем Godot
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Godot
+      uses: chickensoft-games/setup-godot@v1
+      with:
+        godot-version: 4.3
+
+    # Сборка HTML5
+    - name: Export HTML5
+      run: |
+        godot --export "HTML5" export/index.html
+
+    # Загрузка результата на GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: export/
