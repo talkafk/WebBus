@@ -172,7 +172,6 @@ size_flags_horizontal = 3
 placeholder_text = "score:int"
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/Yandex"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
@@ -189,7 +188,6 @@ text = "Signed
 "
 
 [node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer/Yandex"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
@@ -209,6 +207,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "developer_payload:String"
 
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="get_purchases" type="Button" parent="VBoxContainer/Yandex/HBoxContainer7"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_purchases"
+
+[node name="get_catalog" type="Button" parent="VBoxContainer/Yandex/HBoxContainer7"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_catalog"
+
 [connection signal="pressed" from="VBoxContainer/General/Show_ad" to="." method="_on_show_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/show_banner" to="." method="_on_show_banner_pressed"]
@@ -226,3 +239,5 @@ placeholder_text = "developer_payload:String"
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer2/set_yandex_leaderboard" to="." method="_on_set_yandex_leaderboard_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer5/init payments" to="." method="_on_init_payments_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer6/purchase" to="." method="_on_purchase_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_purchases" to="." method="_on_get_purchases_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_catalog" to="." method="_on_get_catalog_pressed"]

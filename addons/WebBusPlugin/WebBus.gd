@@ -286,9 +286,7 @@ func stop_gameplay():
 				await _SDK_inited
 			CrazySDK.game.gameplayStop()
 	
-#endregion
 
-#region Yandex
 
 func ready():
 	match platform:
@@ -301,6 +299,9 @@ func ready():
 				await _SDK_inited
 			CrazySDK.game.sdkGameLoadingStop()
 
+			
+#endregion
+#region Yandex
 
 signal leaderboard_info_recieved
 var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
@@ -416,30 +417,73 @@ func get_type_device():
 #region purchases
 var payments:JavaScriptObject
 
+var _init_payments_callback := JavaScriptBridge.create_callback(func(args):
+	print('init_payments')
+	payments = args[0])
+
+
 func init_payments(signed:bool = false):
 	var conf := JavaScriptBridge.create_object("Object")
 	if signed:
 		conf["signed"] = signed
-	var callback := JavaScriptBridge.create_callback(func(args):
-		print('init_payments')
-		payments = args[0])
-	YandexSDK.getPayments(conf).then(callback)
+	YandexSDK.getPayments(conf).then(_init_payments_callback)
 
-signal _purchase
+
+signal _purchase(success:bool)
+
+var _purchase_callback := JavaScriptBridge.create_callback(func(args):
+	_purchase.emit(true))
+var _purchase_error_callback := JavaScriptBridge.create_callback(func(args):
+	print("Error purchase", _js_to_dict(args[0]))
+	_purchase.emit(false))
 
 func purchase(id:String, developer_payload:String = ""):
 	var settings := JavaScriptBridge.create_object("Object")
 	settings["id"] = id
-	var callback := JavaScriptBridge.create_callback(func(args):
-		_purchase.emit(args[0]))
-	var error_callback := JavaScriptBridge.create_callback(func(args):
-		print("Error payment", args[0])
-		_purchase.emit(args[0]))
 	if developer_payload:
 		settings["developerPayload"] = developer_payload
 	if payments:
-		payments.purchase(settings).then(callback).catch(error_callback)
+		payments.purchase(settings).then(_purchase_callback).catch(_purchase_error_callback)
 	var result = await _purchase
 	return result
 
+
+signal _get_purchases(success:bool)
+
+var _get_purchases_callback := JavaScriptBridge.create_callback(func(args):
+	_get_purchases.emit(args[0]))
+
+var _get_purchases_error_callback := JavaScriptBridge.create_callback(func(args):
+	print("Error", _js_to_dict(args[0]))
+	_get_purchases.emit(false))
+
+func get_purchases() -> Array:
+	if payments:
+		payments.getPurchases().then(_get_purchases_callback).catch(_get_purchases_error_callback)
+	var result = await _get_purchases
+	if result:
+		return _js_to_dict(result)
+	else:
+		return []
+
+
+func get_catalog() -> Array:
+	if payments:
+		payments.getCatalog().then(_get_purchases_callback).catch(_get_purchases_error_callback)
+	var result = await _get_purchases
+	if result:
+		return _js_to_dict(result)
+	else:
+		return []
+
+
+
+#endregion
+#region tool
+
+func _js_to_dict(js_object:JavaScriptObject) -> Variant:
+	var window := JavaScriptBridge.get_interface("window")
+	var strn = window.JSON.stringify(js_object).to_snake_case()
+	return JSON.parse_string(strn)
+	
 #endregion
