@@ -105,3 +105,11 @@ func _on_init_payments_pressed() -> void:
 
 func _on_purchase_pressed() -> void:
 	print(await WebBus.purchase($VBoxContainer/Yandex/HBoxContainer6/id_String.text, $VBoxContainer/Yandex/HBoxContainer6/developer_payload_String.text))
+
+	
+func _on_get_purchases_pressed():
+	print(await WebBus.get_purchases())
+
+
+func _on_get_catalog_pressed():
+	print(await WebBus.get_catalog())

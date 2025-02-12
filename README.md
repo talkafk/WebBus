@@ -176,6 +176,39 @@ WebBus.set_yandex_leaderboard(name_leaderboard, score, extra_data)
 
 `extra_data` : optional parameter, **String** type
 
+#### Payments
+
+Init yandex payments
+
+```gdsript
+WebBus.init_payments(signed)
+```
+
+`signed`: **bool** type
+
+Make purchase
+
+```gdscript
+WebBus.purchase(product_id, developer_payload)
+```
+
+`product_id`: **String** type
+
+`developer_payload`: optional parameter, **String** type
+
+Get player's purchase list
+
+
+```gdscript
+var purchase_list = await WebBus.get_purchases()
+```
+
+Get product list
+
+```gdscript
+var product_list = await WebBus.get_catalog()
+```
+
 ### Crazy Games
 #### Game
 
