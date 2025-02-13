@@ -184,7 +184,7 @@ Init yandex payments
 WebBus.init_payments(signed)
 ```
 
-`signed`: **bool** type
+`signed`: optional parameter, **bool** type
 
 Make purchase
 
