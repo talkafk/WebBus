@@ -2,7 +2,7 @@
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
 This version is for Godot 4.x.
-### Contents
+## Contents
 
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
@@ -13,7 +13,9 @@ This version is for Godot 4.x.
     - [Ready](#ready)
     - [Other](#other)
   - [Yandex](#yandex)
-	- [Leaderboards](#leaderboards)
+	  - [Leaderboards](#leaderboards)
+    - [Payments](#payments)
+    - [Server time](#server-time)
   - [Crazy Games](#crazy-games)
 	  - [Game](#game-1)
   - [Main Screen Menu](#main-screen-menu)
@@ -208,6 +210,14 @@ Get product list
 ```gdscript
 var product_list = await WebBus.get_catalog()
 ```
+#### Server time
+
+Get server time
+
+```gdscript
+var time:int = WebBus.get_server_time() # Example: 1720613073778
+```
+
 
 ### Crazy Games
 #### Game
