@@ -75,7 +75,7 @@ var system_info
 
 
 #region _ready
-func _ready():
+func _ready() -> void:
 	match OS.get_name():
 		"Web":
 			window = JavaScriptBridge.get_interface("window")
@@ -152,7 +152,7 @@ func _ready():
 			_get_info()
 				
 				
-func _get_info():
+func _get_info() -> void:
 	var lang:String
 	var type:String
 	match platform:
@@ -173,7 +173,7 @@ func _get_info():
 	
 #endregion
 #region Ads
-func show_ad():
+func show_ad() -> void:
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.CRAZY:
@@ -183,7 +183,7 @@ func show_ad():
 			Platform.GAMEDISTRIBUTION:
 				game_dist_show_ad()
 
-func show_rewarded_ad():
+func show_rewarded_ad()-> void:
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.CRAZY:
@@ -195,54 +195,54 @@ func show_rewarded_ad():
 	
 # Yandex Games Block
 
-func yandex_show_ad():
+func yandex_show_ad()-> void:
 	while not YandexSDK:
 		await _SDK_inited
 	YandexSDK.adv.showFullscreenAdv(_adCallbacks)
 
-func yandex_show_rewarded_ad():
+func yandex_show_rewarded_ad()-> void:
 	while not YandexSDK:
 		await _SDK_inited
 	YandexSDK.adv.showRewardedVideo(_adRewardCallbacks)
 
 # Crazy Games
 
-func crazy_show_ad():
+func crazy_show_ad()-> void:
 	while not CrazySDK:
 		await _SDK_inited
 	CrazySDK.ad.requestAd("midgame", _adCallbacks)
 	
-func crazy_show_rewarded_ad():
+func crazy_show_rewarded_ad()-> void:
 	while not CrazySDK:
 		await _SDK_inited
 	CrazySDK.ad.requestAd("rewarded", _adRewardCallbacks)
 
 # Game Distribution
-func game_dist_show_ad():
+func game_dist_show_ad()-> void:
 	while not GameDistSDK:
 		await _SDK_inited
 	GameDistSDK.show_ad()
 	
-func game_dist_show_rewarded_ad():
+func game_dist_show_rewarded_ad()-> void:
 	while not GameDistSDK:
 		await _SDK_inited
 	GameDistSDK.show_ad('rewarded')
 
 #Callbacks
-func _rewarded_ad(args):
+func _rewarded_ad(args)-> void:
 	reward_added.emit()
 	
-func _ad(args):
+func _ad(args)-> void:
 	ad_closed.emit()
 	
-func _adError(args):
+func _adError(args)-> void:
 	ad_error.emit()
 	
-func _adStarted(args):
+func _adStarted(args)-> void:
 	ad_started.emit()
 
 
-func show_banner():
+func show_banner() -> void:
 	match platform:
 		Platform.YANDEX:
 			while not YandexSDK:
@@ -254,7 +254,7 @@ func show_banner():
 			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
 			CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
 		
-func hide_banner():	
+func hide_banner() -> void:	
 	match platform:
 		Platform.YANDEX:
 			YandexSDK.adv.hideBannerAdv()
@@ -303,66 +303,75 @@ func ready():
 #endregion
 #region Yandex
 
-signal leaderboard_info_recieved
-var callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
 
+signal leaderboard_info_recieved(result:Dictionary)
+var _callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
 
 func get_leaderboard_info(leaderboard:String):
 	match platform:
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			leaderboards.getLeaderboardDescription(leaderboard).then(callback_info_recieved)
-			return
+			leaderboards.getLeaderboardDescription(leaderboard).then(_callback_info_recieved)
+			return await leaderboard_info_recieved
 			push_warning("Bad requst getting leaderboard")
 
 func _leaderboard_info_recieved(info):
-	leaderboard_info_recieved.emit(info[0])
+	leaderboard_info_recieved.emit(_js_to_dict(info[0]))
+
 
 signal leaderboard_score_setted
 
-func set_leaderboard_score(leaderboard:String, score: int, extra_data:String = ""):
+var _callback_leaderboard_score_setted = JavaScriptBridge.create_callback(func(args):
+					leaderboard_score_setted.emit())
+
+func set_leaderboard_score(leaderboard:String, score: int, extra_data:String = "") -> void:
 	match platform:
 		Platform.YANDEX:
 			while not leaderboards:
 				await _SDK_inited
-			leaderboards.setLeaderboardScore(leaderboard, score, extra_data).then(
-				JavaScriptBridge.create_callback(func(args):
-					leaderboard_score_setted.emit()
-					)
-			)
-			return
+			leaderboards.setLeaderboardScore(leaderboard, score, extra_data).then(_callback_leaderboard_score_setted)
+			await leaderboard_score_setted
+			return 
 	push_warning("Bad request setting leaderboard score")
 
-signal leaderboard_player_entry_recieved
+
+signal leaderboard_player_entry_recieved(result:Dictionary)
 var callback_player_entry_recieved = JavaScriptBridge.create_callback(_leaderboard_player_entry_recieved)
 
-func get_leaderboard_player_entry(leaderboard:String):
+func get_leaderboard_player_entry(leaderboard:String) -> Dictionary:
 	match platform:
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
 			leaderboards.getLeaderboardPlayerEntry(leaderboard).then(callback_player_entry_recieved)
+			return await leaderboard_player_entry_recieved
+		_:
+			return {}
 		
-func _leaderboard_player_entry_recieved(info):
-	leaderboard_player_entry_recieved.emit(info[0])
-	
+func _leaderboard_player_entry_recieved(info) -> void:
+	leaderboard_player_entry_recieved.emit(_js_to_dict(info[0]))
+
+
 signal leaderboard_entries_recieved
 var callback_entries_recieved = JavaScriptBridge.create_callback(_leaderboard_entries_recieved)
 
-#TODO need test
-func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quantity_around:int = 5, quantity_top:int = 5):
-	if OS.has_feature("yandexgames"):
-		while not YandexSDK:
-			await _SDK_inited
-		var config := JavaScriptBridge.create_object("Object")
-		config["includeUser"] = include_user
-		config["quantityAround"] = quantity_around
-		config["quantityTop"] = quantity_top
-		leaderboards.getLeaderboardEntries(leaderboard, config).then(callback_entries_recieved)
-		
+func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quantity_around:int = 5, quantity_top:int = 5) -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			var config := JavaScriptBridge.create_object("Object")
+			config["includeUser"] = include_user
+			config["quantityAround"] = quantity_around
+			config["quantityTop"] = quantity_top
+			leaderboards.getLeaderboardEntries(leaderboard, config).then(callback_entries_recieved)
+			return await leaderboard_entries_recieved
+		_: 
+			return {}
+
 func _leaderboard_entries_recieved(info):
-	leaderboard_entries_recieved.emit(info[0])
+	leaderboard_entries_recieved.emit(_js_to_dict(info[0]))
 
 
 func get_server_time() -> int:
@@ -378,7 +387,7 @@ func get_server_time() -> int:
 #endregion
 
 #region Crazy Games
-func happytime():
+func happytime() -> void:
 	match platform:
 		Platform.CRAZY:
 			if CrazySDK:
@@ -386,7 +395,7 @@ func happytime():
 			else:
 				push_warning("SDK not initialized")
 	
-func start_loading():
+func start_loading() -> void:
 	match platform:
 		Platform.CRAZY:
 			if CrazySDK:
@@ -398,7 +407,7 @@ func start_loading():
 #region getting data
 
 
-func get_platform():
+func get_platform() -> String:
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
@@ -407,20 +416,23 @@ func get_platform():
 				return "crazy_games"
 			Platform.GAMEDISTRIBUTION:
 				return "game_distribution"
+	return "unknown"
 
 
-func get_language():
+func get_language() -> String:
 	if OS.get_name() == "Web":
 		if info:
 			print("language from sdk:", info["language"])
 			return info["language"]
+	return "unknown"
 
 
-func get_type_device():
+func get_type_device() -> String:
 	if OS.get_name() == "Web":
 		if info:
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
+	return "unknown"
 
 #endregion
 

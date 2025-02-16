@@ -127,7 +127,7 @@ func getting_leaderboard_info(info):
 
 `name_leaderboard` : **String** type
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Get leaderboard player entry:
 ```gdscript
@@ -142,7 +142,7 @@ func getting_leaderboard_player_entry(info):
 
 `name_leaderboard` : **String** type
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Get leaderboard entries:
 ```gdscript
@@ -163,11 +163,11 @@ func getting_leaderboard_entries(info):
 
 `quantity_top` : **int** type, optional parameter
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Save score in leaderboard:
 ```gdscript
-WebBus.set_yandex_leaderboard(name_leaderboard, score, extra_data)
+WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 ```
 
 `name_leaderboard` : **String** type
@@ -189,7 +189,7 @@ WebBus.init_payments(signed)
 Make purchase
 
 ```gdscript
-WebBus.purchase(product_id, developer_payload)
+var success = await WebBus.purchase(product_id, developer_payload)
 ```
 
 `product_id`: **String** type
