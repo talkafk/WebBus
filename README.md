@@ -2,7 +2,7 @@
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
 This version is for Godot 4.x.
-### Contents
+## Contents
 
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
@@ -13,7 +13,9 @@ This version is for Godot 4.x.
     - [Ready](#ready)
     - [Other](#other)
   - [Yandex](#yandex)
-	- [Leaderboards](#leaderboards)
+	  - [Leaderboards](#leaderboards)
+    - [Payments](#payments)
+    - [Server time](#server-time)
   - [Crazy Games](#crazy-games)
 	  - [Game](#game-1)
   - [Main Screen Menu](#main-screen-menu)
@@ -127,7 +129,7 @@ func getting_leaderboard_info(info):
 
 `name_leaderboard` : **String** type
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Get leaderboard player entry:
 ```gdscript
@@ -142,7 +144,7 @@ func getting_leaderboard_player_entry(info):
 
 `name_leaderboard` : **String** type
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Get leaderboard entries:
 ```gdscript
@@ -163,11 +165,11 @@ func getting_leaderboard_entries(info):
 
 `quantity_top` : **int** type, optional parameter
 
-`info` : **JavaScriptObject** type
+`info` : **Dictionary** type
 
 Save score in leaderboard:
 ```gdscript
-WebBus.set_yandex_leaderboard(name_leaderboard, score, extra_data)
+WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 ```
 
 `name_leaderboard` : **String** type
@@ -189,7 +191,7 @@ WebBus.init_payments(signed)
 Make purchase
 
 ```gdscript
-WebBus.purchase(product_id, developer_payload)
+var success = await WebBus.purchase(product_id, developer_payload)
 ```
 
 `product_id`: **String** type
@@ -208,6 +210,14 @@ Get product list
 ```gdscript
 var product_list = await WebBus.get_catalog()
 ```
+#### Server time
+
+Get server time
+
+```gdscript
+var time:int = WebBus.get_server_time() # Example: 1720613073778
+```
+
 
 ### Crazy Games
 #### Game
