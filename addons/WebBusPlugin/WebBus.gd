@@ -365,6 +365,16 @@ func _leaderboard_entries_recieved(info):
 	leaderboard_entries_recieved.emit(info[0])
 
 
+func get_server_time() -> int:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			return YandexSDK.serverTime()
+		_:
+			return 0
+
+
 #endregion
 
 #region Crazy Games
