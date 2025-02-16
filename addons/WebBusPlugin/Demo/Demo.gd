@@ -64,8 +64,7 @@ func _on_get_yandex_leaderboard_info_pressed():
 	
 	
 func getting_leaderboard_info(info):
-	leaderboard_info = info 
-	print(leaderboard_info.name)
+	print(info)
 
 func _on_get_yandex_leaderboard_player_entry_pressed():
 	var name_leaderboard :String = $VBoxContainer/Yandex/HBoxContainer3/leaderboard.text

@@ -105,6 +105,7 @@ text = "start_loading"
 [node name="Yandex" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 1.55
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
