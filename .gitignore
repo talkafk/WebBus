@@ -18,3 +18,5 @@ mono_crash.*.json
 /addons/*
 !/addons/WebBusPlugin/
 /export/*
+
+.vscode/
