@@ -218,6 +218,25 @@ Get server time
 var time:int = WebBus.get_server_time() # Example: 1720613073778
 ```
 
+#### Game Rating
+
+Check if the player can provide feedback:
+
+```gdscript
+
+var feedback_info = await WebBus.can_rewiew()
+print(feedback_info.value) # bool
+
+```
+
+Request feedback from the player:
+
+```gdscript
+
+var feedback_request = await WebBus.request_review()
+print(feedback_request.feedback_sent) # bool
+
+```
 
 ### Crazy Games
 #### Game

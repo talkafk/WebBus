@@ -384,6 +384,37 @@ func get_server_time() -> int:
 			return 0
 
 
+signal can_feedback(result:Dictionary)
+
+var _callback_can_rewiew = JavaScriptBridge.create_callback(func(args):
+	can_feedback.emit(_js_to_dict(args[0])))
+
+func can_rewiew() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.canReview().then(_callback_can_rewiew)
+			return await can_feedback
+		_:
+			return {}
+
+
+signal request_feedback(result:Dictionary)
+
+var _callback_request_rewiew = JavaScriptBridge.create_callback(func(args):
+	request_feedback.emit(_js_to_dict(args[0])))	
+
+func request_review() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.requestReview().then(_callback_request_rewiew)
+			return await request_feedback
+		_:
+			return {}
+
 #endregion
 
 #region Crazy Games

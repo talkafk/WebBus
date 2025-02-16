@@ -112,3 +112,13 @@ func _on_get_purchases_pressed():
 
 func _on_get_catalog_pressed():
 	print(await WebBus.get_catalog())
+
+
+func _on_can_rewiew_pressed():
+	var feedback_info = await WebBus.can_rewiew()
+	print(feedback_info) # bool
+
+
+func _on_request_review_pressed():
+	var feedback_request = await WebBus.request_review()
+	print(feedback_request) # bool

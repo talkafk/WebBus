@@ -223,6 +223,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "get_catalog"
 
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="can_rewiew" type="Button" parent="VBoxContainer/Yandex/HBoxContainer8"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "can_rewiew"
+
+[node name="request_review" type="Button" parent="VBoxContainer/Yandex/HBoxContainer8"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "request_review"
+
 [connection signal="pressed" from="VBoxContainer/General/Show_ad" to="." method="_on_show_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/show_banner" to="." method="_on_show_banner_pressed"]
@@ -242,3 +257,5 @@ text = "get_catalog"
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer6/purchase" to="." method="_on_purchase_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_purchases" to="." method="_on_get_purchases_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_catalog" to="." method="_on_get_catalog_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer8/can_rewiew" to="." method="_on_can_rewiew_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer8/request_review" to="." method="_on_request_review_pressed"]
