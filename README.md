@@ -16,6 +16,8 @@ This version is for Godot 4.x.
 	  - [Leaderboards](#leaderboards)
     - [Payments](#payments)
     - [Server time](#server-time)
+    - [Game rating](#game-rating)
+    - [Desktop shortcut](#desktop-shortcut)
   - [Crazy Games](#crazy-games)
 	  - [Game](#game-1)
   - [Main Screen Menu](#main-screen-menu)
@@ -236,6 +238,23 @@ Request feedback from the player:
 var feedback_request = await WebBus.request_review()
 print(feedback_request.feedback_sent) # bool
 
+```
+#### Desktop shortcut
+
+Check if the player can show a prompt:
+
+```gdscript
+
+var prompt = await WebBus.can_show_prompt()
+print(prompt.can_show) # true or false
+
+```
+
+Show a prompt to the player:
+
+```gdscript
+var result = await WebBus.show_prompt()
+print(result.outcome) # "accepted"
 ```
 
 ### Crazy Games

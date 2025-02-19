@@ -415,6 +415,37 @@ func request_review() -> Dictionary:
 		_:
 			return {}
 
+
+signal could_show_prompt(result:Dictionary)
+
+var _callback_can_show_prompt = JavaScriptBridge.create_callback(func(args):
+	could_show_prompt.emit(_js_to_dict(args[0])))
+
+func can_show_prompt() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.canShowPrompt().then(_callback_can_show_prompt)
+			return await could_show_prompt
+		_:
+			return {}
+
+signal showed_prompt(result:Dictionary)
+
+var callback_show_prompt = JavaScriptBridge.create_callback(func(args):
+	showed_prompt.emit(_js_to_dict(args[0])))
+
+func show_prompt() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.showPrompt().then(callback_show_prompt)
+			return await showed_prompt
+		_:
+			return {}
+
 #endregion
 
 #region Crazy Games
