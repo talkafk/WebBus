@@ -539,6 +539,8 @@ func get_platform() -> String:
 				return "crazy_games"
 			Platform.GAMEDISTRIBUTION:
 				return "game_distribution"
+			Platform.POKI:
+				return "poki"
 	return "unknown"
 
 
