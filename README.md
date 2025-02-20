@@ -28,6 +28,7 @@ This version is for Godot 4.x.
 ## Supported platforms
 - Crazy games
 - Yandex games
+- Poki
 
 ## Installation
 
@@ -88,7 +89,7 @@ WebBus.stop_gameplay()
 
 #### Ready
 
-Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`.
+Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`. For Poki, this is equivalent to `gameLoadingFinished()`
 
 ```gdscript
 WebBus.ready()

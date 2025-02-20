@@ -13,6 +13,9 @@ if (url.includes('crazygames')) {
 if (url.includes('gamedistribution')) {
     window.platform = 'gamedistribution'
 }
+if (url.includes('poki')) {
+    window.platform = 'poki'
+}
 let url_src
 switch (window.platform) {
     case "yandex":
@@ -29,35 +32,11 @@ switch (window.platform) {
         document.head.appendChild(script);
         console.log("Crazy JS init");
         break;
-}
-
-
-
-
-function SaveLeaderboardScore(leaderboardName, score, extraData) {
-    console.log('Save leaderboard score', score, "on", leaderboardName, "with", extraData);
-    lb.setLeaderboardScore(leaderboardName, score, extraData).then(() => {
-        console.log('Leaderboard score saved');
-    });
-}
-
-function GetLeaderboardInfo(leaderboardName, callback){
-    console.log('Getting leaderboard', leaderboardName, "description");
-    lb.getLeaderboardDescription(leaderboardName).then((_info) => {
-        callback(_info);
-    });
-}
-
-function GetLeaderboardPlayerEntry(leaderboardName, callback){
-    console.log('Getting leaderboard', leaderboardName, "player entry");
-    lb.getLeaderboardPlayerEntry(leaderboardName).then((_res) => {
-        callback(_res);
-    });
-}
-
-function GetLeaderboardEntries(leaderboardName, config, callback) {
-    console.log('Getting leaderboard', leaderboardName, "entries");
-    lb.getLeaderboardEntries(leaderboardName, config).then((_res) => {
-        callback(_res);
-    });
+    case "poki":
+        url_src="https://game-cdn.poki.com/scripts/v2/poki-sdk.js";
+        var script = document.createElement('script');
+        script.src = url_src;
+        document.head.appendChild(script);
+        console.log("Poki JS init");
+        break;
 }
