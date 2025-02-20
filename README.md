@@ -176,6 +176,21 @@ WebBus.ready()
 
 #### Other
 
+Getting name of platform:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
+```gdscript
+
+var platform_name = WebBus.get_platform()
+# return String: "yandex", "crazy_games",  "poki"
+
+```
+
 Getting type of device:
 
 The function return `String`, possible values: "desktop", "tablet", "mobile".
