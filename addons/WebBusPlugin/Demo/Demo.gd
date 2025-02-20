@@ -44,12 +44,14 @@ func _on_ready_pressed():
 	WebBus.ready()
 
 func ad_closed():
+	AudioServer.set_bus_mute(0, false)
 	print("ad_closed")
 	
 func ad_error():
 	print("ad_error")
 	
 func ad_started():
+	AudioServer.set_bus_mute(0, true)
 	print("ad_started")
 	
 func reward_added():

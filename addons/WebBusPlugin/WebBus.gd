@@ -252,6 +252,7 @@ func game_dist_show_rewarded_ad()-> void:
 func poki_show_ad()-> void:
 	while not PokiSDK:
 		await _SDK_inited
+	ad_started.emit()
 	PokiSDK.commercialBreak().then(_adFinishedCallback)
 
 var _poki_rewarded_ad = JavaScriptBridge.create_callback(_poki_reward_ad)
@@ -259,6 +260,7 @@ var _poki_rewarded_ad = JavaScriptBridge.create_callback(_poki_reward_ad)
 func poky_show_rewarded_ad()-> void:
 	while not PokiSDK:
 		await _SDK_inited
+	ad_started.emit()
 	PokiSDK.rewardedBreak().then(_poki_rewarded_ad)
 
 func _poki_reward_ad(args)-> void:
