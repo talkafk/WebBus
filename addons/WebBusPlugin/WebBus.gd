@@ -18,6 +18,7 @@ var YandexSDK:JavaScriptObject
 var leaderboards:JavaScriptObject
 var CrazySDK:JavaScriptObject
 var GameDistSDK:JavaScriptObject
+var PokiSDK:JavaScriptObject
 
 var info := {}
 
@@ -65,7 +66,7 @@ const LANGUAGE_CODES = {'AF': 'uz', 'AX': 'sv', 'AL': 'en', 'DZ': 'kab',
  'VN': 'vi', 'WF': 'fr', 'EH': 'ar', '001': 'yi', 'YE': 'ar', 'ZM': 'en',
  'ZW': 'sn'}
 
-enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION}
+enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION, POKI}
 
 var platform : int
 
@@ -93,6 +94,8 @@ func _ready() -> void:
 					platform = Platform.CRAZY
 				"gamedistribution":
 					platform = Platform.GAMEDISTRIBUTION
+				"poki":
+					platform = Platform.POKI
 			match platform:
 				Platform.YANDEX:
 					var callbacks = JavaScriptBridge.create_object("Object")
@@ -149,6 +152,17 @@ func _ready() -> void:
 					GameDistSDK = window.gdsdk
 					emit_signal("_SDK_inited")
 					print('gd init gamedistribution')
+				Platform.POKI:
+					var _callback = JavaScriptBridge.create_callback(func(args):
+						emit_signal("_SDK_inited")
+					)
+					print("waiting sdk..")
+					PokiSDK = window.PokiSDK
+					while not PokiSDK:
+						PokiSDK = window.PokiSDK
+					PokiSDK.init().then(_callback)
+					await _SDK_inited
+					print('gd init poki')
 			_get_info()
 				
 				
@@ -182,6 +196,9 @@ func show_ad() -> void:
 				yandex_show_ad()
 			Platform.GAMEDISTRIBUTION:
 				game_dist_show_ad()
+			Platform.POKI:
+				poki_show_ad()
+
 
 func show_rewarded_ad()-> void:
 	if OS.get_name() == "Web":
@@ -192,6 +209,8 @@ func show_rewarded_ad()-> void:
 				yandex_show_rewarded_ad()
 			Platform.GAMEDISTRIBUTION:
 				game_dist_show_rewarded_ad()
+			Platform.POKI:
+				poky_show_rewarded_ad()
 	
 # Yandex Games Block
 
@@ -227,6 +246,27 @@ func game_dist_show_rewarded_ad()-> void:
 	while not GameDistSDK:
 		await _SDK_inited
 	GameDistSDK.show_ad('rewarded')
+
+# Poki
+
+func poki_show_ad()-> void:
+	while not PokiSDK:
+		await _SDK_inited
+	PokiSDK.commercialBreak().then(_adFinishedCallback)
+
+var _poki_rewarded_ad = JavaScriptBridge.create_callback(_poki_reward_ad)
+
+func poky_show_rewarded_ad()-> void:
+	while not PokiSDK:
+		await _SDK_inited
+	PokiSDK.rewardedBreak().then(_poki_rewarded_ad)
+
+func _poki_reward_ad(args)-> void:
+	if args[0]:
+		reward_added.emit()
+	else:
+		ad_error.emit()
+	ad_closed.emit()
 
 #Callbacks
 func _rewarded_ad(args)-> void:
@@ -274,7 +314,14 @@ func start_gameplay():
 			while not CrazySDK:
 				await _SDK_inited
 			CrazySDK.game.gameplayStart()
-	
+		Platform.POKI:
+			while not PokiSDK:
+				await _SDK_inited
+			PokiSDK.gameplayStart()
+		Platform.GAMEDISTRIBUTION:
+			pass #TODO
+
+
 func stop_gameplay():
 	match platform:
 		Platform.YANDEX:
@@ -285,6 +332,12 @@ func stop_gameplay():
 			while not CrazySDK:
 				await _SDK_inited
 			CrazySDK.game.gameplayStop()
+		Platform.POKI:
+			while not PokiSDK:
+				await _SDK_inited
+			PokiSDK.gameplayStop()
+		Platform.GAMEDISTRIBUTION:
+			pass #TODO
 	
 
 
@@ -298,6 +351,14 @@ func ready():
 			while not CrazySDK:
 				await _SDK_inited
 			CrazySDK.game.sdkGameLoadingStop()
+		Platform.POKI:
+			while not PokiSDK:
+				await _SDK_inited
+			PokiSDK.gameLoadingFinished()
+		Platform.GAMEDISTRIBUTION:
+			while not GameDistSDK:
+				await _SDK_inited
+			pass #TODO
 
 			
 #endregion
@@ -383,6 +444,68 @@ func get_server_time() -> int:
 		_:
 			return 0
 
+
+signal can_feedback(result:Dictionary)
+
+var _callback_can_rewiew = JavaScriptBridge.create_callback(func(args):
+	can_feedback.emit(_js_to_dict(args[0])))
+
+func can_rewiew() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.canReview().then(_callback_can_rewiew)
+			return await can_feedback
+		_:
+			return {}
+
+
+signal request_feedback(result:Dictionary)
+
+var _callback_request_rewiew = JavaScriptBridge.create_callback(func(args):
+	request_feedback.emit(_js_to_dict(args[0])))	
+
+func request_review() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.requestReview().then(_callback_request_rewiew)
+			return await request_feedback
+		_:
+			return {}
+
+
+signal could_show_prompt(result:Dictionary)
+
+var _callback_can_show_prompt = JavaScriptBridge.create_callback(func(args):
+	could_show_prompt.emit(_js_to_dict(args[0])))
+
+func can_show_prompt() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.canShowPrompt().then(_callback_can_show_prompt)
+			return await could_show_prompt
+		_:
+			return {}
+
+signal showed_prompt(result:Dictionary)
+
+var callback_show_prompt = JavaScriptBridge.create_callback(func(args):
+	showed_prompt.emit(_js_to_dict(args[0])))
+
+func show_prompt() -> Dictionary:
+	match platform:
+		Platform.YANDEX:
+			while not YandexSDK:
+				await _SDK_inited
+			YandexSDK.feedback.showPrompt().then(callback_show_prompt)
+			return await showed_prompt
+		_:
+			return {}
 
 #endregion
 

@@ -16,6 +16,8 @@ This version is for Godot 4.x.
 	  - [Leaderboards](#leaderboards)
     - [Payments](#payments)
     - [Server time](#server-time)
+    - [Game rating](#game-rating)
+    - [Desktop shortcut](#desktop-shortcut)
   - [Crazy Games](#crazy-games)
 	  - [Game](#game-1)
   - [Main Screen Menu](#main-screen-menu)
@@ -26,6 +28,7 @@ This version is for Godot 4.x.
 ## Supported platforms
 - Crazy games
 - Yandex games
+- Poki
 
 ## Installation
 
@@ -86,7 +89,7 @@ WebBus.stop_gameplay()
 
 #### Ready
 
-Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`.
+Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`. For Poki, this is equivalent to `gameLoadingFinished()`
 
 ```gdscript
 WebBus.ready()
@@ -218,6 +221,42 @@ Get server time
 var time:int = WebBus.get_server_time() # Example: 1720613073778
 ```
 
+#### Game Rating
+
+Check if the player can provide feedback:
+
+```gdscript
+
+var feedback_info = await WebBus.can_rewiew()
+print(feedback_info.value) # bool
+
+```
+
+Request feedback from the player:
+
+```gdscript
+
+var feedback_request = await WebBus.request_review()
+print(feedback_request.feedback_sent) # bool
+
+```
+#### Desktop shortcut
+
+Check if the player can show a prompt:
+
+```gdscript
+
+var prompt = await WebBus.can_show_prompt()
+print(prompt.can_show) # true or false
+
+```
+
+Show a prompt to the player:
+
+```gdscript
+var result = await WebBus.show_prompt()
+print(result.outcome) # "accepted"
+```
 
 ### Crazy Games
 #### Game
