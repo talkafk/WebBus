@@ -12,17 +12,12 @@ This version is for Godot 4.x.
     - [Game](#game)
     - [Ready](#ready)
     - [Other](#other)
-  - [Yandex](#yandex)
-	  - [Leaderboards](#leaderboards)
+    - [Leaderboards](#leaderboards)
     - [Payments](#payments)
     - [Server time](#server-time)
     - [Game rating](#game-rating)
     - [Desktop shortcut](#desktop-shortcut)
-  - [Crazy Games](#crazy-games)
-	  - [Game](#game-1)
   - [Main Screen Menu](#main-screen-menu)
-- [Features](#features)
-  - [Archive](#archive)
 
 
 ## Supported platforms
@@ -46,15 +41,39 @@ You can explore the demo scene for a better understanding of how to use the plug
 #### Advertisement
 
 Calling full-screen advertisement:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
+
 ```gdscript
 WebBus.show_ad()
 ```
 Calling rewarded advertisement:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
+
 ```gdscript
 WebBus.show_rewarded_ad()
 ```
 
 For full-screen and rewarded advertisements, there are 4 callback signals:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
+
 ```gdscript
 signal reward_added
 signal ad_closed
@@ -63,11 +82,26 @@ signal ad_started
 ```
 
 Calling banner advertisement:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+
 ```gdscript
 WebBus.show_banner()
 ```
 
 Close banner advertisement:
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
 ```gdscript
 WebBus.hide_banner()
 ```
@@ -77,19 +111,64 @@ WebBus.hide_banner()
 
 The `start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
 ```gdscript
 WebBus.start_gameplay()
 ```
 
 The `stop_gameplay()` function has to be called on every game break don't forget to call `start_gameplay(` when the gameplay resumes.
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
 ```gdscript
 WebBus.stop_gameplay()
 ```
 
+
+The `happytime()` method can be called on various player achievements.
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+
+```gdscript
+WebBus.happytime()
+```
+
+The `start_loading()` function has to be called whenever you start loading your game.
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+```gdscript
+WebBus.crazy_start_loading()
+```
+
+
 #### Ready
 
 Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`. For Poki, this is equivalent to `gameLoadingFinished()`
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
 
 ```gdscript
 WebBus.ready()
@@ -101,6 +180,12 @@ Getting type of device:
 
 The function return `String`, possible values: "desktop", "tablet", "mobile".
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
 ```gdscript
 var device_type = WebBus.get_type_device()
 ```
@@ -109,13 +194,23 @@ Getting language:
 
 The function return 2 letter is language code.
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
 ```gdscript
 var language = WebBus.get_language()
 ```
 
-### Yandex
-
 #### Leaderboards
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
 
 Features exclusive to Yandex games.
 
@@ -183,6 +278,13 @@ WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 
 #### Payments
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+
 Init yandex payments
 
 ```gdsript
@@ -215,6 +317,13 @@ var product_list = await WebBus.get_catalog()
 ```
 #### Server time
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+
 Get server time
 
 ```gdscript
@@ -222,6 +331,13 @@ var time:int = WebBus.get_server_time() # Example: 1720613073778
 ```
 
 #### Game Rating
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
 
 Check if the player can provide feedback:
 
@@ -242,6 +358,12 @@ print(feedback_request.feedback_sent) # bool
 ```
 #### Desktop shortcut
 
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
 Check if the player can show a prompt:
 
 ```gdscript
@@ -256,21 +378,6 @@ Show a prompt to the player:
 ```gdscript
 var result = await WebBus.show_prompt()
 print(result.outcome) # "accepted"
-```
-
-### Crazy Games
-#### Game
-
-The `happytime()` method can be called on various player achievements.
-
-```gdscript
-WebBus.happytime()
-```
-
-The `start_loading()` function has to be called whenever you start loading your game.
-
-```gdscript
-WebBus.crazy_start_loading()
 ```
 
 ### Main Screen Menu
