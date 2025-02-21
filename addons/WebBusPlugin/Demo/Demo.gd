@@ -124,3 +124,8 @@ func _on_can_rewiew_pressed():
 func _on_request_review_pressed():
 	var feedback_request = await WebBus.request_review()
 	print(feedback_request) # bool
+
+
+func _on_get_platform_pressed():
+	var platform = WebBus.get_platform()
+	print(platform) # string
