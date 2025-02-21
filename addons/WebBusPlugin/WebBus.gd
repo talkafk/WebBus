@@ -160,6 +160,7 @@ func _ready() -> void:
 					PokiSDK = window.PokiSDK
 					while not PokiSDK:
 						PokiSDK = window.PokiSDK
+						await get_tree().create_timer(0.1).timeout
 					PokiSDK.init().then(_callback)
 					await _SDK_inited
 					print('gd init poki')
@@ -543,6 +544,8 @@ func get_platform() -> String:
 				return "game_distribution"
 			Platform.POKI:
 				return "poki"
+			_:
+				return "unknown"
 	return "unknown"
 
 
@@ -551,6 +554,7 @@ func get_language() -> String:
 		if info:
 			print("language from sdk:", info["language"])
 			return info["language"]
+		return "unknown"
 	return "unknown"
 
 
@@ -559,6 +563,7 @@ func get_type_device() -> String:
 		if info:
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
+return "unknown"
 	return "unknown"
 
 #endregion
