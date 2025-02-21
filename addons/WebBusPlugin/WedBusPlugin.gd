@@ -16,9 +16,9 @@ func _enter_tree():
 	
 	# Init main screen scene
 	main_screen_scene_instance = MainScreenScene.instantiate()
+	main_screen_scene_instance.main_scene_data_change.connect(_update_data_from_main_screen)
 	EditorInterface.get_editor_main_screen().add_child(main_screen_scene_instance)
 	_make_visible(false)
-	main_screen_scene_instance.main_scene_data_change.connect(_update_data_from_main_screen)
 	
 
 func _exit_tree():

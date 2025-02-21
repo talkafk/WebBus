@@ -16,6 +16,9 @@ if (url.includes('gamedistribution')) {
 if (url.includes('poki')) {
     window.platform = 'poki'
 }
+if (window.platform == null) {
+    window.platform = 'unknown'
+}
 let url_src
 switch (window.platform) {
     case "yandex":
@@ -39,4 +42,13 @@ switch (window.platform) {
         document.head.appendChild(script);
         console.log("Poki JS init");
         break;
+    case "gamedistribution":
+        url_src="https://html5.api.gamedistribution.com/main.bundle.js";
+        var script = document.createElement('script');
+        script.src
+        document.head.appendChild(script);
+        console.log("GameDistribution JS init");
+        break;
+    default:
+        console.log("Platform not found");
 }

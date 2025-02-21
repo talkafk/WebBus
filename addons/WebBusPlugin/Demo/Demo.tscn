@@ -23,7 +23,7 @@ theme_override_constants/separation = 14
 [node name="General" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-columns = 3
+columns = 5
 
 [node name="Show_ad" type="Button" parent="VBoxContainer/General"]
 layout_mode = 2
@@ -81,6 +81,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 text = "ready"
+
+[node name="get_platform" type="Button" parent="VBoxContainer/General"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+text = "get_platform"
 
 [node name="Crazy" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -247,6 +254,7 @@ text = "request_review"
 [connection signal="pressed" from="VBoxContainer/General/start_gameplay" to="." method="_on_start_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/ready" to="." method="_on_ready_pressed"]
+[connection signal="pressed" from="VBoxContainer/General/get_platform" to="." method="_on_get_platform_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]

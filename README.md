@@ -1,4 +1,8 @@
 # WebBus
+![Godot 4.x](https://img.shields.io/badge/Godot-4.x-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
 This version is for Godot 4.x.
@@ -8,7 +12,7 @@ This version is for Godot 4.x.
 - [Installation](#installation)
 - [Usage](#usage)
   - [General](#general)
-	  - [Advertisement](#advertisement)
+    - [Advertisement](#advertisement)
     - [Game](#game)
     - [Ready](#ready)
     - [Other](#other)
@@ -24,6 +28,16 @@ This version is for Godot 4.x.
 - Crazy games
 - Yandex games
 - Poki
+
+| Feature            | Crazy Games | Yandex Games | Poki  |
+|--------------------|:-----------:|:------------:|:------:|
+| Fullscreen Advertisement     | ✅          | ✅           | ✅    |
+| Rewarded Advertisement       | ✅          | ✅           | ✅    |
+| Banner Advertisement         | ✅          | ✅           | ❌    |
+| Leaderboards       | ❌          | ✅           | ❌    |
+| Payments           | ❌          | ✅           | ❌    |
+| Server time        | ❌          | ✅           | ❌    |
+| Desktop shortcut   | ❌          | ✅           | ❌    |
 
 ## Installation
 
@@ -75,11 +89,43 @@ For full-screen and rewarded advertisements, there are 4 callback signals:
 
 
 ```gdscript
-signal reward_added
+signal reward_added 
 signal ad_closed
 signal ad_error
 signal ad_started
 ```
+
+Full example:
+
+```gdscript
+extends Node
+
+func _ready():
+	WebBus.ad_closed.connect(ad_closed)
+	WebBus.ad_error.connect(ad_error)
+	WebBus.ad_started.connect(ad_started)
+	WebBus.reward_added.connect(reward_added)
+  
+  WebBus.show_ad()
+
+
+func ad_started():
+	AudioServer.set_bus_mute(0, true)
+
+
+func ad_closed():
+	AudioServer.set_bus_mute(0, false)
+	
+
+func ad_error():
+	push_warning("ad_error")
+	
+
+func reward_added():
+	$Player.add_gold(10)
+
+```
+
 
 Calling banner advertisement:
 
@@ -121,7 +167,7 @@ The `start_gameplay()` function has to be called whenever the player starts play
 WebBus.start_gameplay()
 ```
 
-The `stop_gameplay()` function has to be called on every game break don't forget to call `start_gameplay(` when the gameplay resumes.
+The `stop_gameplay()` function has to be called on every game break, don't forget to call `start_gameplay()` when the gameplay resumes.
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -156,13 +202,16 @@ The `start_loading()` function has to be called whenever you start loading your 
 | Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
 
 ```gdscript
-WebBus.crazy_start_loading()
+WebBus.start_loading()
 ```
 
 
 #### Ready
 
-Call `ready()` function when the game ready for game. For Crazy Games, this is equivalent to `sdkGameLoadingStop()`. For Poki, this is equivalent to `gameLoadingFinished()`
+Call `ready()` when the game is fully loaded and ready to play. 
+
+> **Note:** For Crazy Games, calling `ready()` is equivalent to `sdkGameLoadingStop()`. For Poki, this is equivalent to `gameLoadingFinished()`
+
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -178,6 +227,8 @@ WebBus.ready()
 
 Getting name of platform:
 
+The function returns a `String`. Possible values are: "yandex", "crazy_games", "poki"
+
 | Platform          | Supported |
 |-------------------|-----------|
 | Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
@@ -185,15 +236,12 @@ Getting name of platform:
 | Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
 
 ```gdscript
-
 var platform_name = WebBus.get_platform()
-# return String: "yandex", "crazy_games",  "poki"
-
 ```
 
 Getting type of device:
 
-The function return `String`, possible values: "desktop", "tablet", "mobile".
+The function returns a `String`, possible values: "desktop", "tablet", "mobile".
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -207,7 +255,7 @@ var device_type = WebBus.get_type_device()
 
 Getting language:
 
-The function return 2 letter is language code.
+The function returns 2-letter language code.
 
 | Platform          | Supported |
 |-------------------|-----------|

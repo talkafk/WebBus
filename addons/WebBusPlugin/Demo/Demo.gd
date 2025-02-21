@@ -44,12 +44,14 @@ func _on_ready_pressed():
 	WebBus.ready()
 
 func ad_closed():
+	AudioServer.set_bus_mute(0, false)
 	print("ad_closed")
 	
 func ad_error():
 	print("ad_error")
 	
 func ad_started():
+	AudioServer.set_bus_mute(0, true)
 	print("ad_started")
 	
 func reward_added():
@@ -122,3 +124,8 @@ func _on_can_rewiew_pressed():
 func _on_request_review_pressed():
 	var feedback_request = await WebBus.request_review()
 	print(feedback_request) # bool
+
+
+func _on_get_platform_pressed():
+	var platform = WebBus.get_platform()
+	print(platform) # string
