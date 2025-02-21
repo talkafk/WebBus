@@ -563,7 +563,7 @@ func get_type_device() -> String:
 		if info:
 			print("language from sdk:", info["device_type"])
 			return info["device_type"]
-return "unknown"
+		return "unknown"
 	return "unknown"
 
 #endregion

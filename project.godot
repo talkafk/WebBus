@@ -15,7 +15,7 @@ markdown_book/docs_folder="/"
 [application]
 
 config/name="WebBus"
-config/version="0.3.0"
+config/version="0.3.1"
 config/tags=PackedStringArray("tools")
 run/main_scene="res://addons/WebBusPlugin/Demo/Demo.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
