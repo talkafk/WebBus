@@ -186,6 +186,9 @@ func _get_info() -> void:
 			var c_code = system_info.countryCode
 			lang = LANGUAGE_CODES[c_code]
 			type = system_info.device.type
+		_:
+			lang = "unknown"
+			type = "unknown"
 	info["language"] = lang
 	info["device_type"] = type
 	
@@ -603,7 +606,7 @@ func get_language() -> String:
 func get_type_device() -> String:
 	if OS.get_name() == "Web":
 		if info:
-			print("language from sdk:", info["device_type"])
+			print("type device from sdk:", info["device_type"])
 			return info["device_type"]
 		return "unknown"
 	return "unknown"
