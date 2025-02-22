@@ -129,3 +129,24 @@ func _on_request_review_pressed():
 func _on_get_platform_pressed():
 	var platform = WebBus.get_platform()
 	print(platform) # string
+
+
+func _on_invite_link_pressed():
+	var params := {}
+	params[$VBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/Invite/HBoxContainer/value.text
+	var result = await WebBus.invite_link(params)
+	print(result)
+	
+
+func _on_get_invite_param_pressed():
+	print(await WebBus.get_invite_param($VBoxContainer/Invite/HBoxContainer2/key.text))
+
+
+func _on_show_invite_button_pressed():
+	var params := {}
+	params[$VBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/Invite/HBoxContainer/value.text
+	WebBus.show_invite_button(params)
+
+
+func _on_hide_invite_button_pressed():
+	WebBus.hide_invite_button()

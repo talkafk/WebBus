@@ -12,6 +12,9 @@ var _adStartedCallback:JavaScriptObject
 var _adErrorCallback:JavaScriptObject
 var _adFinishedCallback:JavaScriptObject
 var _adFinishedRewardCallback:JavaScriptObject
+var _adRewardAndCloseCallback:JavaScriptObject
+
+
 var window:JavaScriptObject
 
 var YandexSDK:JavaScriptObject
@@ -86,7 +89,7 @@ func _ready() -> void:
 			_adErrorCallback = JavaScriptBridge.create_callback(_adError)
 			_adFinishedCallback = JavaScriptBridge.create_callback(_ad)
 			_adFinishedRewardCallback = JavaScriptBridge.create_callback(_rewarded_ad)
-			var str_palform = window.platform
+			_adRewardAndCloseCallback = JavaScriptBridge.create_callback(_ad_reward_and_close)
 			match window.platform:
 				"yandex":
 					platform = Platform.YANDEX
@@ -126,13 +129,13 @@ func _ready() -> void:
 						)
 					window.YaGames.init().then(_init_callback)
 					await _inited
-					emit_signal("_SDK_inited")
+					_SDK_inited.emit()
 					print('gd init yandex')
 				Platform.CRAZY:
 					_adCallbacks["adFinished"] = _adFinishedCallback
 					_adCallbacks["adError"] = _adErrorCallback
 					_adCallbacks["adStarted"] = _adStartedCallback
-					_adRewardCallbacks["adFinished"] = _adFinishedRewardCallback
+					_adRewardCallbacks["adFinished"] = _adRewardAndCloseCallback
 					_adRewardCallbacks["adError"] = _adErrorCallback
 					_adRewardCallbacks["adStarted"] = _adStartedCallback
 					print("waiting sdk..")
@@ -140,13 +143,11 @@ func _ready() -> void:
 					while not CrazySDK:
 						CrazySDK = window.CrazyGames.SDK
 						await get_tree().create_timer(0.1).timeout
-					var callback = JavaScriptBridge.create_callback(func(args:Array):
-						system_info = args[1]
-						emit_signal("_system_info_recieved", system_info))
-					CrazySDK.user.getSystemInfo(callback)
-					await _system_info_recieved
-					
-					emit_signal("_SDK_inited")
+					var callback_init = JavaScriptBridge.create_callback(func(args):
+						_inited.emit())
+					CrazySDK.init().then(callback_init)
+					await _inited
+					_SDK_inited.emit()
 					print('gd init crazy')
 				Platform.GAMEDISTRIBUTION:
 					_adCallbacks["ad_stop"] = _adFinishedCallback
@@ -154,11 +155,11 @@ func _ready() -> void:
 					_adCallbacks["ad_rewarded"] = _adFinishedRewardCallback
 					window.setcallbacks(_adCallbacks)
 					GameDistSDK = window.gdsdk
-					emit_signal("_SDK_inited")
+					_SDK_inited.emit()
 					print('gd init gamedistribution')
 				Platform.POKI:
 					var _callback = JavaScriptBridge.create_callback(func(args):
-						emit_signal("_SDK_inited")
+						_inited.emit()
 					)
 					print("waiting sdk..")
 					PokiSDK = window.PokiSDK
@@ -166,7 +167,8 @@ func _ready() -> void:
 						PokiSDK = window.PokiSDK
 						await get_tree().create_timer(0.1).timeout
 					PokiSDK.init().then(_callback)
-					await _SDK_inited
+					await _inited
+					_SDK_inited.emit()
 					print('gd init poki')
 			_get_info()
 				
@@ -181,11 +183,11 @@ func _get_info() -> void:
 			lang = YandexSDK.environment.i18n.lang
 			type = YandexSDK.deviceInfo.type
 		Platform.CRAZY: 
-			while not system_info:
+			while not CrazySDK:
 				await _SDK_inited
-			var c_code = system_info.countryCode
+			var c_code = CrazySDK.user.systemInfo.countryCode
 			lang = LANGUAGE_CODES[c_code]
-			type = system_info.device.type
+			type = CrazySDK.user.systemInfo.device.type
 		_:
 			lang = "unknown"
 			type = "unknown"
@@ -299,6 +301,10 @@ func _adError(args)-> void:
 func _adStarted(args)-> void:
 	ad_started.emit()
 
+func _ad_reward_and_close(args)-> void:
+	reward_added.emit()
+	ad_closed.emit()
+
 
 func show_banner() -> void:
 	match platform:
@@ -381,7 +387,7 @@ func ready():
 		Platform.CRAZY:
 			while not CrazySDK:
 				await _SDK_inited
-			CrazySDK.game.sdkGameLoadingStop()
+			CrazySDK.game.loadingStop()
 		Platform.POKI:
 			while not PokiSDK:
 				await _SDK_inited
@@ -569,7 +575,7 @@ func start_loading() -> void:
 	match platform:
 		Platform.CRAZY:
 			if CrazySDK:
-				CrazySDK.game.sdkGameLoadingStart()
+				CrazySDK.game.loadingStart()
 			else:
 				push_warning("SDK not initialized")
 		_:
@@ -610,6 +616,70 @@ func get_type_device() -> String:
 			return info["device_type"]
 		return "unknown"
 	return "unknown"
+
+#endregion
+
+#region invite
+
+signal invite_link_getted(result:String)
+
+func invite_link(params:Dictionary) -> String:
+	var conf = JavaScriptBridge.create_object("Object")
+	for key in params.keys():
+		conf[key] = params[key]
+	match platform:
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			return CrazySDK.game.inviteLink(conf)
+		Platform.POKI:
+			while not PokiSDK:
+				await _SDK_inited
+			var callback = JavaScriptBridge.create_callback(func(args):
+				invite_link_getted.emit(args[0]))
+			PokiSDK.shareableURL(conf).then(callback)
+			return await invite_link_getted
+		_:
+			push_warning("Platform not supported")
+			return ""
+
+
+func get_invite_param(param:Variant) -> Variant:
+	match platform:
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			return CrazySDK.game.getInviteParam(param)
+		Platform.POKI:
+			while not PokiSDK:
+				await _SDK_inited
+			return PokiSDK.getURLParam(param)
+		_:
+			push_warning("Platform not supported")
+			return ""
+
+
+func show_invite_button(params:Dictionary) -> void:
+	var conf = JavaScriptBridge.create_object("Object")
+	for key in params.keys():
+		conf[key] = params[key]
+	match platform:
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.showInviteButton(conf)
+		_:
+			push_warning("Platform not supported")
+
+func hide_invite_button() -> void:
+	match platform:
+		Platform.CRAZY:
+			while not CrazySDK:
+				await _SDK_inited
+			CrazySDK.game.hideInviteButton()
+		_:
+			push_warning("Platform not supported")
+
 
 #endregion
 
