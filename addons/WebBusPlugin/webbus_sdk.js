@@ -29,7 +29,7 @@ switch (window.platform) {
         console.log("Yandex JS init");
         break;
     case "crazy":
-        url_src="https://sdk.crazygames.com/crazygames-sdk-v2.js";
+        url_src="https://sdk.crazygames.com/crazygames-sdk-v3.js";
         var script = document.createElement('script');
         script.src = url_src;
         document.head.appendChild(script);

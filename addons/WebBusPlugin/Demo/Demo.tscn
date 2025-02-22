@@ -89,6 +89,53 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 text = "get_platform"
 
+[node name="Invite" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Invite"]
+layout_mode = 2
+
+[node name="invite_link" type="Button" parent="VBoxContainer/Invite/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "invite_link"
+
+[node name="key" type="LineEdit" parent="VBoxContainer/Invite/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "key"
+
+[node name="value" type="LineEdit" parent="VBoxContainer/Invite/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "value"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Invite"]
+layout_mode = 2
+
+[node name="get_invite_param" type="Button" parent="VBoxContainer/Invite/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_invite_param"
+
+[node name="key" type="LineEdit" parent="VBoxContainer/Invite/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "key"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Invite"]
+layout_mode = 2
+
+[node name="show_invite_button" type="Button" parent="VBoxContainer/Invite/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "show_invite_button"
+
+[node name="hide_invite_button" type="Button" parent="VBoxContainer/Invite/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "hide_invite_button"
+
 [node name="Crazy" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -255,6 +302,10 @@ text = "request_review"
 [connection signal="pressed" from="VBoxContainer/General/stop_gameplay" to="." method="_on_stop_gameplay_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/ready" to="." method="_on_ready_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/get_platform" to="." method="_on_get_platform_pressed"]
+[connection signal="pressed" from="VBoxContainer/Invite/HBoxContainer/invite_link" to="." method="_on_invite_link_pressed"]
+[connection signal="pressed" from="VBoxContainer/Invite/HBoxContainer2/get_invite_param" to="." method="_on_get_invite_param_pressed"]
+[connection signal="pressed" from="VBoxContainer/Invite/HBoxContainer3/show_invite_button" to="." method="_on_show_invite_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Invite/HBoxContainer3/hide_invite_button" to="." method="_on_hide_invite_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer/get_yandex_leaderboard_info" to="." method="_on_get_yandex_leaderboard_info_pressed"]

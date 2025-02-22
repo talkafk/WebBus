@@ -2,6 +2,7 @@
 ![Godot 4.x](https://img.shields.io/badge/Godot-4.x-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+![icon](icon.png)
 
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
@@ -35,6 +36,8 @@ This version is for Godot 4.x.
 | [Banner Advertisement](#banner-advertisement)       | ✅          | ✅           | ❌    |
 | [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
 | [Payments](#payments)          | ❌          | ✅           | ❌    |
+| [Invite Links](#invite-links)  | ✅          | ❌           | ✅    |
+| [Invite Button](#invite-links)  | ✅          | ❌           | ❌    |
 | [Server time](#server-time)       | ❌          | ✅           | ❌    |
 | [Desktop shortcut](#desktop-shortcut)   | ❌          | ✅           | ❌    |
 
@@ -271,7 +274,56 @@ The function returns 2-letter language code.
 var language = WebBus.get_language()
 ```
 
-#### Leaderboards
+### Invite
+
+#### Invite Links
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      |![❌](https://img.shields.io/badge/Not_Supported-red)|
+| Poki              |  ![✔️](https://img.shields.io/badge/Supported-green)  |
+
+Create invite links with your parameters:
+
+```gdscript
+var result = await WebBus.invite_link(params)
+```
+`params` : **Dictionary** type
+
+`result` : **Dictionary** type, invite link on this platform
+
+Get parameters from link:
+
+```gdscript
+var value = await WebBus.get_invite_param(params)
+```
+`key` : **String** type
+
+`result` : **Dictionary** type, invite link on this platform
+
+#### Invite Button
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      |![❌](https://img.shields.io/badge/Not_Supported-red)|
+| Poki              |![❌](https://img.shields.io/badge/Not_Supported-red)  |
+
+Show invite button:
+
+```gdscript
+WebBus.show_invite_button(params)
+```
+`params` : **Dictionary** type
+
+Hide invite button:
+
+```gdscript
+WebBus.hide_invite_button(params)
+```
+
+### Leaderboards
 
 | Platform          | Supported |
 |-------------------|-----------|
