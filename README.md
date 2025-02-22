@@ -2,7 +2,7 @@
 ![Godot 4.x](https://img.shields.io/badge/Godot-4.x-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-![icon](icon.png =100x100)
+![icon](icon.png)
 
 It's a plugin for the Godot engine. Use one plugin for several web platform SDKs.
 
