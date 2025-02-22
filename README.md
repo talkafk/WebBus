@@ -11,17 +11,16 @@ This version is for Godot 4.x.
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [General](#general)
-    - [Advertisement](#advertisement)
-    - [Game](#game)
-    - [Ready](#ready)
-    - [Other](#other)
-    - [Leaderboards](#leaderboards)
-    - [Payments](#payments)
-    - [Server time](#server-time)
-    - [Game rating](#game-rating)
-    - [Desktop shortcut](#desktop-shortcut)
-  - [Main Screen Menu](#main-screen-menu)
+   - [Advertisement](#advertisement)
+   - [Game](#game)
+   - [Ready](#ready)
+   - [Other](#other)
+   - [Leaderboards](#leaderboards)
+   - [Payments](#payments)
+   - [Server time](#server-time)
+   - [Game rating](#game-rating)
+   - [Desktop shortcut](#desktop-shortcut)
+- [Main Screen Menu](#main-screen-menu)
 
 
 ## Supported platforms
@@ -31,13 +30,13 @@ This version is for Godot 4.x.
 
 | Feature            | Crazy Games | Yandex Games | Poki  |
 |--------------------|:-----------:|:------------:|:------:|
-| Fullscreen Advertisement     | ✅          | ✅           | ✅    |
-| Rewarded Advertisement       | ✅          | ✅           | ✅    |
-| Banner Advertisement         | ✅          | ✅           | ❌    |
-| Leaderboards       | ❌          | ✅           | ❌    |
-| Payments           | ❌          | ✅           | ❌    |
-| Server time        | ❌          | ✅           | ❌    |
-| Desktop shortcut   | ❌          | ✅           | ❌    |
+| [Fullscreen Advertisement](#fullscreen-advertisement)     | ✅          | ✅           | ✅    |
+| [Rewarded Advertisement](#rewarded-advertisement)       | ✅          | ✅           | ✅    |
+| [Banner Advertisement](#banner-advertisement)       | ✅          | ✅           | ❌    |
+| [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
+| [Payments](#payments)          | ❌          | ✅           | ❌    |
+| [Server time](#server-time)       | ❌          | ✅           | ❌    |
+| [Desktop shortcut](#desktop-shortcut)   | ❌          | ✅           | ❌    |
 
 ## Installation
 
@@ -50,9 +49,10 @@ This version is for Godot 4.x.
 
 You can explore the demo scene for a better understanding of how to use the plugin.
 
-### General
 
-#### Advertisement
+### Advertisement
+
+#### Fullscreen Advertisement
 
 Calling full-screen advertisement:
 
@@ -66,6 +66,9 @@ Calling full-screen advertisement:
 ```gdscript
 WebBus.show_ad()
 ```
+
+#### Rewarded Advertisement
+
 Calling rewarded advertisement:
 
 | Platform          | Supported |
@@ -95,7 +98,8 @@ signal ad_error
 signal ad_started
 ```
 
-Full example:
+
+#### Full example
 
 ```gdscript
 extends Node
@@ -125,7 +129,7 @@ func reward_added():
 	$Player.add_gold(10)
 
 ```
-
+#### Banner advertisement
 
 Calling banner advertisement:
 
@@ -153,7 +157,7 @@ WebBus.hide_banner()
 ```
 >For Crazy Games banner you can set the size and position in the [Main Screen Menu](#main-screen-menu)
 
-#### Game
+### Game
 
 The `start_gameplay()` function has to be called whenever the player starts playing or resumes playing after a break.
 
@@ -206,7 +210,7 @@ WebBus.start_loading()
 ```
 
 
-#### Ready
+### Ready
 
 Call `ready()` when the game is fully loaded and ready to play. 
 
@@ -223,7 +227,7 @@ Call `ready()` when the game is fully loaded and ready to play.
 WebBus.ready()
 ```
 
-#### Other
+### Other
 
 Getting name of platform:
 
@@ -339,7 +343,7 @@ WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 
 `extra_data` : optional parameter, **String** type
 
-#### Payments
+### Payments
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -378,7 +382,7 @@ Get product list
 ```gdscript
 var product_list = await WebBus.get_catalog()
 ```
-#### Server time
+### Server time
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -393,7 +397,7 @@ Get server time
 var time:int = WebBus.get_server_time() # Example: 1720613073778
 ```
 
-#### Game Rating
+### Game Rating
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -419,7 +423,7 @@ var feedback_request = await WebBus.request_review()
 print(feedback_request.feedback_sent) # bool
 
 ```
-#### Desktop shortcut
+### Desktop shortcut
 
 | Platform          | Supported |
 |-------------------|-----------|
@@ -443,7 +447,7 @@ var result = await WebBus.show_prompt()
 print(result.outcome) # "accepted"
 ```
 
-### Main Screen Menu
+## Main Screen Menu
 
 In the main screen menu you can set your settings.
 
