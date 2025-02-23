@@ -34,14 +34,14 @@ jobs:
         godot --headless -s tests/run_tests.gd
 
         
-    - name: Create export folder
-      run: | 
-        mkdir export
+    # - name: Create export folder
+    #   run: | 
+    #     mkdir export
 
-    # Сборка HTML5
-    - name: Export HTML5
-      run: |
-        godot --editor --headless --export-release "HTML5" export/index.html --quit
+    # # Сборка HTML5
+    # - name: Export HTML5
+    #   run: |
+    #     godot --editor --headless --export-release "HTML5" export/index.html --quit
 
     # # Загрузка результата на GitHub Pages
     # - name: Deploy to GitHub Pages
