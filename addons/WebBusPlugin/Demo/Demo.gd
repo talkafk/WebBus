@@ -8,6 +8,10 @@ func _ready():
 	WebBus.leaderboard_info_recieved.connect(getting_leaderboard_info)
 	WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
 	WebBus.leaderboard_entries_recieved.connect(getting_leaderboard_entries)
+	WebBus.focused.connect(func():
+		get_tree().set_pause(false))
+	WebBus.unfocused.connect(func():
+		get_tree().set_pause(true))
 
 func _on_show_ad_pressed():
 	WebBus.show_ad()
@@ -150,3 +154,4 @@ func _on_show_invite_button_pressed():
 
 func _on_hide_invite_button_pressed():
 	WebBus.hide_invite_button()
+	

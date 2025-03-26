@@ -21,6 +21,7 @@ This version is for Godot 4.x.
    - [Server time](#server-time)
    - [Game rating](#game-rating)
    - [Desktop shortcut](#desktop-shortcut)
+   - [Pause](#pause)
 - [Main Screen Menu](#main-screen-menu)
 
 
@@ -499,10 +500,34 @@ var result = await WebBus.show_prompt()
 print(result.outcome) # "accepted"
 ```
 
+### Pause
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![✔️](https://img.shields.io/badge/Supported-green) |
+
+>[!NOTE]
+>This function works on any hosting, including the test server Godot.
+
+
+Sometimes the built-in Godot focus tracking tools may not work under specific conditions. To avoid unwanted behavior in such cases, this plugin provides signals:
+- `focused`
+- `unfocused`
+
+Example:
+```gdcript
+WebBus.focused.connect(func():
+	get_tree().set_pause(false))
+WebBus.unfocused.connect(func():
+	get_tree().set_pause(true))
+```
+
 ## Main Screen Menu
 
 In the main screen menu you can set your settings.
 
 >You can enable automatic build archiving, but make sure the export folder does not contain any extraneous files.
 
-![alt text](image.png)
+![main screen menu](mainscreen.png)
