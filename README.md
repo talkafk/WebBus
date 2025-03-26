@@ -517,7 +517,7 @@ Sometimes the built-in Godot focus tracking tools may not work under specific co
 - `unfocused`
 
 Example:
-```gdcript
+```gdscript
 WebBus.focused.connect(func():
 	get_tree().set_pause(false))
 WebBus.unfocused.connect(func():
