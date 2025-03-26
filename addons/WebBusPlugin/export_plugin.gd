@@ -1,6 +1,6 @@
 @tool
 extends EditorExportPlugin
-class_name  HTMLExportPlugin
+class_name  WebBusHTMLExportPlugin
 
 const JS_FILE = "webbus_sdk.js"
 

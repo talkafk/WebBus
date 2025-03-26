@@ -3,7 +3,7 @@ extends EditorPlugin
 
 const  AUTOLOAD_NAME_AD = "WebBus"
 
-var export_plugin: HTMLExportPlugin
+var export_plugin: WebBusHTMLExportPlugin
 
 const MainScreenScene = preload("res://addons/WebBusPlugin/MainScreenScene.tscn")
 var main_screen_scene_instance

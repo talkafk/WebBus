@@ -4,7 +4,10 @@ signal _SDK_inited
 signal reward_added
 signal ad_closed
 signal ad_error
-signal ad_started 
+signal ad_started
+signal focused
+signal unfocused
+
 
 var _adCallbacks:JavaScriptObject
 var _adRewardCallbacks:JavaScriptObject
@@ -83,6 +86,7 @@ func _ready() -> void:
 	match OS.get_name():
 		"Web":
 			window = JavaScriptBridge.get_interface("window")
+			_set_pause_signal()
 			_adCallbacks = JavaScriptBridge.create_object("Object")
 			_adRewardCallbacks = JavaScriptBridge.create_object("Object")
 			_adStartedCallback = JavaScriptBridge.create_callback(_adStarted)
@@ -195,6 +199,13 @@ func _get_info() -> void:
 	info["device_type"] = type
 	
 	
+var _callback_w_p = JavaScriptBridge.create_callback(func(_args): unfocused.emit())
+var _callback_w_f = JavaScriptBridge.create_callback(func(_args): focused.emit())
+
+func _set_pause_signal() -> void:
+	window.addEventListener("focus", _callback_w_f)
+	window.addEventListener("blur", _callback_w_p)
+
 #endregion
 #region Ads
 func show_ad() -> void:
