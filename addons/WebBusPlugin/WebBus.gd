@@ -199,12 +199,30 @@ func _get_info() -> void:
 	info["device_type"] = type
 	
 	
-var _callback_w_p = JavaScriptBridge.create_callback(func(_args): unfocused.emit())
-var _callback_w_f = JavaScriptBridge.create_callback(func(_args): focused.emit())
-
+var is_focus:bool = true
+var _callback_w_p = JavaScriptBridge.create_callback(func(_args):
+	unfocused.emit()
+	is_focus = false
+	)
+var _callback_w_f = JavaScriptBridge.create_callback(func(_args):
+	focused.emit()
+	is_focus = true
+	)
+	
+var document = JavaScriptBridge.get_interface("document")
+var _listner = JavaScriptBridge.create_callback(func(_args):
+	if document.hidden and is_focus:
+		unfocused.emit()
+	elif !document.hidden and !is_focus:
+		focused.emit()
+	is_focus = !is_focus
+	)
+	
 func _set_pause_signal() -> void:
 	window.addEventListener("focus", _callback_w_f)
 	window.addEventListener("blur", _callback_w_p)
+	
+	document.addEventListener('visibilitychange', _listner)
 
 #endregion
 #region Ads

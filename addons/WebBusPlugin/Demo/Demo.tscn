@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpogarfjr8ys4"]
+[gd_scene load_steps=3 format=3 uid="uid://bpogarfjr8ys4"]
 
-[ext_resource type="Script" path="res://addons/WebBusPlugin/Demo/Demo.gd" id="1_so7c8"]
+[ext_resource type="Script" uid="uid://2e4elt4khhck" path="res://addons/WebBusPlugin/Demo/Demo.gd" id="1_so7c8"]
+[ext_resource type="AudioStream" uid="uid://kperu0kstmja" path="res://addons/WebBusPlugin/Demo/good-night-lofi-cozy-chill-music-160166.mp3" id="2_bh7q7"]
 
 [node name="Demo" type="Control"]
 layout_mode = 3
@@ -291,6 +292,11 @@ text = "can_rewiew"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "request_review"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_bh7q7")
+volume_db = -24.705
+autoplay = true
 
 [connection signal="pressed" from="VBoxContainer/General/Show_ad" to="." method="_on_show_ad_pressed"]
 [connection signal="pressed" from="VBoxContainer/General/Show_reward_ad" to="." method="_on_show_reward_ad_pressed"]

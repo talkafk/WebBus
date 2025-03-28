@@ -9,9 +9,11 @@ func _ready():
 	WebBus.leaderboard_player_entry_recieved.connect(getting_leaderboard_player_entry)
 	WebBus.leaderboard_entries_recieved.connect(getting_leaderboard_entries)
 	WebBus.focused.connect(func():
-		get_tree().set_pause(false))
+		get_tree().set_pause(false)
+		AudioServer.set_bus_mute(0, false))
 	WebBus.unfocused.connect(func():
-		get_tree().set_pause(true))
+		get_tree().set_pause(true)
+		AudioServer.set_bus_mute(0, true))
 
 func _on_show_ad_pressed():
 	WebBus.show_ad()

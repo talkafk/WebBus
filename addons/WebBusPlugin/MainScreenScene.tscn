@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dadbpx8g75c15"]
 
-[ext_resource type="Script" path="res://addons/WebBusPlugin/main_screen_scene.gd" id="1_lnuwk"]
+[ext_resource type="Script" uid="uid://dw5jc5w3qr13k" path="res://addons/WebBusPlugin/main_screen_scene.gd" id="1_lnuwk"]
 
 [node name="MainScreenScene" type="Control"]
 layout_mode = 3
@@ -41,6 +41,7 @@ selected = 10
 fit_to_longest_item = false
 item_count = 13
 popup/item_0/text = "120px"
+popup/item_0/id = 0
 popup/item_1/text = "160px"
 popup/item_1/id = 1
 popup/item_2/text = "250px"
@@ -76,6 +77,7 @@ selected = 9
 fit_to_longest_item = false
 item_count = 10
 popup/item_0/text = "50px"
+popup/item_0/id = 0
 popup/item_1/text = "60px"
 popup/item_1/id = 1
 popup/item_2/text = "90px"
@@ -107,6 +109,7 @@ layout_mode = 2
 selected = 1
 item_count = 4
 popup/item_0/text = "bottom"
+popup/item_0/id = 0
 popup/item_1/text = "top"
 popup/item_1/id = 1
 popup/item_2/text = "left"
