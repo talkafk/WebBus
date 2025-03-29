@@ -35,6 +35,7 @@ This version is for Godot 4.x.
 | [Fullscreen Advertisement](#fullscreen-advertisement)     | ✅          | ✅           | ✅    |
 | [Rewarded Advertisement](#rewarded-advertisement)       | ✅          | ✅           | ✅    |
 | [Banner Advertisement](#banner-advertisement)       | ✅          | ✅           | ❌    |
+| [User Info](#user)      | ✅          | ✅           | ❌    |
 | [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
 | [Payments](#payments)          | ❌          | ✅           | ❌    |
 | [Invite Links](#invite-links)  | ✅          | ❌           | ✅    |
@@ -229,6 +230,24 @@ Call `ready()` when the game is fully loaded and ready to play.
 
 ```gdscript
 WebBus.ready()
+```
+
+### User
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+`user_info` dictionary contains player's username and avatar link
+
+```gdscript
+print(user_info)
+# {"player_name": "NameOfPlayer", "avatar": "https://link/to/avatar.png"}
+
+var name = user_info.player_name
+var avatar_link = user_info.avatar
 ```
 
 ### Other

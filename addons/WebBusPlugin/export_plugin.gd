@@ -50,7 +50,6 @@ func _export_end() -> void:
 			zip_export(ARCHIVE_NAME)
 	
 	
-	
 func zip_export(name_file:String):
 	var writer := ZIPPacker.new()
 	var archive_path :String = export_path.get_base_dir() + "/" + name_file
