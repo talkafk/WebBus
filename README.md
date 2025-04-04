@@ -243,11 +243,11 @@ WebBus.ready()
 `user_info` dictionary contains player's username and avatar link
 
 ```gdscript
-print(user_info)
+print(WebBus.user_info)
 # {"player_name": "NameOfPlayer", "avatar": "https://link/to/avatar.png"}
 
-var name = user_info.player_name
-var avatar_link = user_info.avatar
+var name = WebBus.user_info.player_name
+var avatar_link = WebBus.user_info.avatar
 ```
 
 ### Other
