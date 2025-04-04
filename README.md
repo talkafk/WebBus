@@ -15,6 +15,7 @@ This version is for Godot 4.x.
    - [Advertisement](#advertisement)
    - [Game](#game)
    - [Ready](#ready)
+   - [User Info](#user)
    - [Other](#other)
    - [Leaderboards](#leaderboards)
    - [Payments](#payments)
