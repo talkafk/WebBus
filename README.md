@@ -15,6 +15,7 @@ This version is for Godot 4.x.
    - [Advertisement](#advertisement)
    - [Game](#game)
    - [Ready](#ready)
+   - [User Info](#user)
    - [Other](#other)
    - [Leaderboards](#leaderboards)
    - [Payments](#payments)
@@ -243,11 +244,11 @@ WebBus.ready()
 `user_info` dictionary contains player's username and avatar link
 
 ```gdscript
-print(user_info)
+print(WebBus.user_info)
 # {"player_name": "NameOfPlayer", "avatar": "https://link/to/avatar.png"}
 
-var name = user_info.player_name
-var avatar_link = user_info.avatar
+var name = WebBus.user_info.player_name
+var avatar_link = WebBus.user_info.avatar
 ```
 
 ### Other
@@ -536,7 +537,7 @@ Sometimes the built-in Godot focus tracking tools may not work under specific co
 - `unfocused`
 
 Example:
-```gdcript
+```gdscript
 WebBus.focused.connect(func():
 	get_tree().set_pause(false))
 WebBus.unfocused.connect(func():
