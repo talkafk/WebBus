@@ -18,10 +18,9 @@ config/name="WebBus"
 config/version="0.3.1"
 config/tags=PackedStringArray("tools")
 run/main_scene="res://addons/WebBusPlugin/Demo/Demo.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 run/max_fps=30
-boot_splash/bg_color=Color(0.0775754, 0.227012, 0.207304, 1)
-boot_splash/image="res://icon.png"
+boot_splash/bg_color=Color(0.0358351, 0.138565, 0.12502, 1)
 boot_splash/fullsize=false
 config/icon="res://icon.png"
 
@@ -31,7 +30,7 @@ WebBus="*res://addons/WebBusPlugin/WebBus.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/WebBusPlugin/plugin.cfg")
+enabled=PackedStringArray("res://addons/WebBusPlugin/plugin.cfg", "res://addons/custom-html-loader/plugin.cfg", "res://addons/script-ide/plugin.cfg", "res://addons/wakatime/plugin.cfg")
 
 [rendering]
 

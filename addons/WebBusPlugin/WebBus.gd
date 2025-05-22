@@ -25,6 +25,7 @@ var leaderboards:JavaScriptObject
 var CrazySDK:JavaScriptObject
 var GameDistSDK:JavaScriptObject
 var PokiSDK:JavaScriptObject
+var vkBridge:JavaScriptObject
 
 var system_info := {}
 var user_info := {}
@@ -73,7 +74,7 @@ const LANGUAGE_CODES = {'AF': 'uz', 'AX': 'sv', 'AL': 'en', 'DZ': 'kab',
  'VN': 'vi', 'WF': 'fr', 'EH': 'ar', '001': 'yi', 'YE': 'ar', 'ZM': 'en',
  'ZW': 'sn'}
 
-enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION, POKI}
+enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION, POKI, VK}
 
 var platform : int
 
@@ -106,6 +107,9 @@ func _ready() -> void:
 				"poki":
 					platform = Platform.POKI
 					system_info.platform = "poki"
+				"vk":
+					platform = Platform.POKI
+					system_info.platform = "vk"
 				_:
 					platform = -1
 					system_info.platform = "unknowm"
@@ -178,6 +182,21 @@ func _ready() -> void:
 					await _inited
 					_SDK_inited.emit()
 					print('gd init poki')
+				Platform.VK:
+					var _callback = JavaScriptBridge.create_callback(func(args):
+						if args[0].result:
+							_inited.emit()
+						else:
+							push_error("Error vk init")
+					)
+					vkBridge = window.vkBridge
+					while not vkBridge:
+						vkBridge = window.vkBridge
+						await get_tree().create_timer(0.1).timeout
+					vkBridge.send("VKWebAppInit").then(_callback)
+					await _inited
+					_SDK_inited.emit()
+					print('gd init vk')
 			_get_info()
 			_get_user_info()
 				
@@ -228,6 +247,12 @@ func _get_user_info():
 				if player:
 					user_info.player_name = player.username
 					user_info.avatar = player.profilePictureUrl
+		Platform.VK:
+			vkBridge.send("VKWebAppGetUserInfo").then(_callback_get_player)
+			var player = await _getted_player
+			if player:
+				user_info.player_name = player.first_name + " " + player.last_name
+				user_info.avatar = player.photo_100
 	
 	
 var is_focus:bool = true
