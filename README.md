@@ -11,7 +11,8 @@ This version is for Godot 4.x.
 
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Usage](#usage) 
+   - [Initialization](#initialization)
    - [Advertisement](#advertisement)
    - [Game](#game)
    - [Ready](#ready)
