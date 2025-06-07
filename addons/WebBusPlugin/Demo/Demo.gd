@@ -158,3 +158,6 @@ func _on_show_invite_button_pressed():
 func _on_hide_invite_button_pressed():
 	WebBus.hide_invite_button()
 	
+
+func _on_consume_purchase_pressed() -> void:
+	print( await WebBus.consume_purchase($VBoxContainer/Yandex/HBoxContainer9/token.text))
