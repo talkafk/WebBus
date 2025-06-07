@@ -1,7 +1,9 @@
 extends Control
 
 func _ready():
-	WebBus.get_language()
+	if !WebBus.is_init:
+		await WebBus.inited
+	print(WebBus.get_language())
 	WebBus.ad_closed.connect(ad_closed)
 	WebBus.ad_error.connect(ad_error)
 	WebBus.ad_started.connect(ad_started)

@@ -1,5 +1,7 @@
 extends Node
 
+
+signal inited
 signal _SDK_inited
 signal reward_added
 signal ad_closed
@@ -8,6 +10,7 @@ signal ad_started
 signal focused
 signal unfocused
 
+var is_init:bool = false
 
 var _adCallbacks:JavaScriptObject
 var _adRewardCallbacks:JavaScriptObject
@@ -197,8 +200,10 @@ func _ready() -> void:
 					await _inited
 					_SDK_inited.emit()
 					print('gd init vk')
-			_get_info()
-			_get_user_info()
+			await _get_info()
+			await _get_user_info()
+			is_init = true
+			inited.emit()
 				
 				
 func _get_info() -> void:
@@ -687,18 +692,16 @@ func get_platform() -> String:
 
 func get_language() -> String:
 	if OS.get_name() == "Web":
-		if system_info:
-			print("language from sdk:", system_info["language"])
-			return system_info["language"]
+		if !system_info.is_empty():
+			return system_info.get("language", "unknown")
 		return "unknown"
 	return "unknown"
 
 
 func get_type_device() -> String:
 	if OS.get_name() == "Web":
-		if system_info:
-			print("type device from sdk:", system_info["device_type"])
-			return system_info["device_type"]
+		if !system_info.is_empty():
+			return system_info.get("device_type", "unknown")
 		return "unknown"
 	return "unknown"
 
