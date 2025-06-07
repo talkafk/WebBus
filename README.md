@@ -436,7 +436,7 @@ WebBus.init_payments(signed)
 Make purchase
 
 ```gdscript
-var success = await WebBus.purchase(product_id, developer_payload)
+var purchase:Dictionary = await WebBus.purchase(product_id, developer_payload)
 ```
 
 `product_id`: **String** type
@@ -447,14 +447,23 @@ Get player's purchase list
 
 
 ```gdscript
-var purchase_list = await WebBus.get_purchases()
+var purchase_list:Array = await WebBus.get_purchases()
 ```
 
 Get product list
 
 ```gdscript
-var product_list = await WebBus.get_catalog()
+var product_list:Array = await WebBus.get_catalog()
 ```
+
+Consume purchase
+
+```
+var success:bool = await WebBus.consume_purchase(token)
+```
+
+`token`: **String** type
+
 ### Server time
 
 | Platform          | Supported |
