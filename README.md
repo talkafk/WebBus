@@ -428,7 +428,7 @@ WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 Init yandex payments
 
 ```gdsript
-WebBus.init_payments(signed)
+await WebBus.init_payments(signed)
 ```
 
 `signed`: optional parameter, **bool** type
@@ -463,6 +463,16 @@ var success:bool = await WebBus.consume_purchase(token)
 ```
 
 `token`: **String** type
+
+#### Purchase example
+```gdscript
+await WebBus.init_payments()
+var purchase:Dictionary = await WebBus.purchase("your_purchase_id")
+if ! purchase.get("error", false): # Check if the purchase was successful
+	player.add_gold(500)
+	WebBus.consume_purchase(purchase.purchase_token)
+```
+
 
 ### Server time
 
