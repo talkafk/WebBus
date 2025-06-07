@@ -25,6 +25,7 @@ var leaderboards:JavaScriptObject
 var CrazySDK:JavaScriptObject
 var GameDistSDK:JavaScriptObject
 var PokiSDK:JavaScriptObject
+var vkBridge:JavaScriptObject
 
 var system_info := {}
 var user_info := {}
@@ -73,7 +74,7 @@ const LANGUAGE_CODES = {'AF': 'uz', 'AX': 'sv', 'AL': 'en', 'DZ': 'kab',
  'VN': 'vi', 'WF': 'fr', 'EH': 'ar', '001': 'yi', 'YE': 'ar', 'ZM': 'en',
  'ZW': 'sn'}
 
-enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION, POKI}
+enum Platform {YANDEX, CRAZY, GAMEDISTRIBUTION, POKI, VK}
 
 var platform : int
 
@@ -106,6 +107,9 @@ func _ready() -> void:
 				"poki":
 					platform = Platform.POKI
 					system_info.platform = "poki"
+				"vk":
+					platform = Platform.POKI
+					system_info.platform = "vk"
 				_:
 					platform = -1
 					system_info.platform = "unknowm"
@@ -128,12 +132,12 @@ func _ready() -> void:
 					print('waiting sdk..')
 					while not window.YaGames:
 						await get_tree().create_timer(0.1).timeout
-					var _lb_callback := JavaScriptBridge.create_callback(func(args):
-							leaderboards = args[0]
-							_inited.emit())
 					var _init_callback := JavaScriptBridge.create_callback(func(args):
 						YandexSDK = args[0]
-						YandexSDK.getLeaderboards().then(_lb_callback)
+						leaderboards = YandexSDK.leaderboards
+						if OS.is_debug_build():
+							window.ysdk = YandexSDK
+						_inited.emit()
 						)
 					window.YaGames.init().then(_init_callback)
 					await _inited
@@ -178,6 +182,21 @@ func _ready() -> void:
 					await _inited
 					_SDK_inited.emit()
 					print('gd init poki')
+				Platform.VK:
+					var _callback = JavaScriptBridge.create_callback(func(args):
+						if args[0].result:
+							_inited.emit()
+						else:
+							push_error("Error vk init")
+					)
+					vkBridge = window.vkBridge
+					while not vkBridge:
+						vkBridge = window.vkBridge
+						await get_tree().create_timer(0.1).timeout
+					vkBridge.send("VKWebAppInit").then(_callback)
+					await _inited
+					_SDK_inited.emit()
+					print('gd init vk')
 			_get_info()
 			_get_user_info()
 				
@@ -228,6 +247,12 @@ func _get_user_info():
 				if player:
 					user_info.player_name = player.username
 					user_info.avatar = player.profilePictureUrl
+		Platform.VK:
+			vkBridge.send("VKWebAppGetUserInfo").then(_callback_get_player)
+			var player = await _getted_player
+			if player:
+				user_info.player_name = player.first_name + " " + player.last_name
+				user_info.avatar = player.photo_100
 	
 	
 var is_focus:bool = true
@@ -472,7 +497,7 @@ func get_leaderboard_info(leaderboard:String):
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			leaderboards.getLeaderboardDescription(leaderboard).then(_callback_info_recieved)
+			leaderboards.getDescription(leaderboard).then(_callback_info_recieved)
 			return await leaderboard_info_recieved
 		_:
 			push_warning("Platform not supported")
@@ -492,7 +517,7 @@ func set_leaderboard_score(leaderboard:String, score: int, extra_data:String = "
 		Platform.YANDEX:
 			while not leaderboards:
 				await _SDK_inited
-			leaderboards.setLeaderboardScore(leaderboard, score, extra_data).then(_callback_leaderboard_score_setted)
+			leaderboards.setScore(leaderboard, score, extra_data).then(_callback_leaderboard_score_setted)
 			await leaderboard_score_setted
 			return
 		_:
@@ -508,7 +533,7 @@ func get_leaderboard_player_entry(leaderboard:String) -> Dictionary:
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			leaderboards.getLeaderboardPlayerEntry(leaderboard).then(callback_player_entry_recieved)
+			leaderboards.getPlayerEntry(leaderboard).then(callback_player_entry_recieved)
 			return await leaderboard_player_entry_recieved
 		_:
 			push_warning("Platform not supported")
@@ -530,7 +555,7 @@ func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quant
 			config["includeUser"] = include_user
 			config["quantityAround"] = quantity_around
 			config["quantityTop"] = quantity_top
-			leaderboards.getLeaderboardEntries(leaderboard, config).then(callback_entries_recieved)
+			leaderboards.getEntries(leaderboard, config).then(callback_entries_recieved)
 			return await leaderboard_entries_recieved
 		_:
 			push_warning("Platform not supported")
@@ -766,16 +791,23 @@ func init_payments(signed:bool = false) -> void:
 			push_warning("Platform not supported")
 
 
-signal purchased(success:bool)
+signal purchased(data:Dictionary)
 
 var _purchase_callback := JavaScriptBridge.create_callback(func(args):
-	purchased.emit(true))
+	purchased.emit(_js_to_dict(args[0]))
+	)
 
 var _purchase_error_callback := JavaScriptBridge.create_callback(func(args):
-	print("Error purchase", _js_to_dict(args[0]))
-	purchased.emit(false))
+	var message
+	if args[0].code == "payment_user_canceled":
+		message = "Payment user canceled"
+	else:
+		message = _js_to_dict(args[0])
+	purchased.emit({"error": true, "message": message})
+	)
 
-func purchase(id:String, developer_payload:String = "") -> bool:
+
+func purchase(id:String, developer_payload:String = "") -> Dictionary:
 	match platform:
 		Platform.YANDEX:
 			var settings := JavaScriptBridge.create_object("Object")
@@ -785,35 +817,34 @@ func purchase(id:String, developer_payload:String = "") -> bool:
 			if payments:
 				payments.purchase(settings).then(_purchase_callback).catch(_purchase_error_callback)
 				return await purchased
-			return false
+			return ({"error": true,  "message": "Payments not initialized"})
 		_:
 			push_warning("Platform not supported")
-			return false
-	
+			return {"error": true, "message": "Platform not supported"}
 
 
-signal purchase_getted(success:bool)
+signal purchases_getted(list:Array)
 
 var _get_purchases_callback := JavaScriptBridge.create_callback(func(args):
-	purchase_getted.emit(_js_to_dict(args[0])))
+	purchases_getted.emit(_js_to_dict(args[0])))
 
 var _get_purchases_error_callback := JavaScriptBridge.create_callback(func(args):
 	push_warning(_js_to_dict(args[0]))
-	purchase_getted.emit([]))
+	purchases_getted.emit([]))
 
 func get_purchases() -> Array:
 	match platform:
 		Platform.YANDEX:
 			if payments:
 				payments.getPurchases().then(_get_purchases_callback).catch(_get_purchases_error_callback)
-				return await purchase_getted
+				return await purchases_getted
 			return []
 		_:
 			push_warning("Platform not supported")
 			return []
 
 
-signal catalog_getted(success:bool)
+signal catalog_getted(list:Array)
 
 var _get_catalog_callback := JavaScriptBridge.create_callback(func(args):
 	catalog_getted.emit(_js_to_dict(args[0])))
@@ -834,12 +865,53 @@ func get_catalog() -> Array:
 			return []
 
 
+signal consumed(succes:bool)
+
+var _consume_callback := JavaScriptBridge.create_callback(func(args):
+	consumed.emit(args[0])
+	)
+	
+var _consume_error_callback := JavaScriptBridge.create_callback(func(args):
+	push_warning(_js_to_dict(args[0]))
+	consumed.emit(false)
+	)
+
+func consume_purchase(token:String) -> bool:
+	match platform:
+		Platform.YANDEX:
+			if payments:
+				payments.consumePurchase(token).then(_consume_callback).catch(_consume_error_callback)
+				return await consumed
+		_:
+			push_warning("Platform not supported")
+	return false
+	
+
 #endregion
 #region tool
 
 func _js_to_dict(js_object:JavaScriptObject) -> Variant:
 	var window := JavaScriptBridge.get_interface("window")
-	var strn = window.JSON.stringify(js_object).to_snake_case()
-	return JSON.parse_string(strn)
+	var strn = window.JSON.stringify(js_object)
+	var dict = JSON.parse_string(strn)
+	return _re_snake(dict)
+
+
+func _re_snake(data:Variant) -> Variant:
+	var new_data = data
+	if data is Dictionary:
+		new_data = {}
+		for k in data:
+			if k is String:
+				var k_snake = k.to_snake_case()
+				new_data[k_snake] = _re_snake(data[k])
+	elif data is Array:
+		new_data = []
+		for e in data:
+			new_data.append(_re_snake(e))
+	elif data is float:
+		if data == int(data):
+			new_data = int(data)
+	return new_data
 	
 #endregion

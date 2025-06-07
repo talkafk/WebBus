@@ -170,7 +170,7 @@ size_flags_stretch_ratio = 0.2
 [node name="get_yandex_leaderboard_info" type="Button" parent="VBoxContainer/Yandex/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "get_yandex_leaderboard_info"
+text = "get_leaderboard_info"
 
 [node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer"]
 layout_mode = 2
@@ -185,7 +185,7 @@ size_flags_stretch_ratio = 0.2
 [node name="get_yandex_leaderboard_player_entry" type="Button" parent="VBoxContainer/Yandex/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "get_yandex_leaderboard_player_entry"
+text = "get_leaderboard_player_entry"
 
 [node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer3"]
 layout_mode = 2
@@ -200,7 +200,7 @@ size_flags_stretch_ratio = 0.2
 [node name="get_yandex_leaderboard_entries" type="Button" parent="VBoxContainer/Yandex/HBoxContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "get_yandex_leaderboard_entries"
+text = "get_leaderboard_entries"
 
 [node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer4"]
 layout_mode = 2
@@ -215,7 +215,7 @@ size_flags_stretch_ratio = 0.2
 [node name="set_yandex_leaderboard" type="Button" parent="VBoxContainer/Yandex/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "set_yandex_leaderboard_score"
+text = "set_leaderboard_score"
 
 [node name="leaderboard" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer2"]
 layout_mode = 2
@@ -278,6 +278,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "get_catalog"
 
+[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer/Yandex"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="consume_purchase" type="Button" parent="VBoxContainer/Yandex/HBoxContainer9"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "consume_purchase"
+
+[node name="token" type="TextEdit" parent="VBoxContainer/Yandex/HBoxContainer9"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "token:String"
+
 [node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer/Yandex"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -322,5 +337,6 @@ autoplay = true
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer6/purchase" to="." method="_on_purchase_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_purchases" to="." method="_on_get_purchases_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer7/get_catalog" to="." method="_on_get_catalog_pressed"]
+[connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer9/consume_purchase" to="." method="_on_consume_purchase_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer8/can_rewiew" to="." method="_on_can_rewiew_pressed"]
 [connection signal="pressed" from="VBoxContainer/Yandex/HBoxContainer8/request_review" to="." method="_on_request_review_pressed"]

@@ -16,6 +16,9 @@ if (url.includes('gamedistribution')) {
 if (url.includes('poki')) {
     window.platform = 'poki'
 }
+if (url.includes('vk')) {
+    window.platform = 'vk'
+}
 if (window.platform == null) {
     window.platform = 'unknown'
 }
@@ -41,6 +44,13 @@ switch (window.platform) {
         script.src = url_src;
         document.head.appendChild(script);
         console.log("Poki JS init");
+        break;
+    case "vk":
+        url_src="https://unpkg.com/@vkontakte/vk-bridge@2.15.6/dist/browser.min.js";
+        var script = document.createElement('script');
+        script.src = url_src;
+        document.head.appendChild(script);
+        console.log("VK JS init");
         break;
     case "gamedistribution":
         url_src="https://html5.api.gamedistribution.com/main.bundle.js";
