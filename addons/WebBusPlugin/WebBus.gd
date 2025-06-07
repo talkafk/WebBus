@@ -137,7 +137,10 @@ func _ready() -> void:
 							_inited.emit())
 					var _init_callback := JavaScriptBridge.create_callback(func(args):
 						YandexSDK = args[0]
-						YandexSDK.getLeaderboards().then(_lb_callback)
+						leaderboards = YandexSDK.leaderboards
+						if OS.is_debug_build():
+							window.ysdk = YandexSDK
+						_inited.emit()
 						)
 					window.YaGames.init().then(_init_callback)
 					await _inited
@@ -497,7 +500,7 @@ func get_leaderboard_info(leaderboard:String):
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			leaderboards.getLeaderboardDescription(leaderboard).then(_callback_info_recieved)
+			leaderboards.getDescription(leaderboard).then(_callback_info_recieved)
 			return await leaderboard_info_recieved
 		_:
 			push_warning("Platform not supported")
@@ -517,7 +520,7 @@ func set_leaderboard_score(leaderboard:String, score: int, extra_data:String = "
 		Platform.YANDEX:
 			while not leaderboards:
 				await _SDK_inited
-			leaderboards.setLeaderboardScore(leaderboard, score, extra_data).then(_callback_leaderboard_score_setted)
+			leaderboards.setScore(leaderboard, score, extra_data).then(_callback_leaderboard_score_setted)
 			await leaderboard_score_setted
 			return
 		_:
@@ -533,7 +536,7 @@ func get_leaderboard_player_entry(leaderboard:String) -> Dictionary:
 		Platform.YANDEX:
 			while not YandexSDK:
 				await _SDK_inited
-			leaderboards.getLeaderboardPlayerEntry(leaderboard).then(callback_player_entry_recieved)
+			leaderboards.getPlayerEntry(leaderboard).then(callback_player_entry_recieved)
 			return await leaderboard_player_entry_recieved
 		_:
 			push_warning("Platform not supported")
@@ -555,7 +558,7 @@ func get_leaderboard_entries(leaderboard:String, include_user:bool = true, quant
 			config["includeUser"] = include_user
 			config["quantityAround"] = quantity_around
 			config["quantityTop"] = quantity_top
-			leaderboards.getLeaderboardEntries(leaderboard, config).then(callback_entries_recieved)
+			leaderboards.getEntries(leaderboard, config).then(callback_entries_recieved)
 			return await leaderboard_entries_recieved
 		_:
 			push_warning("Platform not supported")
