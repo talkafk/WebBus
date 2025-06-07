@@ -794,16 +794,23 @@ func init_payments(signed:bool = false) -> void:
 			push_warning("Platform not supported")
 
 
-signal purchased(success:bool)
+signal purchased(data:Dictionary)
 
 var _purchase_callback := JavaScriptBridge.create_callback(func(args):
-	purchased.emit(true))
+	purchased.emit(_js_to_dict(args[0]))
+	)
 
 var _purchase_error_callback := JavaScriptBridge.create_callback(func(args):
-	print("Error purchase", _js_to_dict(args[0]))
-	purchased.emit(false))
+	var message
+	if args[0].code == "payment_user_canceled":
+		message = "Payment user canceled"
+	else:
+		message = _js_to_dict(args[0])
+	purchased.emit({"error": true, "message": message})
+	)
 
-func purchase(id:String, developer_payload:String = "") -> bool:
+
+func purchase(id:String, developer_payload:String = "") -> Dictionary:
 	match platform:
 		Platform.YANDEX:
 			var settings := JavaScriptBridge.create_object("Object")
@@ -813,35 +820,34 @@ func purchase(id:String, developer_payload:String = "") -> bool:
 			if payments:
 				payments.purchase(settings).then(_purchase_callback).catch(_purchase_error_callback)
 				return await purchased
-			return false
+			return ({"error": true,  "message": "Payments not initialized"})
 		_:
 			push_warning("Platform not supported")
-			return false
-	
+			return {"error": true, "message": "Platform not supported"}
 
 
-signal purchase_getted(success:bool)
+signal purchases_getted(list:Array)
 
 var _get_purchases_callback := JavaScriptBridge.create_callback(func(args):
-	purchase_getted.emit(_js_to_dict(args[0])))
+	purchases_getted.emit(_js_to_dict(args[0])))
 
 var _get_purchases_error_callback := JavaScriptBridge.create_callback(func(args):
 	push_warning(_js_to_dict(args[0]))
-	purchase_getted.emit([]))
+	purchases_getted.emit([]))
 
 func get_purchases() -> Array:
 	match platform:
 		Platform.YANDEX:
 			if payments:
 				payments.getPurchases().then(_get_purchases_callback).catch(_get_purchases_error_callback)
-				return await purchase_getted
+				return await purchases_getted
 			return []
 		_:
 			push_warning("Platform not supported")
 			return []
 
 
-signal catalog_getted(success:bool)
+signal catalog_getted(list:Array)
 
 var _get_catalog_callback := JavaScriptBridge.create_callback(func(args):
 	catalog_getted.emit(_js_to_dict(args[0])))
@@ -862,12 +868,53 @@ func get_catalog() -> Array:
 			return []
 
 
+signal consumed(succes:bool)
+
+var _consume_callback := JavaScriptBridge.create_callback(func(args):
+	consumed.emit(args[0])
+	)
+	
+var _consume_error_callback := JavaScriptBridge.create_callback(func(args):
+	push_warning(_js_to_dict(args[0]))
+	consumed.emit(false)
+	)
+
+func consume_purchase(token:String) -> bool:
+	match platform:
+		Platform.YANDEX:
+			if payments:
+				payments.consumePurchase(token).then(_consume_callback).catch(_consume_error_callback)
+				return await consumed
+		_:
+			push_warning("Platform not supported")
+	return false
+	
+
 #endregion
 #region tool
 
 func _js_to_dict(js_object:JavaScriptObject) -> Variant:
 	var window := JavaScriptBridge.get_interface("window")
-	var strn = window.JSON.stringify(js_object).to_snake_case()
-	return JSON.parse_string(strn)
+	var strn = window.JSON.stringify(js_object)
+	var dict = JSON.parse_string(strn)
+	return _re_snake(dict)
+
+
+func _re_snake(data:Variant) -> Variant:
+	var new_data = data
+	if data is Dictionary:
+		new_data = {}
+		for k in data:
+			if k is String:
+				var k_snake = k.to_snake_case()
+				new_data[k_snake] = _re_snake(data[k])
+	elif data is Array:
+		new_data = []
+		for e in data:
+			new_data.append(_re_snake(e))
+	elif data is float:
+		if data == int(data):
+			new_data = int(data)
+	return new_data
 	
 #endregion
