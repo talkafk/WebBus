@@ -132,9 +132,6 @@ func _ready() -> void:
 					print('waiting sdk..')
 					while not window.YaGames:
 						await get_tree().create_timer(0.1).timeout
-					var _lb_callback := JavaScriptBridge.create_callback(func(args):
-							leaderboards = args[0]
-							_inited.emit())
 					var _init_callback := JavaScriptBridge.create_callback(func(args):
 						YandexSDK = args[0]
 						leaderboards = YandexSDK.leaderboards
