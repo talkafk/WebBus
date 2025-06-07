@@ -55,6 +55,20 @@ This version is for Godot 4.x.
 
 You can explore the demo scene for a better understanding of how to use the plugin.
 
+### Initialization
+
+>[!WARNING] 
+> If you use any Webbus method in _ready() of an autoload script or the initial scene, you need to wait until the plugin is fully initialized before calling its method. See the example below.
+
+```gdscript
+var lang :String
+
+func _ready() -> void:
+	if !WebBus.is_init:
+		await WebBus.inited
+	WebBus.ready()
+	lang = WebBus.get_language()
+```
 
 ### Advertisement
 
