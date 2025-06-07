@@ -458,7 +458,7 @@ var product_list:Array = await WebBus.get_catalog()
 
 Consume purchase
 
-```
+```gdscript
 var success:bool = await WebBus.consume_purchase(token)
 ```
 
