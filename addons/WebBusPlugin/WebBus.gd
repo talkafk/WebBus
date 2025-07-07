@@ -245,6 +245,7 @@ func _get_user_info():
 			if name:
 				user_info.player_name = name
 				user_info.avatar = player.getPhoto("medium")
+				user_info.is_auth = player.isAuthorized()
 		Platform.CRAZY:
 			if CrazySDK.user.isUserAccountAvailable:
 				CrazySDK.user.getUser().then(_callback_get_player)
@@ -287,6 +288,12 @@ func _set_pause_signal() -> void:
 
 #endregion
 #region Ads
+## Calling full-screen advertisement[br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ✔️[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_ad() -> void:
 	if OS.get_name() == "Web":
 		match platform:
@@ -303,7 +310,12 @@ func show_ad() -> void:
 	else:
 		push_warning("Not a web build")
 
-
+## Calling rewarded advertisement[br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ✔️[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_rewarded_ad()-> void:
 	if OS.get_name() == "Web":
 		match platform:
@@ -396,6 +408,12 @@ func _ad_reward_and_close(args)-> void:
 	ad_closed.emit()
 
 
+## Calling banner advertisement [br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ❌[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_banner() -> void:
 	match platform:
 		Platform.YANDEX:
@@ -441,6 +459,8 @@ func start_gameplay():
 			PokiSDK.gameplayStart()
 		Platform.GAMEDISTRIBUTION:
 			pass #TODO
+		Platform.VK:
+			pass #TODO
 		_:
 			push_warning("Platform not supported")
 			return
@@ -461,6 +481,8 @@ func stop_gameplay():
 				await _SDK_inited
 			PokiSDK.gameplayStop()
 		Platform.GAMEDISTRIBUTION:
+			pass #TODO
+		Platform.VK:
 			pass #TODO
 		_:
 			push_warning("Platform not supported")
@@ -485,6 +507,8 @@ func ready():
 		Platform.GAMEDISTRIBUTION:
 			while not GameDistSDK:
 				await _SDK_inited
+			pass #TODO
+		Platform.VK:
 			pass #TODO
 		_:
 			push_warning("Platform not supported")
