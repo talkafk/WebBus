@@ -11,7 +11,8 @@ This version is for Godot 4.x.
 
 - [Supported platforms](#supported-platforms)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Usage](#usage) 
+   - [Initialization](#initialization)
    - [Advertisement](#advertisement)
    - [Game](#game)
    - [Ready](#ready)
@@ -55,6 +56,20 @@ This version is for Godot 4.x.
 
 You can explore the demo scene for a better understanding of how to use the plugin.
 
+### Initialization
+
+>[!WARNING] 
+> If you use any Webbus method in _ready() of an autoload script or the initial scene, you need to wait until the plugin is fully initialized before calling its method. See the example below.
+
+```gdscript
+var lang :String
+
+func _ready() -> void:
+	if !WebBus.is_init:
+		await WebBus.inited
+	WebBus.ready()
+	lang = WebBus.get_language()
+```
 
 ### Advertisement
 
@@ -115,8 +130,8 @@ func _ready():
 	WebBus.ad_error.connect(ad_error)
 	WebBus.ad_started.connect(ad_started)
 	WebBus.reward_added.connect(reward_added)
-  
-  WebBus.show_ad()
+
+	WebBus.show_ad()
 
 
 func ad_started():
@@ -428,7 +443,7 @@ WebBus.set_leaderboard_score(name_leaderboard, score, extra_data)
 Init yandex payments
 
 ```gdsript
-WebBus.init_payments(signed)
+await WebBus.init_payments(signed)
 ```
 
 `signed`: optional parameter, **bool** type
@@ -436,7 +451,7 @@ WebBus.init_payments(signed)
 Make purchase
 
 ```gdscript
-var success = await WebBus.purchase(product_id, developer_payload)
+var purchase:Dictionary = await WebBus.purchase(product_id, developer_payload)
 ```
 
 `product_id`: **String** type
@@ -447,14 +462,33 @@ Get player's purchase list
 
 
 ```gdscript
-var purchase_list = await WebBus.get_purchases()
+var purchase_list:Array = await WebBus.get_purchases()
 ```
 
 Get product list
 
 ```gdscript
-var product_list = await WebBus.get_catalog()
+var product_list:Array = await WebBus.get_catalog()
 ```
+
+Consume purchase
+
+```gdscript
+var success:bool = await WebBus.consume_purchase(token)
+```
+
+`token`: **String** type
+
+#### Purchase example
+```gdscript
+await WebBus.init_payments()
+var purchase:Dictionary = await WebBus.purchase("your_purchase_id")
+if ! purchase.get("error", false): # Check if the purchase was successful
+	player.add_gold(500)
+	WebBus.consume_purchase(purchase.purchase_token)
+```
+
+
 ### Server time
 
 | Platform          | Supported |
