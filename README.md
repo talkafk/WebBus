@@ -130,8 +130,8 @@ func _ready():
 	WebBus.ad_error.connect(ad_error)
 	WebBus.ad_started.connect(ad_started)
 	WebBus.reward_added.connect(reward_added)
-  
-  WebBus.show_ad()
+
+	WebBus.show_ad()
 
 
 func ad_started():
