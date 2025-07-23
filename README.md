@@ -17,6 +17,8 @@ This version is for Godot 4.x.
    - [Game](#game)
    - [Ready](#ready)
    - [User Info](#user)
+   - [Authentication](#authentication)
+   - [User Data](#user-data) 
    - [Other](#other)
    - [Leaderboards](#leaderboards)
    - [Payments](#payments)
@@ -38,10 +40,12 @@ This version is for Godot 4.x.
 | [Rewarded Advertisement](#rewarded-advertisement)       | ✅          | ✅           | ✅    |
 | [Banner Advertisement](#banner-advertisement)       | ✅          | ✅           | ❌    |
 | [User Info](#user)      | ✅          | ✅           | ❌    |
+| [Authentication](#authentication)      | ✅          | ✅           | ❌    |
+| [User Data](#user-data)      | ✅          | ✅           | ❌    |
 | [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
 | [Payments](#payments)          | ❌          | ✅           | ❌    |
 | [Invite Links](#invite-links)  | ✅          | ❌           | ✅    |
-| [Invite Button](#invite-links)  | ✅          | ❌           | ❌    |
+| [Invite Button](#invite-button)  | ✅          | ❌           | ❌    |
 | [Server time](#server-time)       | ❌          | ✅           | ❌    |
 | [Desktop shortcut](#desktop-shortcut)   | ❌          | ✅           | ❌    |
 
@@ -265,6 +269,46 @@ print(WebBus.user_info)
 var name = WebBus.user_info.player_name
 var avatar_link = WebBus.user_info.avatar
 ```
+
+### Authentication
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+
+```gdscript
+var succees_auth = await WebBus.open_auth_dialog()
+print(succees_auth) # true/false
+print(WebBus.user_info.player_name)
+```
+
+### User data
+
+| Platform          | Supported |
+|-------------------|-----------|
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
+
+Setting data:
+
+```gdscript
+var data:Dictionary = {"Key": "Value"}
+WebBus.set_data(data)
+
+```
+
+Getting data:
+
+```gdscript
+var keys:Array = ["Key"]
+var result = await WebBus.get_data(keys)
+print(result) # {"Key": "Value"}
+```
+
 
 ### Other
 

@@ -233,6 +233,8 @@ signal _getted_player(player:JavaScriptObject)
 var _callback_get_player = JavaScriptBridge.create_callback(func(args):
 	_getted_player.emit(args[0])
 	)
+var js_player:JavaScriptObject
+
 
 func _get_user_info():
 	user_info.player_name = ""
@@ -240,24 +242,25 @@ func _get_user_info():
 	match platform:
 		Platform.YANDEX:
 			YandexSDK.getPlayer().then(_callback_get_player)
-			var player = await _getted_player
-			var name = player.getName()
+			js_player = await _getted_player
+			var name = js_player.getName()
 			if name:
 				user_info.player_name = name
-				user_info.avatar = player.getPhoto("medium")
+				user_info.avatar = js_player.getPhoto("medium")
+				user_info.is_auth = js_player.isAuthorized()
 		Platform.CRAZY:
 			if CrazySDK.user.isUserAccountAvailable:
 				CrazySDK.user.getUser().then(_callback_get_player)
-				var player = await _getted_player
-				if player:
-					user_info.player_name = player.username
-					user_info.avatar = player.profilePictureUrl
+				js_player = await _getted_player
+				if js_player:
+					user_info.player_name = js_player.username
+					user_info.avatar = js_player.profilePictureUrl
 		Platform.VK:
 			vkBridge.send("VKWebAppGetUserInfo").then(_callback_get_player)
-			var player = await _getted_player
-			if player:
-				user_info.player_name = player.first_name + " " + player.last_name
-				user_info.avatar = player.photo_100
+			js_player = await _getted_player
+			if js_player:
+				user_info.player_name = js_player.first_name + " " + js_player.last_name
+				user_info.avatar = js_player.photo_100
 	
 	
 var is_focus:bool = true
@@ -287,6 +290,12 @@ func _set_pause_signal() -> void:
 
 #endregion
 #region Ads
+## Calling full-screen advertisement[br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ✔️[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_ad() -> void:
 	if OS.get_name() == "Web":
 		match platform:
@@ -303,7 +312,12 @@ func show_ad() -> void:
 	else:
 		push_warning("Not a web build")
 
-
+## Calling rewarded advertisement[br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ✔️[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_rewarded_ad()-> void:
 	if OS.get_name() == "Web":
 		match platform:
@@ -386,6 +400,7 @@ func _ad(args)-> void:
 	ad_closed.emit()
 	
 func _adError(args)-> void:
+	push_error("WebBus error:", _js_to_dict(args[0]))
 	ad_error.emit()
 	
 func _adStarted(args)-> void:
@@ -396,6 +411,12 @@ func _ad_reward_and_close(args)-> void:
 	ad_closed.emit()
 
 
+## Calling banner advertisement [br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ❌[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_banner() -> void:
 	match platform:
 		Platform.YANDEX:
@@ -441,6 +462,8 @@ func start_gameplay():
 			PokiSDK.gameplayStart()
 		Platform.GAMEDISTRIBUTION:
 			pass #TODO
+		Platform.VK:
+			pass #TODO
 		_:
 			push_warning("Platform not supported")
 			return
@@ -462,10 +485,11 @@ func stop_gameplay():
 			PokiSDK.gameplayStop()
 		Platform.GAMEDISTRIBUTION:
 			pass #TODO
+		Platform.VK:
+			pass #TODO
 		_:
 			push_warning("Platform not supported")
 			return
-	
 
 
 func ready():
@@ -486,13 +510,97 @@ func ready():
 			while not GameDistSDK:
 				await _SDK_inited
 			pass #TODO
+		Platform.VK:
+			pass #TODO
 		_:
 			push_warning("Platform not supported")
 
 			
 #endregion
-#region Yandex
 
+#region Data
+signal _auth(success:bool)
+
+var _callback_auth_dialog = JavaScriptBridge.create_callback(func(args):
+	_auth.emit(true)
+	)
+	
+var _callback_auth_dialog_error = JavaScriptBridge.create_callback(func(args):
+	_auth.emit(false)
+	)
+
+func open_auth_dialog() -> bool:
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				YandexSDK.auth.openAuthDialog().then(_callback_auth_dialog).catch(_callback_auth_dialog_error)
+				var result = await _auth
+				if result:
+					YandexSDK.getPlayer().then(_callback_get_player)
+					js_player = await _getted_player
+					var name = js_player.getName()
+					if name:
+						user_info.player_name = name
+						user_info.avatar = js_player.getPhoto("medium")
+						user_info.is_auth = js_player.isAuthorized()
+				return result
+			Platform.CRAZY:
+				CrazySDK.user.showAuthPrompt().then(_callback_auth_dialog).catch(_callback_auth_dialog_error)
+				var result = await _auth
+				if result and CrazySDK.user.isUserAccountAvailable:
+					CrazySDK.user.getUser().then(_callback_get_player)
+					js_player = await _getted_player
+					if js_player:
+						user_info.player_name = js_player.username
+						user_info.avatar = js_player.profilePictureUrl
+				return result
+			_:
+				push_warning("Platform not supported")
+	return false
+	
+	
+func set_data(data:Dictionary) -> void:
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				var _data:JavaScriptObject = _to_js(data)
+				js_player.setData(_data)
+			Platform.CRAZY:
+				for k in data:
+					CrazySDK.data.setItem(k, data[k])
+			_:
+				push_warning("Platform not supported")
+						
+
+signal _getted_data
+
+var _callback_getting_data = JavaScriptBridge.create_callback(func(args):
+	_getted_data.emit(_js_to_dict(args[0], false))
+	)
+	
+var _callback_getting_data_error = JavaScriptBridge.create_callback(func(args):
+	_getted_data.emit({})
+	)
+
+func get_data(keys:Array) -> Dictionary:
+	var result := {}
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				var _data:JavaScriptObject = _to_js(keys)
+				js_player.getData(_data).then(_callback_getting_data).catch(_callback_getting_data_error)
+				result = await _getted_data
+				return result
+			Platform.CRAZY:
+				for k in keys:
+					result[k] = CrazySDK.data.getItem(k)
+				return result
+			_:
+				push_warning("Platform not supported")
+	return result
+	
+#endregion
+#region Yandex
 
 signal leaderboard_info_recieved(result:Dictionary)
 var _callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)
@@ -893,11 +1001,13 @@ func consume_purchase(token:String) -> bool:
 #endregion
 #region tool
 
-func _js_to_dict(js_object:JavaScriptObject) -> Variant:
+func _js_to_dict(js_object:JavaScriptObject, is_snake:bool=true) -> Variant:
 	var window := JavaScriptBridge.get_interface("window")
 	var strn = window.JSON.stringify(js_object)
 	var dict = JSON.parse_string(strn)
-	return _re_snake(dict)
+	if is_snake:
+		return _re_snake(dict)
+	return dict
 
 
 func _re_snake(data:Variant) -> Variant:
@@ -908,6 +1018,8 @@ func _re_snake(data:Variant) -> Variant:
 			if k is String:
 				var k_snake = k.to_snake_case()
 				new_data[k_snake] = _re_snake(data[k])
+			else:
+				new_data[k] = _re_snake(data[k])
 	elif data is Array:
 		new_data = []
 		for e in data:
@@ -917,4 +1029,17 @@ func _re_snake(data:Variant) -> Variant:
 			new_data = int(data)
 	return new_data
 	
+	
+func _to_js(data:Variant) -> Variant:
+	if data is Dictionary:
+		var js_object = JavaScriptBridge.create_object("Object")
+		for k in data:
+			js_object[k] = _to_js(data[k])
+		return js_object
+	if data is Array:
+		var js_object = JavaScriptBridge.create_object("Array")
+		for k in data:
+			js_object.push(_to_js(k))
+		return js_object
+	return data
 #endregion

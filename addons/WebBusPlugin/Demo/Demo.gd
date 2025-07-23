@@ -142,18 +142,18 @@ func _on_get_platform_pressed():
 
 func _on_invite_link_pressed():
 	var params := {}
-	params[$VBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/Invite/HBoxContainer/value.text
+	params[$VBoxContainer/HBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/HBoxContainer/Invite/HBoxContainer/value.text
 	var result = await WebBus.invite_link(params)
 	print(result)
 	
 
 func _on_get_invite_param_pressed():
-	print(await WebBus.get_invite_param($VBoxContainer/Invite/HBoxContainer2/key.text))
+	print(await WebBus.get_invite_param($VBoxContainer/HBoxContainer/Invite/HBoxContainer2/key.text))
 
 
 func _on_show_invite_button_pressed():
 	var params := {}
-	params[$VBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/Invite/HBoxContainer/value.text
+	params[$VBoxContainer/HBoxContainer/Invite/HBoxContainer/key.text] = $VBoxContainer/HBoxContainer/Invite/HBoxContainer/value.text
 	WebBus.show_invite_button(params)
 
 
@@ -162,4 +162,16 @@ func _on_hide_invite_button_pressed():
 	
 
 func _on_consume_purchase_pressed() -> void:
-	print( await WebBus.consume_purchase($VBoxContainer/Yandex/HBoxContainer9/token.text))
+	print(await WebBus.consume_purchase($VBoxContainer/Yandex/HBoxContainer9/token.text))
+
+
+func _on_set_data_pressed() -> void:
+	WebBus.set_data({$VBoxContainer/HBoxContainer/Data/HBoxContainer/key.text: $VBoxContainer/HBoxContainer/Data/HBoxContainer/value.text})
+
+
+func _on_get_data_pressed() -> void:
+	print(await WebBus.get_data([$VBoxContainer/HBoxContainer/Data/HBoxContainer2/key.text]))
+
+
+func _on_open_auth_dialog_pressed() -> void:
+	WebBus.open_auth_dialog()
