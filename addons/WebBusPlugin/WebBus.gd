@@ -579,6 +579,7 @@ var _callback_getting_data = JavaScriptBridge.create_callback(func(args):
 	)
 	
 var _callback_getting_data_error = JavaScriptBridge.create_callback(func(args):
+	push_error("WebBus error:", _js_to_dict(args[0]))
 	_getted_data.emit({})
 	)
 
@@ -599,6 +600,47 @@ func get_data(keys:Array) -> Dictionary:
 				push_warning("Platform not supported")
 	return result
 	
+	
+func set_stats(data:Dictionary) -> void:
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				var _data:JavaScriptObject = _to_js(data)
+				js_player.setStats(_data)
+			Platform.CRAZY:
+				for k in data:
+					CrazySDK.data.setItem(k, data[k])
+			_:
+				push_warning("Platform not supported")
+						
+
+signal _getted_stats
+
+var _callback_getting_stats = JavaScriptBridge.create_callback(func(args):
+	_getted_stats.emit(_js_to_dict(args[0], false))
+	)
+	
+var _callback_getting_stats_error = JavaScriptBridge.create_callback(func(args):
+	push_error("WebBus error:", _js_to_dict(args[0]))
+	_getted_stats.emit({})
+	)
+
+func get_stats(keys:Array) -> Dictionary:
+	var result := {}
+	if OS.get_name() == "Web":
+		match platform:
+			Platform.YANDEX:
+				var _data:JavaScriptObject = _to_js(keys)
+				js_player.getStats(_data).then(_callback_getting_stats).catch(_callback_getting_stats_error)
+				result = await _getted_stats
+				return result
+			Platform.CRAZY:
+				for k in keys:
+					result[k] = CrazySDK.data.getItem(k)
+				return result
+			_:
+				push_warning("Platform not supported")
+	return result
 #endregion
 #region Yandex
 

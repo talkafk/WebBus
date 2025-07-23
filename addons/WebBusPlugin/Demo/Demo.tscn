@@ -175,6 +175,37 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "key"
 
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Data"]
+layout_mode = 2
+
+[node name="set_stats" type="Button" parent="VBoxContainer/HBoxContainer/Data/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "set_stats"
+
+[node name="key" type="LineEdit" parent="VBoxContainer/HBoxContainer/Data/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "key"
+
+[node name="value" type="LineEdit" parent="VBoxContainer/HBoxContainer/Data/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "value"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Data"]
+layout_mode = 2
+
+[node name="get_stats" type="Button" parent="VBoxContainer/HBoxContainer/Data/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "get_stats"
+
+[node name="key" type="LineEdit" parent="VBoxContainer/HBoxContainer/Data/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "key"
+
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Data"]
 layout_mode = 2
 
@@ -375,6 +406,8 @@ autoplay = true
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Invite/HBoxContainer3/hide_invite_button" to="." method="_on_hide_invite_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Data/HBoxContainer/set data" to="." method="_on_set_data_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Data/HBoxContainer2/get_data" to="." method="_on_get_data_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Data/HBoxContainer4/set_stats" to="." method="_on_set_stats_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Data/HBoxContainer5/get_stats" to="." method="_on_get_stats_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Data/HBoxContainer3/open_auth_dialog" to="." method="_on_open_auth_dialog_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/happytime" to="." method="_on_happytime_pressed"]
 [connection signal="pressed" from="VBoxContainer/Crazy/start_loading" to="." method="_on_start_loading_pressed"]

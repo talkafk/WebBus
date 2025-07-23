@@ -175,3 +175,11 @@ func _on_get_data_pressed() -> void:
 
 func _on_open_auth_dialog_pressed() -> void:
 	WebBus.open_auth_dialog()
+
+
+func _on_set_stats_pressed() -> void:
+	WebBus.set_stats({$VBoxContainer/HBoxContainer/Data/HBoxContainer4/key.text: float($VBoxContainer/HBoxContainer/Data/HBoxContainer4/value.text)})
+
+
+func _on_get_stats_pressed() -> void:
+	print(await WebBus.get_stats([$VBoxContainer/HBoxContainer/Data/HBoxContainer5/key.text]))
