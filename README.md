@@ -45,7 +45,7 @@ This version is for Godot 4.x.
 | [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
 | [Payments](#payments)          | ❌          | ✅           | ❌    |
 | [Invite Links](#invite-links)  | ✅          | ❌           | ✅    |
-| [Invite Button](#invite-links)  | ✅          | ❌           | ❌    |
+| [Invite Button](#invite-button)  | ✅          | ❌           | ❌    |
 | [Server time](#server-time)       | ❌          | ✅           | ❌    |
 | [Desktop shortcut](#desktop-shortcut)   | ❌          | ✅           | ❌    |
 
