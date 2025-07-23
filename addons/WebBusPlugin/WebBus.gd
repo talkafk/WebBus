@@ -400,6 +400,7 @@ func _ad(args)-> void:
 	ad_closed.emit()
 	
 func _adError(args)-> void:
+	push_error("WebBus error:", _js_to_dict(args[0]))
 	ad_error.emit()
 	
 func _adStarted(args)-> void:
