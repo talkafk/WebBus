@@ -17,6 +17,8 @@ This version is for Godot 4.x.
    - [Game](#game)
    - [Ready](#ready)
    - [User Info](#user)
+   - [Authentication](#authentication)
+   - [User Data](#user-data) 
    - [Other](#other)
    - [Leaderboards](#leaderboards)
    - [Payments](#payments)
@@ -38,6 +40,8 @@ This version is for Godot 4.x.
 | [Rewarded Advertisement](#rewarded-advertisement)       | ✅          | ✅           | ✅    |
 | [Banner Advertisement](#banner-advertisement)       | ✅          | ✅           | ❌    |
 | [User Info](#user)      | ✅          | ✅           | ❌    |
+| [Authentication](#authentication)      | ✅          | ✅           | ❌    |
+| [User Data](#user-data)      | ✅          | ✅           | ❌    |
 | [Leaderboards](#leaderboards)      | ❌          | ✅           | ❌    |
 | [Payments](#payments)          | ❌          | ✅           | ❌    |
 | [Invite Links](#invite-links)  | ✅          | ❌           | ✅    |
