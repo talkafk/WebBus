@@ -522,28 +522,54 @@ signal _auth(success:bool)
 
 var _callback_auth_dialog = JavaScriptBridge.create_callback(func(args):
 	_auth.emit(true)
-	user_info.is_auth = true
 	)
 	
 var _callback_auth_dialog_error = JavaScriptBridge.create_callback(func(args):
 	_auth.emit(false)
 	)
 
-func open_auth_diaolg() -> bool:
+func open_auth_dialog() -> bool:
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
 				YandexSDK.auth.openAuthDialog().then(_callback_auth_dialog).catch(_callback_auth_dialog_error)
-				return await _auth
+				var result = await _auth
+				if result:
+					YandexSDK.getPlayer().then(_callback_get_player)
+					js_player = await _getted_player
+					var name = js_player.getName()
+					if name:
+						user_info.player_name = name
+						user_info.avatar = js_player.getPhoto("medium")
+						user_info.is_auth = js_player.isAuthorized()
+				return result
+			Platform.CRAZY:
+				CrazySDK.user.showAuthPrompt().then(_callback_auth_dialog).catch(_callback_auth_dialog_error)
+				var result = await _auth
+				if result and CrazySDK.user.isUserAccountAvailable:
+					CrazySDK.user.getUser().then(_callback_get_player)
+					js_player = await _getted_player
+					if js_player:
+						user_info.player_name = js_player.username
+						user_info.avatar = js_player.profilePictureUrl
+				return result
+			_:
+				push_warning("Platform not supported")
 	return false
-
-
+	
+	
 func set_data(data:Dictionary) -> void:
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
 				var _data:JavaScriptObject = _to_js(data)
 				js_player.setData(_data)
+			Platform.CRAZY:
+				for k in data:
+					CrazySDK.data.setItem(k, data[k])
+			_:
+				push_warning("Platform not supported")
+						
 
 signal _getted_data
 
@@ -556,7 +582,7 @@ var _callback_getting_data_error = JavaScriptBridge.create_callback(func(args):
 	)
 
 func get_data(keys:Array) -> Dictionary:
-	var result = {}
+	var result := {}
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
@@ -564,14 +590,16 @@ func get_data(keys:Array) -> Dictionary:
 				js_player.getData(_data).then(_callback_getting_data).catch(_callback_getting_data_error)
 				result = await _getted_data
 				return result
+			Platform.CRAZY:
+				for k in keys:
+					result[k] = CrazySDK.data.getItem(k)
+				return result
+			_:
+				push_warning("Platform not supported")
 	return result
-				
-
+	
 #endregion
-
-
 #region Yandex
-
 
 signal leaderboard_info_recieved(result:Dictionary)
 var _callback_info_recieved = JavaScriptBridge.create_callback(_leaderboard_info_recieved)

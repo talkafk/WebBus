@@ -162,7 +162,7 @@ func _on_hide_invite_button_pressed():
 	
 
 func _on_consume_purchase_pressed() -> void:
-	print( await WebBus.consume_purchase($VBoxContainer/Yandex/HBoxContainer9/token.text))
+	print(await WebBus.consume_purchase($VBoxContainer/Yandex/HBoxContainer9/token.text))
 
 
 func _on_set_data_pressed() -> void:
@@ -174,4 +174,4 @@ func _on_get_data_pressed() -> void:
 
 
 func _on_open_auth_dialog_pressed() -> void:
-	WebBus.open_auth_diaolg()
+	WebBus.open_auth_dialog()
