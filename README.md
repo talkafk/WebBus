@@ -325,7 +325,7 @@ Getting stats:
 
 ```gdscript
 var keys:Array = ["Key"]
-var result = await WebBus.get_data(keys)
+var result = await WebBus.get_stats(keys)
 print(result) # {"Key": 12345.0}
 ```
 
