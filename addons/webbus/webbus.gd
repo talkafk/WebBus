@@ -1,7 +1,7 @@
 extends Node
 ## Singlton class[br]
 ## [br]
-## Docs: [url]https://github.com/talkafk/WebBus[/url]
+## Docs: [url]https://talkafk.github.io/WebBus[/url]
 
 
 signal inited
@@ -591,17 +591,23 @@ var _callback_getting_data_error := JavaScriptBridge.create_callback(func(args):
 	_getted_data.emit({})
 	)
 
-func get_data(keys:Array) -> Dictionary:
+func get_data(keys:Variant) -> Dictionary:
+	var keys_array:Array
+	if keys is Array:
+		keys_array = keys
+	else:
+		keys_array = [keys]
+		
 	var result := {}
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
-				var _data:JavaScriptObject = tools.to_js(keys)
+				var _data:JavaScriptObject = tools.to_js(keys_array)
 				js_player.getData(_data).then(_callback_getting_data).catch(_callback_getting_data_error)
 				result = await _getted_data
 				return result
 			Platform.CRAZY:
-				for k in keys:
+				for k in keys_array:
 					result[k] = CrazySDK.data.getItem(k)
 				return result
 			_:
@@ -633,17 +639,23 @@ var _callback_getting_stats_error := JavaScriptBridge.create_callback(func(args)
 	_getted_stats.emit({})
 	)
 
-func get_stats(keys:Array) -> Dictionary:
+func get_stats(keys:Variant) -> Dictionary:
+	var keys_array:Array
+	if keys is Array:
+		keys_array = keys
+	else:
+		keys_array = [keys]
+		
 	var result := {}
 	if OS.get_name() == "Web":
 		match platform:
 			Platform.YANDEX:
-				var _data:JavaScriptObject = tools.to_js(keys)
+				var _data:JavaScriptObject = tools.to_js(keys_array)
 				js_player.getStats(_data).then(_callback_getting_stats).catch(_callback_getting_stats_error)
 				result = await _getted_stats
 				return result
 			Platform.CRAZY:
-				for k in keys:
+				for k in keys_array:
 					result[k] = CrazySDK.data.getItem(k)
 				return result
 			_:

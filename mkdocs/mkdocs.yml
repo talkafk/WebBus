@@ -1,0 +1,66 @@
+site_name: WebBus Plugin Docs
+site_description: Documantation of plugin WebBus for Godot 4
+site_author: Talkafk
+site_url: https://talkafk.github.io/WebBus
+repo_url: https://github.com/talkafk/WebBus
+repo_name: talkafk/WebBus
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - navigation.expand
+    - navigation.instant
+
+  palette:
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: teal
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+nav:
+  - About: index.md
+  - Quick Start: quick_start.md
+  - Usage:
+      - Advertisement: usage/advertisement.md
+      - Game: usage/game.md
+      - User Info: usage/user_info.md
+      - Authentication: usage/authentication.md
+      - User Data: usage/user_data.md
+      - System Info: usage/system_info.md
+      - Invite: usage/invite.md
+      - Leaderboards: usage/leaderboards.md
+      - Payments: usage/payments.md
+      - Pause Handling: usage/pause.md
+      - Server time: usage/server_time.md
+      - Game rating: usage/game_rating.md
+      - Desktop Shortcuts: usage/desktop_shortcuts.md
+  - Additional Features:
+      - Archiving: additional_features/archiving.md
+      - VK Request Events: additional_features/vk_request_events.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

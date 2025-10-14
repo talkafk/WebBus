@@ -8,10 +8,6 @@
 
 config_version=5
 
-[addons]
-
-markdown_book/docs_folder="/"
-
 [application]
 
 config/name="WebBus"
@@ -37,7 +33,8 @@ enabled=PackedStringArray("res://addons/custom-html-loader/plugin.cfg", "res://a
 folder_colors={
 "res://addons/custom-html-loader/": "gray",
 "res://addons/script-ide/": "gray",
-"res://addons/wakatime/": "gray"
+"res://addons/wakatime/": "gray",
+"res://mkdocs/": "gray"
 }
 
 [rendering]
