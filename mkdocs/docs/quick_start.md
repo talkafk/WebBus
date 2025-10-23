@@ -31,3 +31,9 @@ Call any methods through the `WebBus` singleton.
 ```gdscript
 WebBus.show_ad()
 ```
+## Main screen menu
+
+The plugin adds a new tab to the editor’s main screen.
+This tab contains the plugin’s settings.
+
+![main_sceen](main_screen.png)
