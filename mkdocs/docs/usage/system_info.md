@@ -25,7 +25,7 @@ The function returns a `String`, possible values: `desktop`, `tablet`, `mobile`.
 | Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green)    |
 | Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green)    |
 | Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red)  |
-| VK                | ![✍️](https://img.shields.io/badge/In_Progress-yellow) |
+| VK                | ![✔️](https://img.shields.io/badge/Supported-green)    |
 
 
 ```gdscript
@@ -42,7 +42,7 @@ The function returns 2-letter language code.
 | Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green)    |
 | Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green)    |
 | Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red)  |
-| VK                | ![✍️](https://img.shields.io/badge/In_Progress-yellow) |
+| VK                | ![✔️](https://img.shields.io/badge/Supported-green)    |
 
 ```gdscript
 var language = WebBus.get_language()

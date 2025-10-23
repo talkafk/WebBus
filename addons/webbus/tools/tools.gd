@@ -53,7 +53,7 @@ func get_language_by_code(code:String) -> String:
 
 class VKRequest:
 	var callback:Callable
-	var configs:Dictionary
+	var params:Dictionary
 	var event:String
 	
 	var tools := WebBusTools.new()
@@ -67,8 +67,8 @@ class VKRequest:
 
 	var send_callback := JavaScriptBridge.create_callback(func(args):
 		if args[0]:
-			if configs:
-				var _conf := tools.to_js(configs)
+			if params:
+				var _conf := tools.to_js(params)
 				WebBus.vkBridge.send(event, _conf).then(result_callback)
 			else:
 				WebBus.vkBridge.send(event).then(result_callback)
@@ -76,9 +76,9 @@ class VKRequest:
 			push_error("Error vk request")
 		)
 
-	func send(_event:String, _configs:Dictionary={}, _callback:Callable=_callback_pass):
+	func send(_event:String, _params:Dictionary={}, _callback:Callable=_callback_pass):
 		if OS.get_name() == "Web" and WebBus.platform == WebBus.Platform.VK:
-			configs = _configs
+			params = _params
 			callback = _callback
 			event = _event
 			WebBus.vkBridge.supportsAsync(event).then(send_callback)

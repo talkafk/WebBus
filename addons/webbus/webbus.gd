@@ -93,6 +93,7 @@ func _ready() -> void:
 			is_init = true
 			inited.emit()
 				
+signal _getted_info(data)
 				
 func _get_info() -> void:
 	var lang:String
@@ -109,6 +110,16 @@ func _get_info() -> void:
 			var c_code :String = CrazySDK.user.systemInfo.countryCode
 			lang = tools.get_language_by_code(c_code)
 			type = CrazySDK.user.systemInfo.device.type
+		Platform.VK:
+			while not vkBridge:
+				await _SDK_inited
+			var _callback := JavaScriptBridge.create_callback(func(args):
+				_getted_info.emit(args[0])
+				)
+			vkBridge.send("VKWebAppGetLaunchParams").then(_callback)
+			var res = await _getted_info
+			lang = res.vk_language
+			type = res.vk_platform.split("_")[0]
 		_:
 			lang = "unknown"
 			type = "unknown"
@@ -276,9 +287,9 @@ func hide_banner() -> void:
 	_call_method_on_platform("hide_banner")
 
 #endregion
-#region game
-	
 
+#region Game
+	
 func start_gameplay():
 	match platform:
 		Platform.YANDEX:
@@ -352,6 +363,7 @@ func ready():
 #endregion
 
 #region Data
+
 signal _auth(success:bool)
 
 var _callback_auth_dialog := JavaScriptBridge.create_callback(func(args):
@@ -401,19 +413,25 @@ func set_data(data:Dictionary) -> void:
 			Platform.CRAZY:
 				for k in data:
 					CrazySDK.data.setItem(k, data[k])
+			Platform.VK:
+				var _data := JavaScriptBridge.create_object("Object")
+				for k in data:
+					_data.key = k
+					_data.value = data[k]
+				vkBridge.send("VKWebAppStorageSet", _data)
 			_:
 				push_warning("Platform not supported")
 						
 
-signal _getted_data
+signal data_received
 
 var _callback_getting_data := JavaScriptBridge.create_callback(func(args):
-	_getted_data.emit(tools.js_to_dict(args[0], false))
+	data_received.emit(tools.js_to_dict(args[0], false))
 	)
 	
 var _callback_getting_data_error := JavaScriptBridge.create_callback(func(args):
 	push_error("WebBus error:", tools.js_to_dict(args[0]))
-	_getted_data.emit({})
+	data_received.emit({})
 	)
 
 func get_data(keys:Variant) -> Dictionary:
@@ -429,13 +447,25 @@ func get_data(keys:Variant) -> Dictionary:
 			Platform.YANDEX:
 				var _data:JavaScriptObject = tools.to_js(keys_array)
 				js_player.getData(_data).then(_callback_getting_data).catch(_callback_getting_data_error)
-				result = await _getted_data
+				result = await data_received
 				return result
 			Platform.CRAZY:
 				for k in keys_array:
 					result[k] = CrazySDK.data.getItem(k)
+				data_received.emit(result)
+				return result
+			Platform.VK:
+				var req := tools.VKRequest.new()
+				var conf := {}
+				var _result:Dictionary
+				conf["keys"] = keys_array
+				req.send("VKWebAppStorageGet", conf, func(args): data_received.emit(args))
+				_result = await data_received
+				for key_value in _result["keys"]:
+					result[key_value.key] = key_value.value
 				return result
 			_:
+				data_received.emit(result)
 				push_warning("Platform not supported")
 	return result
 	
@@ -449,19 +479,21 @@ func set_stats(data:Dictionary) -> void:
 			Platform.CRAZY:
 				for k in data:
 					CrazySDK.data.setItem(k, data[k])
+			Platform.VK:
+				set_data(data)
 			_:
 				push_warning("Platform not supported")
 						
 
-signal _getted_stats
+signal stats_received
 
 var _callback_getting_stats := JavaScriptBridge.create_callback(func(args):
-	_getted_stats.emit(tools.js_to_dict(args[0], false))
+	stats_received.emit(tools.js_to_dict(args[0], false))
 	)
 	
 var _callback_getting_stats_error := JavaScriptBridge.create_callback(func(args):
 	push_error("WebBus error:", tools.js_to_dict(args[0]))
-	_getted_stats.emit({})
+	stats_received.emit({})
 	)
 
 func get_stats(keys:Variant) -> Dictionary:
@@ -477,13 +509,17 @@ func get_stats(keys:Variant) -> Dictionary:
 			Platform.YANDEX:
 				var _data:JavaScriptObject = tools.to_js(keys_array)
 				js_player.getStats(_data).then(_callback_getting_stats).catch(_callback_getting_stats_error)
-				result = await _getted_stats
+				result = await stats_received
 				return result
 			Platform.CRAZY:
 				for k in keys_array:
 					result[k] = CrazySDK.data.getItem(k)
+				stats_received.emit(result)
 				return result
-			_:
+			Platform.VK:
+				return await get_data(keys_array)
+			_:	
+				stats_received.emit(result)
 				push_warning("Platform not supported")
 	return result
 #endregion
@@ -667,21 +703,12 @@ func start_loading() -> void:
 			push_warning("Platform not supported")
 				
 #endregion
-#region getting data
+#region System info
 
 func get_platform() -> String:
 	if OS.get_name() == "Web":
-		match platform:
-			Platform.YANDEX:
-				return "yandex"
-			Platform.CRAZY:
-				return "crazy_games"
-			Platform.GAMEDISTRIBUTION:
-				return "game_distribution"
-			Platform.POKI:
-				return "poki"
-			_:
-				return "unknown"
+		if !system_info.is_empty():
+			return system_info.get("platform", "unknown")
 	return "unknown"
 
 
@@ -689,7 +716,6 @@ func get_language() -> String:
 	if OS.get_name() == "Web":
 		if !system_info.is_empty():
 			return system_info.get("language", "unknown")
-		return "unknown"
 	return "unknown"
 
 
@@ -697,12 +723,11 @@ func get_type_device() -> String:
 	if OS.get_name() == "Web":
 		if !system_info.is_empty():
 			return system_info.get("device_type", "unknown")
-		return "unknown"
 	return "unknown"
 
 #endregion
 
-#region invite
+#region Invite
 
 signal invite_link_getted(result:String)
 
@@ -766,7 +791,7 @@ func hide_invite_button() -> void:
 
 #endregion
 
-#region purchases
+#region Purchases
 var payments:JavaScriptObject
 
 var _init_payments_callback := JavaScriptBridge.create_callback(func(args):

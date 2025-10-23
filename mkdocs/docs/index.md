@@ -21,17 +21,17 @@ It allows you to build your project once and use the same build across multiple 
 
 ## List of features
 
-| Feature            | Crazy Games | Yandex Games | Poki    | VK     |
-|--------------------|:-----------:|:------------:|:-------:|:------:|
-| [User Info](usage/user_info.md)      | ✅          | ✅           | ❌    | ✅    |
-| [Fullscreen Advertisement](usage/advertisement.md/#fullscreen-advertisement)     | ✅          | ✅           | ✅    | ✅    |       
-| [Rewarded Advertisement](usage/advertisement.md/#rewarded-advertisement)       | ✅          | ✅           | ✅    | ✅    |  
-| [Banner Advertisement](usage/advertisement.md/#banner-advertisement)       | ✅          | ✅           | ❌    | ✅    |
-| [Authentication](usage/authentication.md)      | ✅          | ✅           | ❌    | ✍️    |
-| [User Data](usage/user_data.md)      | ✅          | ✅           | ❌    | ✍️    |
-| [Leaderboards](usage/leaderboards.md)      | ❌          | ✅           | ❌    | ✍️    |
-| [Payments](usage/payments.md)          | ❌          | ✅           | ❌    | ✍️    |
-| [Invite Links](usage/invite.md/#invite-links)  | ✅          | ❌           | ✅    | ❌    |
-| [Invite Button](usage/invite.md/#invite-button)  | ✅          | ❌           | ❌    | ❌    |
-| [Server time](usage/server_time.md)       | ❌          | ✅           | ❌    | ❌    |
-| [Desktop shortcut](usage/desktop_shortcuts.md)   | ❌          | ✅           | ❌    | ✍️    |
+| Feature                                                                          | Crazy Games | Yandex Games | Poki     | VK      |
+|----------------------------------------------------------------------------------|:-----------:|:------------:|:--------:|:-------:|
+| [User Info](usage/user_info.md)                                                  | ✅          | ✅           | ❌       | ✅      |
+| [Fullscreen Advertisement](usage/advertisement.md/#fullscreen-advertisement)     | ✅          | ✅           | ✅       | ✅      |       
+| [Rewarded Advertisement](usage/advertisement.md/#rewarded-advertisement)         | ✅          | ✅           | ✅       | ✅      |  
+| [Banner Advertisement](usage/advertisement.md/#banner-advertisement)             | ✅          | ✅           | ❌       | ✅      |
+| [Authentication](usage/authentication.md)                                        | ✅          | ✅           | ❌       | ✍️      |
+| [User Data](usage/user_data.md)                                                  | ✅          | ✅           | ❌       | ✅      |
+| [Leaderboards](usage/leaderboards.md)                                            | ❌          | ✅           | ❌       | ✍️      |
+| [Payments](usage/payments.md)                                                    | ❌          | ✅           | ❌       | ✍️      |
+| [Invite Links](usage/invite.md/#invite-links)                                    | ✅          | ❌           | ✅       | ❌      |
+| [Invite Button](usage/invite.md/#invite-button)                                  | ✅          | ❌           | ❌       | ❌      |
+| [Server time](usage/server_time.md)                                              | ❌          | ✅           | ❌       | ❌      |
+| [Desktop shortcut](usage/desktop_shortcuts.md)                                   | ❌          | ✅           | ❌       | ✍️      |

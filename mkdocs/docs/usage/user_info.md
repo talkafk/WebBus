@@ -1,10 +1,10 @@
 
-| Platform          | Supported |
-|-------------------|-----------|
-| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green) |
-| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green) |
+| Platform          | Supported                                             |
+|-------------------|-------------------------------------------------------| 
+| Crazy Games       | ![✔️](https://img.shields.io/badge/Supported-green)   |
+| Yandex Games      | ![✔️](https://img.shields.io/badge/Supported-green)   |
 | Poki              | ![❌](https://img.shields.io/badge/Not_Supported-red) |
-| VK                | ![✔️](https://img.shields.io/badge/Supported-green) |
+| VK                | ![✔️](https://img.shields.io/badge/Supported-green)   |
 
 `user_info` dictionary contains player's username and avatar link
 
