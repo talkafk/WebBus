@@ -44,19 +44,14 @@ var platform : int
 
 var tools := WebBusTools.new()
 
+var platform_sdk : WBPlatform
+
 #region _ready
 func _ready() -> void:
 	match OS.get_name():
 		"Web":
 			window = JavaScriptBridge.get_interface("window")
 			_set_pause_signal()
-			_adCallbacks = JavaScriptBridge.create_object("Object")
-			_adRewardCallbacks = JavaScriptBridge.create_object("Object")
-			_adStartedCallback = JavaScriptBridge.create_callback(_adStarted)
-			_adErrorCallback = JavaScriptBridge.create_callback(_adError)
-			_adFinishedCallback = JavaScriptBridge.create_callback(_ad)
-			_adFinishedRewardCallback = JavaScriptBridge.create_callback(_rewarded_ad)
-			_adRewardAndCloseCallback = JavaScriptBridge.create_callback(_ad_reward_and_close)
 			match window.platform:
 				"yandex":
 					platform = Platform.YANDEX
@@ -80,86 +75,19 @@ func _ready() -> void:
 					return
 			match platform:
 				Platform.YANDEX:
-					var callbacks := JavaScriptBridge.create_object("Object")
-					var rewardcallbacks := JavaScriptBridge.create_object("Object")
-					callbacks["onClose"] = _adFinishedCallback
-					callbacks["onError"] = _adErrorCallback
-					callbacks["onOffline"] = _adErrorCallback
-					callbacks["onOpen"] = _adStartedCallback
-					_adCallbacks["callbacks"] = callbacks
-					rewardcallbacks["onRewarded"] = _adFinishedRewardCallback
-					rewardcallbacks["onError"] = _adErrorCallback
-					rewardcallbacks["onClose"] = _adFinishedCallback
-					rewardcallbacks["onOpen"] = _adStartedCallback
-					_adRewardCallbacks["callbacks"] = rewardcallbacks
 					print('waiting sdk..')
-					while not window.YaGames:
-						await get_tree().create_timer(0.1).timeout
-					var _init_callback := JavaScriptBridge.create_callback(func(args):
-						YandexSDK = args[0]
-						leaderboards = YandexSDK.leaderboards
-						if OS.is_debug_build():
-							window.ysdk = YandexSDK
-						_inited.emit()
-						)
-					window.YaGames.init().then(_init_callback)
-					await _inited
-					_SDK_inited.emit()
-					print('gd init yandex')
+					platform_sdk = WBPlatformYandex.new()
 				Platform.CRAZY:
-					_adCallbacks["adFinished"] = _adFinishedCallback
-					_adCallbacks["adError"] = _adErrorCallback
-					_adCallbacks["adStarted"] = _adStartedCallback
-					_adRewardCallbacks["adFinished"] = _adRewardAndCloseCallback
-					_adRewardCallbacks["adError"] = _adErrorCallback
-					_adRewardCallbacks["adStarted"] = _adStartedCallback
-					print("waiting sdk..")
-					CrazySDK = window.CrazyGames.SDK
-					while not CrazySDK:
-						CrazySDK = window.CrazyGames.SDK
-						await get_tree().create_timer(0.1).timeout
-					var callback_init := JavaScriptBridge.create_callback(func(args):
-						_inited.emit())
-					CrazySDK.init().then(callback_init)
-					await _inited
-					_SDK_inited.emit()
-					print('gd init crazy')
+					pass
 				Platform.GAMEDISTRIBUTION:
-					_adCallbacks["ad_stop"] = _adFinishedCallback
-					_adCallbacks["ad_start"] = _adStartedCallback
-					_adCallbacks["ad_rewarded"] = _adFinishedRewardCallback
-					window.setcallbacks(_adCallbacks)
-					GameDistSDK = window.gdsdk
-					_SDK_inited.emit()
-					print('gd init gamedistribution')
+					pass
 				Platform.POKI:
-					var _callback := JavaScriptBridge.create_callback(func(args):
-						_inited.emit()
-					)
-					print("waiting sdk..")
-					PokiSDK = window.PokiSDK
-					while not PokiSDK:
-						PokiSDK = window.PokiSDK
-						await get_tree().create_timer(0.1).timeout
-					PokiSDK.init().then(_callback)
-					await _inited
-					_SDK_inited.emit()
-					print('gd init poki')
+					pass
 				Platform.VK:
-					var _callback := JavaScriptBridge.create_callback(func(args):
-						if args[0].result:
-							_inited.emit()
-						else:
-							push_error("Error vk init")
-					)
-					vkBridge = window.vkBridge
-					while not vkBridge:
-						vkBridge = window.vkBridge
-						await get_tree().create_timer(0.1).timeout
-					vkBridge.send("VKWebAppInit").then(_callback)
-					await _inited
-					_SDK_inited.emit()
-					print('gd init vk')
+					pass
+				platform_sdk.init_platform()
+				_SDK_inited.emit()
+				print('gd init')
 			await _get_info()
 			await _get_user_info()
 			is_init = true
@@ -258,22 +186,8 @@ func _set_pause_signal() -> void:
 ## VK  ✔️[br]
 ## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_ad() -> void:
-	if OS.get_name() == "Web":
-		match platform:
-			Platform.CRAZY:
-				crazy_show_ad()
-			Platform.YANDEX:
-				yandex_show_ad()
-			Platform.GAMEDISTRIBUTION:
-				game_dist_show_ad()
-			Platform.POKI:
-				poki_show_ad()
-			Platform.VK:
-				vk_show_ad()
-			_:
-				push_warning("Platform not supported")
-	else:
-		push_warning("Not a web build")
+	_call_method_on_platform("show_ad")
+
 
 ## Calling rewarded advertisement[br]
 ## Supported platform: [br]
@@ -283,86 +197,18 @@ func show_ad() -> void:
 ## VK  ✔️[br]
 ## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_rewarded_ad()-> void:
+	_call_method_on_platform("show_rewarded_ad")
+
+
+func _call_method_on_platform(method_name: String) -> void:
 	if OS.get_name() == "Web":
-		match platform:
-			Platform.CRAZY:
-				crazy_show_rewarded_ad()
-			Platform.YANDEX:
-				yandex_show_rewarded_ad()
-			Platform.GAMEDISTRIBUTION:
-				game_dist_show_rewarded_ad()
-			Platform.POKI:
-				poky_show_rewarded_ad()
-			Platform.VK:
-				vk_show_rewarded_ad()
-			_:
-				push_warning("Platform not supported")
+		if platform_sdk.has_method(method_name):
+			platform_sdk.call(method_name)
+			return
+		push_warning("Platform not supported")
 	else:
 		push_warning("Not a web build")
-	
-# Yandex Games Block
 
-func yandex_show_ad()-> void:
-	while not YandexSDK:
-		await _SDK_inited
-	YandexSDK.adv.showFullscreenAdv(_adCallbacks)
-
-func yandex_show_rewarded_ad()-> void:
-	while not YandexSDK:
-		await _SDK_inited
-	YandexSDK.adv.showRewardedVideo(_adRewardCallbacks)
-
-# Crazy Games
-
-func crazy_show_ad()-> void:
-	while not CrazySDK:
-		await _SDK_inited
-	CrazySDK.ad.requestAd("midgame", _adCallbacks)
-	
-func crazy_show_rewarded_ad()-> void:
-	while not CrazySDK:
-		await _SDK_inited
-	CrazySDK.ad.requestAd("rewarded", _adRewardCallbacks)
-
-# Game Distribution
-func game_dist_show_ad()-> void:
-	while not GameDistSDK:
-		await _SDK_inited
-	GameDistSDK.show_ad()
-	
-func game_dist_show_rewarded_ad()-> void:
-	while not GameDistSDK:
-		await _SDK_inited
-	GameDistSDK.show_ad('rewarded')
-
-# Poki
-
-func poki_show_ad() -> void:
-	while not PokiSDK:
-		await _SDK_inited
-	ad_started.emit()
-	PokiSDK.commercialBreak().then(_adFinishedCallback)
-
-
-func poky_show_rewarded_ad() -> void:
-	while not PokiSDK:
-		await _SDK_inited
-	ad_started.emit()
-	PokiSDK.rewardedBreak().then(_reward_check_ad_callback)
-#vk
-
-func vk_show_ad() -> void:
-	var config := JavaScriptBridge.create_object("Object")
-	config["ad_format"] = 'interstitial'
-	ad_started.emit()
-	vkBridge.send("VKWebAppShowNativeAds", config).then(_vk_ad_callback).catch(_adErrorCallback)
-	
-
-func vk_show_rewarded_ad() -> void:
-	var config := JavaScriptBridge.create_object("Object")
-	config["ad_format"] = 'reward'
-	ad_started.emit()
-	vkBridge.send("VKWebAppShowNativeAds", config).then(_vk_reward_callback).catch(_adErrorCallback)
 
 #Callbacks
 func _rewarded_ad(args) -> void:
@@ -417,39 +263,18 @@ func _vk_reward_result(args) -> void:
 ## VK  ✔️[br]
 ## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func show_banner() -> void:
-	match platform:
-		Platform.YANDEX:
-			while not YandexSDK:
-				await _SDK_inited
-			YandexSDK.adv.showBannerAdv()
-		Platform.CRAZY:
-			while not CrazySDK:
-				await _SDK_inited
-			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "block"')
-			CrazySDK.banner.requestResponsiveBanner("responsive-banner-container")
-		Platform.VK:
-			while not vkBridge:
-				await _SDK_inited
-			var req := tools.VKRequest.new()
-			req.send("VKWebAppShowBannerAd")
-		_:
-			push_warning("Platform not supported")
-			return
+	_call_method_on_platform("show_banner")
 
-			
+## Hidding banner advertisement [br]
+## Supported platform: [br]
+## Crazy Games  ✔️[br]
+## Yandex Games  ✔️[br]
+## Poki  ❌[br]
+## VK  ✔️[br]
+## Docs: [url]https://github.com/talkafk/WebBus?tab=readme-ov-file#advertisement[/url]
 func hide_banner() -> void:	
-	match platform:
-		Platform.YANDEX:
-			YandexSDK.adv.hideBannerAdv()
-		Platform.CRAZY:
-			JavaScriptBridge.eval('document.getElementById("responsive-banner-container").style.display = "none"')
-			CrazySDK.banner.clearBanner("responsive-banner-container")
-		Platform.VK:
-			var req := tools.VKRequest.new()
-			req.send("VKWebAppHideBannerAd")
-		_:
-			push_warning("Platform not supported")
-			return
+	_call_method_on_platform("hide_banner")
+
 #endregion
 #region game
 	

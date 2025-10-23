@@ -26,7 +26,7 @@ WebBus="*res://addons/webbus/webbus.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/custom-html-loader/plugin.cfg", "res://addons/script-ide/plugin.cfg", "res://addons/wakatime/plugin.cfg", "res://addons/webbus/plugin.cfg")
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg", "res://addons/wakatime/plugin.cfg", "res://addons/webbus/plugin.cfg")
 
 [file_customization]
 
